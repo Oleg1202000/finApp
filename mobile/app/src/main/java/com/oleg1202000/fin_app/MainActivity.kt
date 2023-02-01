@@ -11,7 +11,11 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.room.Entity
 import com.oleg1202000.fin_app.ui.theme.Fin_appTheme
+import androidx.room.PrimaryKey
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,13 +31,23 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        @Entity
+        class Employee {
+
+            @PrimaryKey
+            var id: Long = 0
+
+            var name: String? = null
+
+            var salary: Int = 0
+        }
     }
 }
 
 @Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!")
-    
+
 }
 
 @Preview(showBackground = true)
