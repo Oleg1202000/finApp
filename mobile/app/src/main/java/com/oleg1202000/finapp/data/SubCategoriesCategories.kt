@@ -1,16 +1,16 @@
-package com.oleg1202000.fin_app.data
+package com.oleg1202000.finapp.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 
 @Entity(
-    tableName = "users_categories",
+    tableName = "subcategories_categories",
     foreignKeys = [
         ForeignKey(
-            entity = Users::class,
+            entity = SubCategories::class,
             parentColumns = ["id"],
-            childColumns = ["user_id"],
+            childColumns = ["subcategory_id"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         ),
@@ -18,12 +18,12 @@ import androidx.room.ForeignKey
             entity = Categories::class,
             parentColumns = ["id"],
             childColumns = ["category_id"],
-            onDelete = ForeignKey.CASCADE,
+            onDelete = ForeignKey.RESTRICT,
             onUpdate = ForeignKey.CASCADE
         )
     ]
 )
-data class UsersCategories(
-    @ColumnInfo(name = "user_id") val userId: Long,
+data class SubCategoriesCategories(
+    @ColumnInfo(name = "subcategory_id") val subCategoryId: Long,
     @ColumnInfo(name = "category_id") val categoryId: Long,
 )

@@ -1,13 +1,11 @@
-package com.oleg1202000.fin_app.data
+package com.oleg1202000.finapp.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
-
 
 @Entity(
-    tableName = "accounts",
+    tableName = "users_categories",
     foreignKeys = [
         ForeignKey(
             entity = Users::class,
@@ -15,12 +13,17 @@ import androidx.room.PrimaryKey
             childColumns = ["user_id"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Categories::class,
+            parentColumns = ["id"],
+            childColumns = ["category_id"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
         )
     ]
 )
-data class Accounts(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+data class UsersCategories(
     @ColumnInfo(name = "user_id") val userId: Long,
-    @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "is_hidden") val isHidden: Boolean
+    @ColumnInfo(name = "category_id") val categoryId: Long,
 )

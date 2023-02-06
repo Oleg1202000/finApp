@@ -1,4 +1,4 @@
-package com.oleg1202000.fin_app.ui.theme
+package com.oleg1202000.finapp.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

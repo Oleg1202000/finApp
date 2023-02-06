@@ -1,13 +1,13 @@
-package com.oleg1202000.fin_app.data
+package com.oleg1202000.finapp.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "tags"
+    tableName = "subcategories"
 )
-data class Tags(
+data class SubCategories(
     @PrimaryKey(autoGenerate = true) val id: Long,
     @ColumnInfo(name = "name") val name: String
 )

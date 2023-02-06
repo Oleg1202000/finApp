@@ -1,4 +1,4 @@
-package com.oleg1202000.fin_app.ui.theme
+package com.oleg1202000.finapp.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
