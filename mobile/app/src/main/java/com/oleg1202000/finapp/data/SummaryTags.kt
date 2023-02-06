@@ -1,29 +1,30 @@
-package com.oleg1202000.fin_app.data
+package com.oleg1202000.finapp.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 
+
 @Entity(
-    tableName = "subcategories_categories",
+    tableName = "summary_tags",
     foreignKeys = [
         ForeignKey(
-            entity = SubCategories::class,
+            entity = Summary::class,
             parentColumns = ["id"],
-            childColumns = ["subcategory_id"],
+            childColumns = ["summary_id"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = Categories::class,
+            entity = Tags::class,
             parentColumns = ["id"],
-            childColumns = ["category_id"],
+            childColumns = ["tag_id"],
             onDelete = ForeignKey.RESTRICT,
             onUpdate = ForeignKey.CASCADE
         )
     ]
 )
-data class SubCategoriesCategories(
-    @ColumnInfo(name = "subcategory_id") val subCategoryId: Long,
-    @ColumnInfo(name = "category_id") val categoryId: Long,
+data class SummaryTags(
+    @ColumnInfo(name = "summary_id") val summaryId: Long,
+    @ColumnInfo(name = "tag_id") val tegId: Long,
 )

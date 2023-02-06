@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.oleg1202000.fin_app'
+    namespace 'com.oleg1202000.finapp'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.oleg1202000.fin_app"
+        applicationId "com.oleg1202000.finapp"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -59,6 +59,7 @@ dependencies {
     implementation platform('androidx.compose:compose-bom:2022.12.00')
 
     implementation 'androidx.compose.foundation:foundation'
+    implementation 'androidx.core:core-ktx:+'
     implementation 'androidx.core:core-ktx:+'
     implementation 'androidx.core:core-ktx:+'
     implementation 'androidx.core:core-ktx:+'

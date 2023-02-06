@@ -1,4 +1,4 @@
-package com.oleg1202000.fin_app
+package com.oleg1202000.finapp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

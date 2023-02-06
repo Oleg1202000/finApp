@@ -1,4 +1,4 @@
-package com.oleg1202000.fin_app
+package com.oleg1202000.finapp
 
 import org.junit.Test
 
