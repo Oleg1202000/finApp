@@ -10,14 +10,14 @@ import com.oleg1202000.finapp.data.Users
 @Dao
 interface UsersDao {
     @Query("SELECT name FROM users")
-    fun getAllUsers(): List<Users>
+    fun getAllUsers(): List<String>
 
     @Query("SELECT * FROM user WHERE id = :userId")
     fun getUser(userId: Long): Users
 
     @Insert
-    fun addtUser(name: Users)
+    fun addtUser(user: Users)
 
     @Delete
-    fun deleteUser(id: Users)
+    fun deleteUser(id: Long)
 }
