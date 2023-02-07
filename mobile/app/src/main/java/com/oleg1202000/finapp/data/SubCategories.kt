@@ -9,5 +9,6 @@ import androidx.room.PrimaryKey
 )
 data class SubCategories(
     @PrimaryKey(autoGenerate = true) val id: Long,
-    @ColumnInfo(name = "name") val name: String
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "color") val color: String
 )
