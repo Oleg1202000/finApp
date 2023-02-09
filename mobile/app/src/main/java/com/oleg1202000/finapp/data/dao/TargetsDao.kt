@@ -1,11 +1,7 @@
 package com.oleg1202000.finapp.data.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.oleg1202000.finapp.data.Targets
-import com.oleg1202000.finapp.data.Users
 
 @Dao
 interface TargetsDao {
@@ -13,7 +9,10 @@ interface TargetsDao {
     fun addTarget(target: Targets)
 
     @Delete
-    fun deleteTarget(id: Long)
+    fun deleteTarget(target: Targets)
+
+    @Update
+    fun updateTarget(target: Targets)
 
     @Query("SELECT * FROM targets")
     fun getAllTargets(): List<Targets>
