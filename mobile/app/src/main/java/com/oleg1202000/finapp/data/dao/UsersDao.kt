@@ -1,9 +1,6 @@
 package com.oleg1202000.finapp.data.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.oleg1202000.finapp.data.Users
 
 
@@ -16,8 +13,10 @@ interface UsersDao {
     fun getUser(userId: Long): Users
 
     @Insert
-    fun addtUser(user: Users)
+    fun addUser(user: Users)
 
     @Delete
-    fun deleteUser(id: Long)
+    fun deleteUser(user: Users)
+    @Update
+    fun updateUser(user: Users)
 }
