@@ -33,11 +33,30 @@ data class Summary(
     @ColumnInfo(name = "amount") val amount: UInt,
     @ColumnInfo(name = "date") val date: Date,
     @ColumnInfo(name = "time") val time: Time,
-    @ColumnInfo(name = "is_income") val isIncome: Boolean,
+    @ColumnInfo(name = "is_sync") val isSync: Boolean,
     @ColumnInfo(name = "about", defaultValue = "NULL") val about: String?
 )
 
 data class ReturnSumAmount(
     val subCategoryId: Long,
     val sumAmount: UInt
+)
+
+
+data class ReturnHistory(
+    val id: Long,
+    val tagName: String,
+    val amount: UInt,
+    val date: Date,
+    val about: String?
+)
+
+
+data class ReturnHistoryOne(
+    val id: Long,
+    val tagName: String,
+    val accountName: String,
+    val amount: UInt,
+    val date: Date,
+    val about: String?
 )
