@@ -53,10 +53,11 @@ data class ReturnHistory(
 
 
 data class ReturnHistoryOne(
-    val id: Long,
     val tagName: String,
     val accountName: String,
+    val subCategoryName: String,
     val amount: UInt,
     val date: Date,
+    val time: Time,
     val about: String?
 )
