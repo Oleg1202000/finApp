@@ -34,6 +34,10 @@ data class Summary(
     @ColumnInfo(name = "date") val date: Date,
     @ColumnInfo(name = "time") val time: Time,
     @ColumnInfo(name = "is_income") val isIncome: Boolean,
-    @ColumnInfo(name = "is_sync", defaultValue = "FALSE") val isSync: Boolean,
     @ColumnInfo(name = "about", defaultValue = "NULL") val about: String?
+)
+
+data class ReturnSumAmount(
+    val subCategoryId: Long,
+    val sumAmount: UInt
 )
