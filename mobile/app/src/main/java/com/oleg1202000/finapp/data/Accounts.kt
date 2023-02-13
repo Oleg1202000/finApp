@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
     ]
 )
 data class Accounts(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "user_id") val userId: Long,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "is_hidden") val isHidden: Boolean
