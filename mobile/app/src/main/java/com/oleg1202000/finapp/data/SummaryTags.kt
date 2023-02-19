@@ -25,6 +25,6 @@ import androidx.room.ForeignKey
     ]
 )
 data class SummaryTags(
-    @ColumnInfo(name = "summary_id") val summaryId: Long,
-    @ColumnInfo(name = "tag_id") val tegId: Long,
+    @ColumnInfo(name = "summary_id") val summaryId: ULong,
+    @ColumnInfo(name = "tag_id") val tegId: ULong
 )

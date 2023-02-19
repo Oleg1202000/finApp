@@ -24,6 +24,6 @@ import androidx.room.ForeignKey
     ]
 )
 data class SubCategoriesCategories(
-    @ColumnInfo(name = "subcategory_id") val subCategoryId: Long,
-    @ColumnInfo(name = "category_id") val categoryId: Long,
+    @ColumnInfo(name = "subcategory_id") val subCategoryId: ULong,
+    @ColumnInfo(name = "category_id") val categoryId: ULong,
 )

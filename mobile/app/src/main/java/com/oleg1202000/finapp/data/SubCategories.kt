@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
     tableName = "subcategories"
 )
 data class SubCategories(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: ULong,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "color") val color: String
 )

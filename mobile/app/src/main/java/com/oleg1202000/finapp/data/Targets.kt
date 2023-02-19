@@ -19,8 +19,9 @@ import androidx.room.PrimaryKey
     ]
 )
 data class Targets(
-    @PrimaryKey(autoGenerate = true) val id: Long,
-    @ColumnInfo(name = "user_id") val userId: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: ULong,
+    @ColumnInfo(name = "user_id") val userId: ULong,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "amount") val amount: UInt
+    // add date
 )

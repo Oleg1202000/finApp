@@ -8,6 +8,10 @@ import androidx.room.PrimaryKey
     tableName = "categories"
 )
 data class Categories(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: ULong,
     @ColumnInfo(name = "name") val name: String
+
+    // добовить уникальные индексы в справочники
+
+
 )

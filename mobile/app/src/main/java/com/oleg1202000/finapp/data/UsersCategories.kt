@@ -24,6 +24,6 @@ import androidx.room.ForeignKey
     ]
 )
 data class UsersCategories(
-    @ColumnInfo(name = "user_id") val userId: Long,
-    @ColumnInfo(name = "category_id") val categoryId: Long,
+    @ColumnInfo(name = "user_id") val userId: ULong,
+    @ColumnInfo(name = "category_id") val categoryId: ULong,
 )

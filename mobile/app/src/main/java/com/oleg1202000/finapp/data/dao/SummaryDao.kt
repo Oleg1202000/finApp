@@ -1,10 +1,7 @@
 package com.oleg1202000.finapp.data.dao
 
 import androidx.room.*
-import com.oleg1202000.finapp.data.ReturnHistory
-import com.oleg1202000.finapp.data.ReturnHistoryOne
-import com.oleg1202000.finapp.data.ReturnSumAmount
-import com.oleg1202000.finapp.data.Targets
+import com.oleg1202000.finapp.data.*
 
 @Dao
 interface SummaryDao {
@@ -25,9 +22,8 @@ interface SummaryDao {
             """
     )
     fun getSumAmount(
-        UserId: Long,
-        // сделать ULong в UId
-        CategoryIds: List<Long>,
+        UserId: ULong,
+        CategoryIds: List<ULong>,
         EndDate: String,
         BeginDate: String
     ): List<ReturnSumAmount>
@@ -51,10 +47,10 @@ interface SummaryDao {
             """
     )
     fun getHistory(
-        UserIds: List<Long>,
-        TagIds: List<Long>,
-        AccountIds: List<Long>,
-        SubCategoryIds: List<Long>,
+        UserIds: List<ULong>,
+        TagIds: List<ULong>,
+        AccountIds: List<ULong>,
+        SubCategoryIds: List<ULong>,
         EndDate: String,
         BeginDate: String
     ): List<ReturnHistory>
@@ -77,16 +73,16 @@ interface SummaryDao {
             """
     )
     fun getHistoryOne(
-        UserId: Long
+        UserId: ULong
     ): List<ReturnHistoryOne>
 
 
     @Insert
-    fun addTarget(target: Targets)
+    fun addSummary(summary: Summary)
 
     @Delete
-    fun deleteTarget(id: Long)
+    fun deleteSummary(summary: Summary)
 
     @Update
-    fun updateSummary()
+    fun updateSummary(summary: Summary)
 }
