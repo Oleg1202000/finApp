@@ -27,9 +27,9 @@ import java.sql.Time
     ]
 )
 data class Summary(
-    @PrimaryKey(autoGenerate = true) val id: Long,
-    @ColumnInfo(name = "account_id") val accountId: Long,
-    @ColumnInfo(name = "subcategory_id") val subCategoryId: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: ULong,
+    @ColumnInfo(name = "account_id") val accountId: ULong,
+    @ColumnInfo(name = "subcategory_id") val subCategoryId: ULong,
     @ColumnInfo(name = "amount") val amount: UInt,
     @ColumnInfo(name = "date") val date: Date,
     @ColumnInfo(name = "time") val time: Time,
@@ -38,13 +38,13 @@ data class Summary(
 )
 
 data class ReturnSumAmount(
-    val subCategoryId: Long,
+    val subCategoryId: ULong,
     val sumAmount: UInt
 )
 
 
 data class ReturnHistory(
-    val id: Long,
+    val id: ULong,
     val tagName: String,
     val amount: UInt,
     val date: Date,

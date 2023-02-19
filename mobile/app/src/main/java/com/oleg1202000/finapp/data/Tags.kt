@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
     tableName = "tags"
 )
 data class Tags(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: ULong,
     @ColumnInfo(name = "name") val name: String
 )

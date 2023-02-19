@@ -10,7 +10,7 @@ interface UsersDao {
     fun getAllUsers(): List<String>
 
     @Query("SELECT * FROM user WHERE id = :userId")
-    fun getUser(userId: Long): Users
+    fun getUser(userId: ULong): Users
 
     @Insert
     fun addUser(user: Users)
