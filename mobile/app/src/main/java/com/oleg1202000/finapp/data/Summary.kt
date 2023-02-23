@@ -11,16 +11,9 @@ import java.sql.Time
     tableName = "summary",
     foreignKeys = [
         ForeignKey(
-            entity = Accounts::class,
+            entity = Categories::class,
             parentColumns = ["id"],
-            childColumns = ["account_id"],
-            onDelete = ForeignKey.RESTRICT,
-            onUpdate = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = SubCategories::class,
-            parentColumns = ["id"],
-            childColumns = ["subcategory_id"],
+            childColumns = ["category_id"],
             onDelete = ForeignKey.RESTRICT,
             onUpdate = ForeignKey.CASCADE
         )
@@ -28,8 +21,7 @@ import java.sql.Time
 )
 data class Summary(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: ULong,
-    @ColumnInfo(name = "account_id") val accountId: ULong,
-    @ColumnInfo(name = "subcategory_id") val subCategoryId: ULong,
+    @ColumnInfo(name = "category_id") val categoryId: ULong,
     @ColumnInfo(name = "amount") val amount: UInt,
     @ColumnInfo(name = "date") val date: Date,
     @ColumnInfo(name = "time") val time: Time,
@@ -38,7 +30,7 @@ data class Summary(
 )
 
 data class ReturnSumAmount(
-    val subCategoryId: ULong,
+    val categoryId: ULong,
     val sumAmount: UInt
 )
 
