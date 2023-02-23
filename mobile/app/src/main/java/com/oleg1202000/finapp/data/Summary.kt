@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.sql.Date
-import java.sql.Time
 
 @Entity(
     tableName = "summary",
@@ -16,15 +15,22 @@ import java.sql.Time
             childColumns = ["category_id"],
             onDelete = ForeignKey.RESTRICT,
             onUpdate = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Tags::class,
+            parentColumns = ["id"],
+            childColumns = ["tag_id"],
+            onDelete = ForeignKey.RESTRICT,
+            onUpdate = ForeignKey.CASCADE
         )
     ]
 )
 data class Summary(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: ULong,
     @ColumnInfo(name = "category_id") val categoryId: ULong,
+    @ColumnInfo(name = "tag_id", defaultValue = "NULL") val tegId: ULong?,
     @ColumnInfo(name = "amount") val amount: UInt,
     @ColumnInfo(name = "date") val date: Date,
-    @ColumnInfo(name = "time") val time: Time,
     @ColumnInfo(name = "is_sync") val isSync: Boolean,
     @ColumnInfo(name = "about", defaultValue = "NULL") val about: String?
 )
@@ -47,9 +53,8 @@ data class ReturnHistory(
 data class ReturnHistoryOne(
     val tagName: String,
     val accountName: String,
-    val subCategoryName: String,
+    val categoryName: String,
     val amount: UInt,
     val date: Date,
-    val time: Time,
     val about: String?
 )
