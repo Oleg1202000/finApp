@@ -43,17 +43,8 @@ data class ReturnSumAmount(
 
 data class ReturnHistory(
     val id: ULong,
-    val tagName: String,
-    val amount: UInt,
-    val date: Date,
-    val about: String?
-)
-
-
-data class ReturnHistoryOne(
-    val tagName: String,
-    val accountName: String,
     val categoryName: String,
+    val tagName: String?,
     val amount: UInt,
     val date: Date,
     val about: String?
