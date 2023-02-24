@@ -7,81 +7,66 @@ import com.oleg1202000.finapp.data.*
 interface SummaryDao {
     @Query(
         """
-        SELECT summary.subcategory_id, SUM(summary.amount)
+        SELECT summary.category_id, SUM(summary.amount)
         
         FROM summary
         
-        RIGHT JOIN summary_tags ON summary_tags.summary_id = summary.id
-        INNER JOIN tags ON summary_tags.tag_id = tags.id
-        INNER JOIN subcategories_categories ON subcategories_categories.subcategory_id = summary.subcategory_id
+         JOIN summary_tags ON summary_tags.summary_id = summary.id
+        RIGHT JOIN tags ON summary.tag_id = tags.id
+        INNER JOIN categories ON categories.id = summary.category_id
         
-        WHERE subcategories_categories.category_id IN (:CategoryIds) AND
-        summary.date >= :BeginDate AND summary.date <= :EndDate AND user_id = :UserId
+        WHERE categories.id IN (:categoryIds) AND
+        tags.id IN (:tagsIds) AND
+        summary.date >= :beginDate AND summary.date <= :endDate
         
-        GROUP BY subcategory_id
-            """
+        GROUP BY category_id
+        """
     )
     fun getSumAmount(
-        UserId: ULong,
-        CategoryIds: List<ULong>,
-        EndDate: String,
-        BeginDate: String
+        categoryIds: List<ULong>,
+        tagsIds: List<ULong>,
+        beginDate: String,
+        endDate: String
     ): List<ReturnSumAmount>
 
 
-    @Query("""
-        SELECT summary.id, tags.name, summary.amount, summary.date, summary.about
+    @Query(
+        """
+        SELECT summary.id, categories.name, tags.name, summary.amount, summary.date, summary.about
         
         FROM summary
         
-        RIGHT JOIN summary_tags ON summary_tags.summary_id = summary.id
-        INNER JOIN accounts ON summary.account_id = accounts.id
+        RIGHT JOIN tags ON tags.id = summary.tag_id
+        INNER JOIN categories ON summary.category_id = categories.id
         
-        WHERE accounts.user_id IN (:UserIds) AND
-        summary.subcategory_id IN (:SubCategoryIds) AND
-        summary_tags.tag_id IN (:TagIds) AND
-        summary.account_id IN (:AccountIds) AND
-        summary.date >= :BeginDate AND summary.date <= :EndDate AND user_id = :UserId
+        WHERE summary.category_id IN (:categoryIds) AND
+        summary.tag_id IN (:tagIds) AND
+        summary.date >= :beginDate AND summary.date <= :endDate
         
-        ORDER BY summary.date DESC, summary.time DESC
-            """
+        ORDER BY summary.date DESC
+        """
     )
     fun getHistory(
-        UserIds: List<ULong>,
-        TagIds: List<ULong>,
-        AccountIds: List<ULong>,
-        SubCategoryIds: List<ULong>,
-        EndDate: String,
-        BeginDate: String
+        tagIds: List<ULong>,
+        categoryIds: List<ULong>,
+        endDate: String,
+        beginDate: String
     ): List<ReturnHistory>
-
-
-    @Query("""
-        SELECT tags.name, accounts.name, subcategories.name, summary.amount, summary.date, summary.time, summary.about
-        
-        FROM summary
-        
-        RIGHT JOIN summary_tags ON summary_tags.summary_id = summary.id
-        INNER JOIN tags ON summary_tags.tag_id = tags.id
-        INNER JOIN subcategories ON subcategories.id = summary.subcategory_id
-        INNER JOIN accounts ON summary.account_id = accounts.id
-        INNER JOIN users ON users.id = accounts.user_id
-        
-        WHERE users.id = :UserId
-        
-        ORDER BY summary.date DESC, summary.time DESC
-            """
-    )
-    fun getHistoryOne(
-        UserId: ULong
-    ): List<ReturnHistoryOne>
 
 
     @Insert
     fun addSummary(summary: Summary)
 
-    @Delete
-    fun deleteSummary(summary: Summary)
+
+    //delete
+    @Query(
+        """
+        DELETE FROM summary
+        WHERE id = :id
+        """
+    )
+    fun deleteSummary(id: ULong)
+
 
     @Update
     fun updateSummary(summary: Summary)
