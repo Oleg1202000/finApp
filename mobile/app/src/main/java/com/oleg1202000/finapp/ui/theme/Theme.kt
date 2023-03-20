@@ -1,21 +1,25 @@
 package com.oleg1202000.finapp.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = DarkGrey,
+    primaryVariant = Color.Black,
+    secondary = Teal200,
+    background = Color.Black
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = LightGray,
+    primaryVariant = Color.White,
+    secondary = cerulean,
+    background = Color.White,
 
     /* Other default colors to override
     background = Color.White,
@@ -29,15 +33,19 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun FinappTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
+    val colors: Colors
+    val typography: androidx.compose.material.Typography
+    if (darkTheme) {
+            colors = DarkColorPalette
+            typography = Typography
     } else {
-        LightColorPalette
+            colors = LightColorPalette
+            typography = Typography
     }
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = typography,
         shapes = Shapes,
         content = content
     )
