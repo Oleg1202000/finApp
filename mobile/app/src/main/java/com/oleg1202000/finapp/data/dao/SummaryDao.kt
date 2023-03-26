@@ -19,7 +19,7 @@ interface SummaryDao {
         tags.id IN (:tagsIds) AND
         summary.date >= :beginDate AND summary.date <= :endDate
         
-        GROUP BY category_id
+        GROUP BY summary.category_id
         """
     )
     fun getSumAmount(
