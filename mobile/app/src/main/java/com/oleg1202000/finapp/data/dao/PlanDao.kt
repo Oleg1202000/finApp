@@ -5,7 +5,7 @@ import androidx.room.Query
 import com.oleg1202000.finapp.data.Plan
 import com.oleg1202000.finapp.data.ReturnPlanName
 
-interface PlanDAO {
+interface PlanDao {
     @Query(
         """
         SELECT categories.name, plan.limit
@@ -19,8 +19,7 @@ interface PlanDAO {
         GROUP BY plan.category_id
         """
     )
-    fun getPlan(beginDate: String,
-                endDate: String): List<ReturnPlanName>
+    fun getPlan(beginDate: String, endDate: String): List<ReturnPlanName>
 
     @Insert
     fun addPlan(plan: Plan)
