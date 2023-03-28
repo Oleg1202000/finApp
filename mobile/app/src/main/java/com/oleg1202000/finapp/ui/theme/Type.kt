@@ -1,6 +1,6 @@
 package com.oleg1202000.finapp.ui.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -14,28 +14,28 @@ val darkColor = Color.White
 
 val Typography = Typography(
 
-    h1 = TextStyle(
+    titleLarge = TextStyle(  // h1
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
         color = lightColor,
         fontSize = 20.sp
     ),
 
-    body1 = TextStyle(
+    bodyMedium = TextStyle(  // body1
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         color = lightColor,
         fontSize = 18.sp
     ),
 
-    button = TextStyle(
+    labelMedium = TextStyle(  // button
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
         color = lightColor,
         fontSize = 14.sp
     ),
 
-    caption = TextStyle(
+    labelSmall = TextStyle( // caption
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         color = lightColor,

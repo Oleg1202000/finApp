@@ -1,8 +1,12 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.oleg1202000.finapp.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
+
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,6 +16,8 @@ import com.oleg1202000.finapp.ui.theme.FinappTheme
 import com.oleg1202000.finapp.ui.theme.LightGray
 import com.oleg1202000.finapp.ui.theme.Typography
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Finapp() {
     FinappTheme {
@@ -31,29 +37,33 @@ fun Finapp() {
 }
 
 
+
 @Composable
 fun StatusBar(){
-    TopAppBar(
-        elevation = 60.dp
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text ="[Название экрана]", style = Typography.h1)
-            Text(text ="Настройки", style = Typography.button)
-        }
 
-    }
+    TopAppBar(
+        title = {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text ="[Название экрана]", style = Typography.titleLarge)
+                Text(text ="Настройки", style = Typography.labelMedium)
+            }
+        },
+        modifier = Modifier.height(60.dp)
+    )
 }
 
 
 @Preview(showBackground = true)
 @Composable
 fun NavagationBar() {
-    BottomNavigation(
-        elevation = 60.dp
+    BottomAppBar(
+        tonalElevation = 60.dp,
+
+
     ) {
 
 
@@ -62,9 +72,9 @@ fun NavagationBar() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Text(text = "Главная", style = Typography.button)
-            Text(text = "План", style = Typography.button)
-            Text(text = "История", style = Typography.button)
+            Text(text = "Главная", style = Typography.labelMedium)
+            Text(text = "План", style = Typography.labelMedium)
+            Text(text = "История", style = Typography.labelMedium)
         }
     }
 

@@ -1,23 +1,23 @@
 package com.oleg1202000.finapp.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val DarkColorPalette = darkColors(
+private val DarkColorPalette = darkColorScheme(
     primary = DarkGrey,
-    primaryVariant = Color.Black,
+    primaryContainer = Color.Black,
     secondary = Teal200,
     background = Color.Black
 )
 
-private val LightColorPalette = lightColors(
+private val LightColorPalette = lightColorScheme(
     primary = LightGray,
-    primaryVariant = Color.White,
+    primaryContainer = Color.White,
     secondary = cerulean,
     background = Color.White,
 
@@ -33,8 +33,8 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun FinappTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors: Colors
-    val typography: androidx.compose.material.Typography
+    val colors: ColorScheme
+    val typography: androidx.compose.material3.Typography
     if (darkTheme) {
             colors = DarkColorPalette
             typography = Typography
@@ -44,7 +44,7 @@ fun FinappTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
     }
 
     MaterialTheme(
-        colors = colors,
+        colorScheme = colors,
         typography = typography,
         shapes = Shapes,
         content = content
