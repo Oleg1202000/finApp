@@ -4,6 +4,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.oleg1202000.finapp.data.Categories
+import com.oleg1202000.finapp.data.Tags
 
 interface TagsDao {
     @Query(
@@ -15,9 +16,9 @@ interface TagsDao {
 
 
     @Insert
-    fun addTag(сategory: Categories)
+    fun addTag(tag: Tags)
 
 
     @Delete
-    fun deleteTag(сategory: Categories)
+    fun deleteTag(tag: Tags)
 }
