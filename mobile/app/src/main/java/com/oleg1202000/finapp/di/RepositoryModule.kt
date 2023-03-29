@@ -11,6 +11,11 @@ import com.oleg1202000.finapp.data.dao.TagsDao
 import dagger.Module
 import javax.inject.Inject
 
+interface Repository {
+
+}
+
+
 
 @Module(includes = [DatabaseModule::class])
  class RepositoryModule @Inject constructor(
@@ -22,11 +27,11 @@ import javax.inject.Inject
 ){
 
     fun getAllCategries() = categoriesDao.getCategories()
-    fun addCategory (сategory: Categories) = categoriesDao.addCategory(сategory)
+    fun setCategory (сategory: Categories) = categoriesDao.addCategory(сategory)
     fun deleteCategory (сategory: Categories) = categoriesDao.deleteCategory(сategory)
 
     fun getPlan(beginDate: String, endDate: String) = planDao.getPlan(beginDate, endDate)
-    fun addPlan (plan: Plan) = planDao.addPlan(plan)
+    fun setPlan (plan: Plan) = planDao.addPlan(plan)
 
 
     fun getSumAmount(
@@ -41,11 +46,11 @@ import javax.inject.Inject
         endDate: String,
         beginDate: String
     ) = summaryDao.getHistory(tagIds, categoryIds, endDate, beginDate)
-    fun addSummary(summary: Summary) = summaryDao.addSummary(summary)
+    fun setSummary(summary: Summary) = summaryDao.addSummary(summary)
     fun deleteSummary(id: ULong) = summaryDao.deleteSummary(id)
     fun updateSummary(summary: Summary) = summaryDao.updateSummary(summary)
 
     fun getTags() = tagsDao.getTags()
-    fun addTag(tag: Tags) = tagsDao.addTag(tag)
+    fun setTag(tag: Tags) = tagsDao.addTag(tag)
     fun deleteTag(tag: Tags) = tagsDao.deleteTag(tag)
 }
