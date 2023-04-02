@@ -12,6 +12,6 @@ import androidx.room.PrimaryKey
     ]
 )
 data class Tags(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: ULong,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val name: String
 )

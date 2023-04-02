@@ -1,9 +1,6 @@
 package com.oleg1202000.finapp.data
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.sql.Date
 
 @Entity(
@@ -16,36 +13,41 @@ import java.sql.Date
             onDelete = ForeignKey.RESTRICT,
             onUpdate = ForeignKey.CASCADE
         ),
-        ForeignKey(
+       /* ForeignKey(
             entity = Tags::class,
             parentColumns = ["id"],
             childColumns = ["tag_id"],
             onDelete = ForeignKey.RESTRICT,
             onUpdate = ForeignKey.CASCADE
-        )
+        )*/
+    ],
+    indices = [
+        Index("category_id", unique = false),
+        //Index("tag_id", unique = false)
     ]
 )
 data class Summary(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: ULong,
-    @ColumnInfo(name = "category_id") val categoryId: ULong,
-    @ColumnInfo(name = "tag_id", defaultValue = "NULL") val tegId: ULong?,
-    @ColumnInfo(name = "amount") val amount: UInt,
-    @ColumnInfo(name = "date") val date: Date,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "category_id") val categoryId: Long,
+    //@ColumnInfo(name = "tag_id", defaultValue = "NULL") val tagId: Long?,
+    @ColumnInfo(name = "amount") val amount: Int,
+    @ColumnInfo(name = "date") val date: Date?,
     @ColumnInfo(name = "is_sync") val isSync: Boolean,
     @ColumnInfo(name = "about", defaultValue = "NULL") val about: String?
 )
 
 data class ReturnSumAmount(
-    val categoryId: ULong,
-    val sumAmount: UInt
+        // https://github.com/android/compose-samples/blob/main/Jetcaster/app/src/main/java/com/example/jetcaster/data/PodcastWithExtraInfo.kt
+
+    @ColumnInfo(name = "category_id") val categoryId: Long,
+    @ColumnInfo(name = "amount") val sumAmount: Int
 )
 
 
 data class ReturnHistory(
-    val id: ULong,
-    val categoryName: String,
-    val tagName: String?,
-    val amount: UInt,
-    val date: Date,
-    val about: String?
+    @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "name") val categoryName: String,
+    @ColumnInfo(name = "amount") val amount: Int,
+    @ColumnInfo(name = "date") val date: Date?,
+    @ColumnInfo(name = "about") val about: String?
 )

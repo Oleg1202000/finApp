@@ -1,10 +1,12 @@
 package com.oleg1202000.finapp.data.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.oleg1202000.finapp.data.Categories
 
+@Dao
 interface CategoriesDao {
     @Query(
         """
@@ -15,9 +17,9 @@ interface CategoriesDao {
 
 
     @Insert
-    fun addCategory(сategory: Categories)
+    fun setCategory(category: Categories)
 
 
     @Delete
-    fun deleteCategory(сategory: Categories)
+    fun deleteCategory(category: Categories)
 }
