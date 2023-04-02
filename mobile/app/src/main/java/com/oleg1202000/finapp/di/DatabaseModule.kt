@@ -9,31 +9,35 @@ import com.oleg1202000.finapp.data.dao.SummaryDao
 import com.oleg1202000.finapp.data.dao.TagsDao
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
 @Module
-class DatabaseModule {
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
 
-    @Provides
     @Singleton
-    fun provideLocalDatabase(context: Context):FinappDatabase = Room.databaseBuilder(
-        context, FinappDatabase::class.java, "finappDatabase.db"
+    @Provides
+    fun provideLocalDatabase(@ApplicationContext context: Context):FinappDatabase = Room.databaseBuilder(
+        context.applicationContext, FinappDatabase::class.java, "finappDatabase.db"
         ).build()
 
-    @Provides
     @Singleton
+    @Provides
     fun provideCategoriesDao(db: FinappDatabase): CategoriesDao = db.categoriesDao()
 
-    @Provides
     @Singleton
+    @Provides
     fun providePlanDao(db: FinappDatabase): PlanDao = db.planDao()
 
-    @Provides
     @Singleton
+    @Provides
     fun provideSummaryDao(db: FinappDatabase): SummaryDao = db.summaryDao()
 
-    @Provides
     @Singleton
+    @Provides
     fun provideTagsDao(db: FinappDatabase): TagsDao = db.tagsDao()
 }
