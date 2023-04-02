@@ -1,8 +1,6 @@
 package com.oleg1202000.finapp.data
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.*
 import java.sql.Date
 
 
@@ -16,15 +14,19 @@ import java.sql.Date
             onDelete = ForeignKey.RESTRICT,
             onUpdate = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index("category_id", unique = false)
     ]
 )
 data class Plan(
-    @ColumnInfo (name = "cateory_id") val categoryId: ULong,
-    @ColumnInfo (name = "limit") val limit: UInt,
-    @ColumnInfo (name = "date") val date: Date
+    @PrimaryKey (autoGenerate = true)  @ColumnInfo(name = "id") val id: Long = 0,
+    @ColumnInfo (name = "category_id") val categoryId: Long,
+    @ColumnInfo (name = "amount") val limit: Int,
+    @ColumnInfo (name = "date") val date: Date?
 )
 
 data class ReturnPlanName(
-    val categoryName: String,
-    val limit: UInt
+    @ColumnInfo(name = "category_name") val categoryName: String,
+    @ColumnInfo (name = "plan_amount") val amount: Int
 )

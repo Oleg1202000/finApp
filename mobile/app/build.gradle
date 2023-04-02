@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -39,7 +40,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.1'
+        kotlinCompilerExtensionVersion '1.4.4'
     }
     packagingOptions {
         resources {
@@ -98,12 +99,9 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
     implementation "androidx.room:room-paging:$room_version"
+    //kapt "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
 
-
-    // Dagger 2
-    //def dagger_version = "2.45"
-    //implementation "com.google.dagger:dagger:$dagger_version"
-    //kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     // Hilt
     def hilt_version = "2.45"

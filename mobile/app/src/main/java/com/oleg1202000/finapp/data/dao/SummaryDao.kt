@@ -2,60 +2,62 @@ package com.oleg1202000.finapp.data.dao
 
 import androidx.room.*
 import com.oleg1202000.finapp.data.*
+import java.sql.Date
 
 @Dao
 interface SummaryDao {
     @Query(
         """
-        SELECT summary.category_id, SUM(summary.amount)
+        SELECT summary.category_id, SUM(summary.amount) AS amount
         
         FROM summary
         
-         JOIN summary_tags ON summary_tags.summary_id = summary.id
-        RIGHT JOIN tags ON summary.tag_id = tags.id
+        INNER JOIN summary_tags ON summary_tags.summary_id = summary.id
+        INNER JOIN tags ON summary_tags.tag_id = tags.id
         INNER JOIN categories ON categories.id = summary.category_id
         
-        WHERE categories.id IN (:categoryIds) AND
-        tags.id IN (:tagsIds) AND
-        summary.date >= :beginDate AND summary.date <= :endDate
+        WHERE categories.id IN (:categoryIds)
+        AND tags.id IN (:tagsIds)
+        AND summary.date >= :beginDate AND summary.date <= :endDate
         
         GROUP BY summary.category_id
         """
     )
     fun getSumAmount(
-        categoryIds: List<ULong>,
-        tagsIds: List<ULong>,
-        beginDate: String,
-        endDate: String
+        categoryIds: List<Long>,
+        tagsIds: List<Long>,
+        beginDate: Date?,
+        endDate: Date?
     ): List<ReturnSumAmount>
 
 
     @Query(
         """
-        SELECT summary.id, categories.name, tags.name, summary.amount, summary.date, summary.about
+        SELECT summary.id, categories.name, summary.amount, summary.date, summary.about
         
         FROM summary
         
-        RIGHT JOIN tags ON tags.id = summary.tag_id
-        INNER JOIN categories ON summary.category_id = categories.id
+        INNER JOIN summary_tags ON summary_tags.summary_id = summary.id
+        INNER JOIN tags ON summary_tags.tag_id = tags.id
+        INNER JOIN categories ON categories.id = summary.category_id
         
         WHERE summary.category_id IN (:categoryIds) AND
-        summary.tag_id IN (:tagIds) AND
+        summary_tags.tag_id IN (:tagIds) AND
         summary.date >= :beginDate AND summary.date <= :endDate
         
         ORDER BY summary.date DESC
         """
     )
     fun getHistory(
-        tagIds: List<ULong>,
-        categoryIds: List<ULong>,
-        endDate: String,
-        beginDate: String
+        tagIds: List<Long>,
+        categoryIds: List<Long>,
+        endDate: Date?,
+        beginDate: Date?
     ): List<ReturnHistory>
 
 
     @Insert
-    fun addSummary(summary: Summary)
+    fun setSummary(summary: Summary)
 
 
     //delete
@@ -65,7 +67,7 @@ interface SummaryDao {
         WHERE id = :id
         """
     )
-    fun deleteSummary(id: ULong)
+    fun deleteSummaryById(id: Long)
 
 
     @Update

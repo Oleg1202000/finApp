@@ -6,6 +6,7 @@ import com.oleg1202000.finapp.data.dao.PlanDao
 import com.oleg1202000.finapp.data.dao.SummaryDao
 import com.oleg1202000.finapp.data.dao.TagsDao
 import kotlinx.coroutines.flow.flow
+import java.sql.Date
 import javax.inject.Inject
 
 
@@ -18,33 +19,35 @@ import javax.inject.Inject
 ) {
 
     fun getAllCategries() = flow { emit(categoriesDao.getCategories()) }
-    fun setCategory (сategory: Categories) = categoriesDao.addCategory(сategory)
+    fun setCategory (category: Categories) = categoriesDao.setCategory(category)
 
 
-    fun deleteCategory (сategory: Categories) = categoriesDao.deleteCategory(сategory)
+    fun deleteCategory (category: Categories) = categoriesDao.deleteCategory(category)
     // TODO: Добавить emit
 
-    fun getPlan(beginDate: String, endDate: String) = planDao.getPlan(beginDate, endDate)
-    fun setPlan (plan: Plan) = planDao.addPlan(plan)
+    fun getPlan(beginDate: Date?, endDate: Date?) = planDao.getPlan(beginDate, endDate)
+    fun setPlan (plan: Plan) = planDao.setPlan(plan)
+     fun deletePlan (plan: Plan) = planDao.deletePlan(plan)
+     fun updPlan (plan: Plan) = planDao.updPlan(plan)
 
 
     fun getSumAmount(
-        categoryIds: List<ULong>,
-        tagsIds: List<ULong>,
-        beginDate: String,
-        endDate: String
+        categoryIds: List<Long>,
+        tagsIds: List<Long>,
+        beginDate: Date?,
+        endDate: Date?
     ) = summaryDao.getSumAmount(categoryIds,tagsIds, beginDate, endDate)
     fun getHistory(
-        tagIds: List<ULong>,
-        categoryIds: List<ULong>,
-        endDate: String,
-        beginDate: String
+        tagIds: List<Long>,
+        categoryIds: List<Long>,
+        endDate: Date?,
+        beginDate: Date?
     ) = summaryDao.getHistory(tagIds, categoryIds, endDate, beginDate)
-    fun setSummary(summary: Summary) = summaryDao.addSummary(summary)
-    fun deleteSummary(id: ULong) = summaryDao.deleteSummary(id)
+    fun setSummary(summary: Summary) = summaryDao.setSummary(summary)
+    fun deleteSummary(id: Long) = summaryDao.deleteSummaryById(id)
     fun updateSummary(summary: Summary) = summaryDao.updateSummary(summary)
 
     fun getTags() = tagsDao.getTags()
-    fun setTag(tag: Tags) = tagsDao.addTag(tag)
+    fun setTag(tag: Tags) = tagsDao.setTag(tag)
     fun deleteTag(tag: Tags) = tagsDao.deleteTag(tag)
 }
