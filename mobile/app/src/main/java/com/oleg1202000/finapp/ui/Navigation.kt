@@ -31,7 +31,12 @@ class Navigation(navController: NavHostController) {
 
     val navigateToHome: () -> Unit = {
         navController.navigate(Screen.Home.route) {
+            popUpTo(Screen.Home.route) {
+                saveState = true
+            }
             restoreState = true
+            launchSingleTop = true
+
         }
     }
 
