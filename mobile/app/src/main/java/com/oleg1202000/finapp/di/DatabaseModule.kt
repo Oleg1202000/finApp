@@ -23,7 +23,7 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideLocalDatabase(@ApplicationContext context: Context):FinappDatabase = Room.databaseBuilder(
-        context.applicationContext, FinappDatabase::class.java, "finappDatabase.db"
+        context.applicationContext, FinappDatabase::class.java, "finappdatabase.db"
         )
         .addTypeConverter(DateConverter::class)
         .build()
