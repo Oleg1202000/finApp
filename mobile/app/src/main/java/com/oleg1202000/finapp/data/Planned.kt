@@ -6,6 +6,7 @@ import java.sql.Date
 
 @Entity (
     tableName = "planned",
+
     foreignKeys = [
         ForeignKey(
             entity = Categories::class,
@@ -15,18 +16,14 @@ import java.sql.Date
             onUpdate = ForeignKey.CASCADE
         )
     ],
+
     indices = [
         Index("category_id", unique = false)
     ]
 )
 data class Planned(
-    @PrimaryKey (autoGenerate = true)  @ColumnInfo(name = "id") val id: Long, // = 0,
+    @PrimaryKey (autoGenerate = true)  @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo (name = "category_id") val categoryId: Long,
     @ColumnInfo (name = "amount") val amount: Int,
     @ColumnInfo (name = "date") val date: Date?
-)
-
-data class ReturnPlanName(
-    @ColumnInfo(name = "category_name") val categoryName: String,
-    @ColumnInfo (name = "plan_amount") val amount: Int
 )

@@ -7,7 +7,6 @@ import com.oleg1202000.finapp.data.FinappDatabase
 import com.oleg1202000.finapp.data.dao.CategoriesDao
 import com.oleg1202000.finapp.data.dao.PlanDao
 import com.oleg1202000.finapp.data.dao.SummaryDao
-import com.oleg1202000.finapp.data.dao.TagsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,8 +38,4 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideSummaryDao(db: FinappDatabase): SummaryDao = db.summaryDao()
-
-    @Singleton
-    @Provides
-    fun provideTagsDao(db: FinappDatabase): TagsDao = db.tagsDao()
 }
