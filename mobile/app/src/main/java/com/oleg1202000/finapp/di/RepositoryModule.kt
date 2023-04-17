@@ -29,9 +29,9 @@ import javax.inject.Inject
 
     fun getPlan(beginDate: Date?, endDate: Date?) = flow { emit(planDao.getPlan(beginDate, endDate)) }
         .flowOn(Dispatchers.IO)
-    fun setPlan (plan: Plan) = planDao.setPlan(plan)
-     fun deletePlan (plan: Plan) = planDao.deletePlan(plan)
-     fun updPlan (plan: Plan) = planDao.updPlan(plan)
+    fun setPlan (plan: Planned) = planDao.setPlan(plan)
+     fun deletePlan (plan: Planned) = planDao.deletePlan(plan)
+     fun updPlan (plan: Planned) = planDao.updPlan(plan)
 
 
     fun getSumAmount(
@@ -41,6 +41,14 @@ import javax.inject.Inject
         endDate: Date?
     ) = flow { emit(summaryDao.getSumAmount(categoryIds,tagsIds, beginDate, endDate)) }
         .flowOn(Dispatchers.IO)
+
+     fun getSumAmountAndPlan(
+         categoryIds: List<Long>,
+         tagsIds: List<Long>,
+         beginDate: Date?,
+         endDate: Date?
+     ) = flow { emit(summaryDao.getSumAmountAndPlan(categoryIds,tagsIds, beginDate, endDate)) }
+         .flowOn(Dispatchers.IO)
     fun getHistory(
         tagIds: List<Long>,
         categoryIds: List<Long>,

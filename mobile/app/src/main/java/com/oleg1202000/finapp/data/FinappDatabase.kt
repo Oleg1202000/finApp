@@ -14,7 +14,7 @@ import com.oleg1202000.finapp.data.dao.TagsDao
         Categories::class,
         Tags::class,
         Summary::class,
-        Plan::class,
+        Planned::class,
         SummaryTags::class
 
     ],

@@ -37,10 +37,16 @@ data class Summary(
 )
 
 data class ReturnSumAmount(
-        // https://github.com/android/compose-samples/blob/main/Jetcaster/app/src/main/java/com/example/jetcaster/data/PodcastWithExtraInfo.kt
 
     @ColumnInfo(name = "category_id") val categoryId: Long,
-    @ColumnInfo(name = "amount") val sumAmount: Int
+    @ColumnInfo(name = "amount") val amount: Int
+)
+
+data class ReturnSumAmountAndPlan(
+
+    @ColumnInfo(name = "category_name") val categoryName: String,
+    @ColumnInfo(name = "summary_amount") val amount: Int,
+    @ColumnInfo(name = "planned") val plan: Int?
 )
 
 
