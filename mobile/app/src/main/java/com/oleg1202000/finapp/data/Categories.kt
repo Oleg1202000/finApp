@@ -15,5 +15,7 @@ import androidx.room.PrimaryKey
 data class Categories(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "is_income") val isIncome: Boolean // Доход или расход
+    @ColumnInfo(name = "is_income") val isIncome: Boolean, // Доход или расход
+    @ColumnInfo(name = "color") val color: Long,
+    @ColumnInfo(name = "path_to_icon") val pathToIcon: String?
 )

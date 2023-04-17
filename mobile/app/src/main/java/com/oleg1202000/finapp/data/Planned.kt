@@ -5,7 +5,7 @@ import java.sql.Date
 
 
 @Entity (
-    tableName = "plan",
+    tableName = "planned",
     foreignKeys = [
         ForeignKey(
             entity = Categories::class,
@@ -19,10 +19,10 @@ import java.sql.Date
         Index("category_id", unique = false)
     ]
 )
-data class Plan(
-    @PrimaryKey (autoGenerate = true)  @ColumnInfo(name = "id") val id: Long = 0,
+data class Planned(
+    @PrimaryKey (autoGenerate = true)  @ColumnInfo(name = "id") val id: Long, // = 0,
     @ColumnInfo (name = "category_id") val categoryId: Long,
-    @ColumnInfo (name = "amount") val limit: Int,
+    @ColumnInfo (name = "amount") val amount: Int,
     @ColumnInfo (name = "date") val date: Date?
 )
 
