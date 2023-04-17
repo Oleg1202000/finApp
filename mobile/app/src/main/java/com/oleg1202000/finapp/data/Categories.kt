@@ -17,5 +17,5 @@ data class Categories(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "is_income") val isIncome: Boolean, // Доход или расход
     @ColumnInfo(name = "color") val color: Long,
-    @ColumnInfo(name = "path_to_icon") val pathToIcon: String?
+    @ColumnInfo(name = "path_to_icon") val pathToIcon: Int
 )
