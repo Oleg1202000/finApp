@@ -35,12 +35,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-   /* kotlin {
-        jvmToolchain {
-            languageVersion.set(JavaLanguageVersion.of("17"))
-        }
-    }*/
-
     kotlinOptions {
         jvmTarget = '17'
     }
@@ -61,7 +55,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    implementation 'androidx.activity:activity-compose:1.7.0'
+    implementation 'androidx.activity:activity-compose:1.7.1'
 
 
     testImplementation 'junit:junit:4.13.2'
@@ -74,7 +68,7 @@ dependencies {
     androidTestImplementation composeBom
 
     implementation 'androidx.compose.material3:material3'
-    implementation "androidx.compose.material:material:1.4.1"
+    implementation "androidx.compose.material:material:1.4.2"
 
     // Android Studio Preview support
     implementation 'androidx.compose.ui:ui-tooling-preview'
@@ -88,15 +82,19 @@ dependencies {
     implementation 'androidx.compose.material3:material3-window-size-class'
 
     // Optional - Integration with activities
-    implementation 'androidx.activity:activity-compose:1.7.0'
+    implementation 'androidx.activity:activity-compose:1.7.1'
     // Optional - Integration with ViewModels
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
     // Optional - Integration with LiveData
     implementation 'androidx.compose.runtime:runtime-livedata'
 
+
     // Navigation-compose
     def nav_version = "2.5.3"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    //Hilt and Navigation
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
 
     // Room
@@ -110,6 +108,7 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
     implementation "androidx.room:room-paging:$room_version"
     ksp "androidx.room:room-compiler:$room_version"
+    //kapt "androidx.room:room-compiler:$room_version"
 
 
     // Hilt
@@ -158,8 +157,6 @@ dependencies {
     def appcompat_version = "1.6.1"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
-    // For loading and tinting drawables on older versions of the platform
-    implementation "androidx.appcompat:appcompat-resources:$appcompat_version"
 }
 
 
