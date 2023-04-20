@@ -1,16 +1,17 @@
 package com.oleg1202000.finapp.data
 
 import androidx.room.TypeConverter
-import java.sql.Date
+import java.util.Date
+
 
 class DateConverter {
     @TypeConverter
-    fun longToDate(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun longToDate(value: Long): Date {
+        return Date(value)
     }
 
     @TypeConverter
-    fun dateToLong(value: Date?): Long? {
-        return value?.time?.toLong()
+    fun dateToLong(value: Date): Long {
+        return value.time
     }
 }

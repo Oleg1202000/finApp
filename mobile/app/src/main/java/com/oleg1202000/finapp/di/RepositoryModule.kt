@@ -7,11 +7,11 @@ import com.oleg1202000.finapp.data.dao.SummaryDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.sql.Date
+import java.util.Date
 import javax.inject.Inject
 
 
- class RepositoryModule @Inject constructor(
+ class LocalRepositoryModule @Inject constructor(
 
     private val categoriesDao: CategoriesDao,
     private val summaryDao: SummaryDao,
@@ -30,7 +30,11 @@ import javax.inject.Inject
 
 
      // Planned table
-    fun getPlan(isIncome: Boolean, beginDate: Date?, endDate: Date?) = flow {
+    fun getPlan(
+         isIncome: Boolean,
+         beginDate: Date,
+         endDate: Date
+     ) = flow {
         emit(planDao.getPlan(isIncome, beginDate, endDate))
     }.flowOn(Dispatchers.IO)
 
@@ -42,15 +46,15 @@ import javax.inject.Inject
      // Summary table
     fun getSumAmount(
         isIncome: Boolean = false,
-        beginDate: Date?,
-        endDate: Date?
+        beginDate: Date,
+        endDate: Date
     ) = flow {
         emit(summaryDao.getSumAmount(isIncome, beginDate, endDate))
     }.flowOn(Dispatchers.IO)
 
     fun getHistory(
-        endDate: Date?,
-        beginDate: Date?
+        beginDate: Date,
+        endDate: Date
     ) = flow {
         emit(summaryDao.getHistory(endDate, beginDate))
     }.flowOn(Dispatchers.IO)

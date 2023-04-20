@@ -2,14 +2,15 @@ package com.oleg1202000.finapp.data.dao
 
 import androidx.room.*
 import com.oleg1202000.finapp.data.*
-import java.sql.Date
+import java.util.Date
+
 
 @Dao
 interface SummaryDao {
 
     @Query(
         """
-        SELECT categories.name AS category_name, SUM(summary.amount) AS summary_amount, SUM(planned.amount) AS planned
+        SELECT categories.name AS category_name, categories.color AS color, categories.path_to_icon AS path_to_icon, SUM(summary.amount) AS summary_amount, SUM(planned.amount) AS planned
         
         FROM summary
 
@@ -26,8 +27,8 @@ interface SummaryDao {
     )
     fun getSumAmount(
         isIncome: Boolean = false,
-        beginDate: Date?,
-        endDate: Date?
+        beginDate: Date,
+        endDate: Date
 
     ) : List<ReturnSumAmount>
 
@@ -46,8 +47,8 @@ interface SummaryDao {
         """
     )
     fun getHistory(
-        endDate: Date?,
-        beginDate: Date?
+        beginDate: Date,
+        endDate: Date
 
     ) : List<ReturnHistory>
 
