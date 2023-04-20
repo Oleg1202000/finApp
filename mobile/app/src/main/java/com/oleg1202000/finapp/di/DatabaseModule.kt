@@ -2,7 +2,6 @@ package com.oleg1202000.finapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.oleg1202000.finapp.data.DateConverter
 import com.oleg1202000.finapp.data.FinappDatabase
 import com.oleg1202000.finapp.data.dao.CategoriesDao
 import com.oleg1202000.finapp.data.dao.PlanDao
@@ -24,7 +23,6 @@ object DatabaseModule {
     fun provideLocalDatabase(@ApplicationContext context: Context):FinappDatabase = Room.databaseBuilder(
         context.applicationContext, FinappDatabase::class.java, "finappdatabase.db"
         )
-        .addTypeConverter(DateConverter::class)
         .build()
 
     @Singleton

@@ -20,6 +20,7 @@ import com.oleg1202000.finapp.data.dao.SummaryDao
 
     exportSchema = false
 )
+
 @TypeConverters(DateConverter::class)
 abstract class FinappDatabase : RoomDatabase() {
 

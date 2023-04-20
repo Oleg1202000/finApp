@@ -3,13 +3,14 @@ package com.oleg1202000.finapp.data.dao
 import androidx.room.*
 import com.oleg1202000.finapp.data.Planned
 import com.oleg1202000.finapp.data.ReturnSumAmount
-import java.sql.Date
+import java.util.Date
+
 
 @Dao
 interface PlanDao {
     @Query(
         """
-        SELECT categories.name AS category_name, SUM(summary.amount) AS summary_amount, SUM(planned.amount) AS planned
+        SELECT categories.name AS category_name, categories.color AS color, categories.path_to_icon AS path_to_icon, SUM(summary.amount) AS summary_amount, SUM(planned.amount) AS planned
         
         FROM planned
         
@@ -24,8 +25,8 @@ interface PlanDao {
     )
     fun getPlan(
         isIncome: Boolean = false,
-        beginDate: Date?,
-        endDate: Date?
+        beginDate: Date,
+        endDate: Date
 
     ) : List<ReturnSumAmount>
 
