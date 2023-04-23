@@ -25,7 +25,7 @@ data class Summary(
     @ColumnInfo(name = "category_id") val categoryId: Long,
     @ColumnInfo(name = "amount") val amount: Int,
     @ColumnInfo(name = "date") val date: Date,
-    @ColumnInfo(name = "is_sync") val isSync: Boolean,
+    @ColumnInfo(name = "is_sync") val isSync: Boolean = false,
     @ColumnInfo(name = "about", defaultValue = "NULL") val about: String?
 )
 
