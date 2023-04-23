@@ -17,9 +17,9 @@ private val DarkColorPalette = darkColorScheme(
 
 private val LightColorPalette = lightColorScheme(
     primary = PrimaryLightGray,
+    onPrimary = Color.Black,
     primaryContainer = SurfaceLightGray,
     secondary = cerulean,
-    background = Color.White,
     surface = SurfaceLightGray
 
     /* Other default colors to override
