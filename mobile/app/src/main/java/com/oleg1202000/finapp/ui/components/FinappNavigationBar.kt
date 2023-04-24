@@ -19,18 +19,19 @@ import com.oleg1202000.finapp.ui.Screen
 @Composable
 fun FinappNavigationBar(
     navController: NavHostController,
-    currentDestination: NavDestination?
+    currentDestination: NavDestination?,
 ) {
 
-    NavigationBar(tonalElevation = 60.dp,
+    NavigationBar(
+        tonalElevation = 60.dp,
         windowInsets = WindowInsets.navigationBars,
         modifier = Modifier.height(140.dp)
     ) {
 
         navItems.forEach { screen ->
             NavigationBarItem(
-                label = {
 
+                label = {
                     Text(text = screen.label,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis

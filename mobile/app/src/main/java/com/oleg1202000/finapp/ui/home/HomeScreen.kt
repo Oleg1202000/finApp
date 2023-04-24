@@ -8,13 +8,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,16 +28,22 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavDestination
+import androidx.navigation.NavHostController
+import com.oleg1202000.finapp.ui.components.FinappFloatingActionButton
+import com.oleg1202000.finapp.ui.components.FinappNavigationBar
+import com.oleg1202000.finapp.ui.components.FinappStatusBar
 import com.oleg1202000.finapp.ui.theme.Shapes
 import com.oleg1202000.finapp.ui.theme.Typography
 import com.oleg1202000.finapp.ui.theme.defaultColor
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel(),
-    statusBarItem: MutableState<String>
-
+    navController: NavHostController,
+    currentDestination: NavDestination?
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -43,55 +51,73 @@ fun HomeScreen(
     val defaultColor = defaultColor
 
 
-    val expense = uiState.sumAmount
-    val income = 0
-    statusBarItem.value = "- $expense    + $income"
+    Scaffold(
 
+        topBar = {
+            FinappStatusBar(
+                item = "- ${uiState.sumAmount}    + 0",  // Для отображения суммы доходов и расходов
+            )
+        },
 
-    LazyColumn(
+        bottomBar = {
+            FinappNavigationBar(
+                navController = navController,
+                currentDestination = currentDestination,
+            )
+        },
 
-    ) {
-           // график1
-        item {
-            if (uiState.sumAmount == 0) {
-                Column(
-                    modifier = Modifier
-                        .height(300.dp),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(text = "Нет записей о расходах")
-                    }
-
-
-                }
-
-            } else {
-                GraphAmount(
-                    dataHome = uiState.dataHome,
-                    defaultColor = defaultColor,
-                    viewModel = viewModel
-                )
-            }
+        floatingActionButton = {
+            FinappFloatingActionButton(
+                navController = navController,
+                currentDestination = currentDestination
+            )
         }
 
-    item { Spacer(modifier = Modifier.height(20.dp)) }
+    ) { innerPadding ->
+
+        LazyColumn(
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            // график1
+            item {
+                if (uiState.sumAmount == 0) {
+                    Column(
+                        modifier = Modifier
+                            .height(300.dp),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(text = "Нет записей о расходах")
+                        }
+                    }
+                    
+                } else {
+
+                    GraphAmount(
+                        dataHome = uiState.dataHome,
+                        defaultColor = defaultColor,
+                        viewModel = viewModel
+                    )
+                }
+            }
+
+            item { Spacer(modifier = Modifier.height(20.dp)) }
 
 
-        // "таблица" из категорий и трат
-    item {
-        TableAmount(
-            dataHome = uiState.dataHome,
-            sumAmount = uiState.sumAmount
-        )
-    }
+            // "таблица" из категорий и трат
+            item {
+                TableAmount(
+                    dataHome = uiState.dataHome,
+                    sumAmount = uiState.sumAmount
+                )
+            }
 
+        }
     }
 }
-
 
 @Composable
 fun GraphAmount(
