@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -27,22 +28,23 @@ class HomeViewModel  @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
 
-    private val beginDate = MutableStateFlow(Calendar.getInstance().time)
-    private val endDate = MutableStateFlow(Calendar.getInstance().time)
+    private val beginDate = MutableStateFlow(Calendar.getInstance().timeInMillis)
+    private val endDate = MutableStateFlow(Calendar.getInstance().timeInMillis)
 
 
     init {
         viewModelScope.launch {
             getDate(deltaWeek = 0)
+
             localRepository.getSumAmount(
                 beginDate = beginDate.value,
                 endDate = endDate.value
             )
-               // .map { items ->
                 .collect { items ->
                     val sumAmount = items.sumOf { it.amount }
 
-                    HomeUiState(
+                    _uiState.update {
+                        it.copy(
                         dataHome = items.map {
                             DataHome(
                                 categoryName = it.categoryName,
@@ -63,29 +65,27 @@ class HomeViewModel  @Inject constructor(
                             )
                         },
                         sumAmount = sumAmount,
-
-                    )
-
-
-
+                        )
+                    }
                 }
-            }
         }
+    }
 
 
     fun getDate(deltaWeek: Int) {
-        //getYear()
-        //getMonth()
-        //getYear()
+
+        /* TODO: getYear()
+        getMonth()
+        getYear()*/
 
         val currentDate : Calendar = Calendar.getInstance()
         currentDate.set(Calendar.WEEK_OF_YEAR, currentDate.get(Calendar.WEEK_OF_YEAR) + deltaWeek)
 
         currentDate.set(Calendar.DAY_OF_WEEK, 1)
-        beginDate.value = currentDate.time
+        beginDate.value = currentDate.timeInMillis
 
         currentDate.set(Calendar.DAY_OF_WEEK, 7)
-       endDate.value = currentDate.time
+       endDate.value = currentDate.timeInMillis
     }
 }
 
@@ -103,6 +103,8 @@ data class DataHome(
     val coefficientAmount: Float,
     val colorItem: Color
 )
+
+
 enum class GraphPeriod {
     Day,
     Week,

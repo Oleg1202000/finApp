@@ -6,10 +6,13 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.oleg1202000.finapp.ui.categories.addcategory.AddCategoryScreen
+import com.oleg1202000.finapp.ui.categories.addcategory.AddCategoryViewModel
 import com.oleg1202000.finapp.ui.history.HistoryScreen
 import com.oleg1202000.finapp.ui.home.HomeScreen
 import com.oleg1202000.finapp.ui.home.HomeViewModel
 import com.oleg1202000.finapp.ui.home.adddata.AddDataScreen
+import com.oleg1202000.finapp.ui.home.adddata.AddDataViewModel
 import com.oleg1202000.finapp.ui.plan.PlanScreen
 import com.oleg1202000.finapp.ui.plan.addplan.AddPlanScreen
 
@@ -28,7 +31,6 @@ fun NavGraph(
 
         composable(Screen.Home.route) {backStackEntry ->
             val viewModel = hiltViewModel<HomeViewModel>()
-
             HomeScreen(
                 navController = navController,
                 currentDestination = currentDestination,
@@ -38,7 +40,11 @@ fun NavGraph(
         }
 
         composable(Screen.AddData.route) {
-            AddDataScreen()
+            val viewModel = hiltViewModel<AddDataViewModel>()
+            AddDataScreen(
+                navController = navController,
+                viewModel = viewModel
+            )
 
         }
 
@@ -61,11 +67,11 @@ fun NavGraph(
             )
         }
 
-        composable(Screen.Category.route) {
-
-        }
-
         composable(Screen.AddCategory.route) {
+            val viewModel = hiltViewModel<AddCategoryViewModel>()
+            AddCategoryScreen(
+                viewModel = viewModel
+            )
 
         }
     }
