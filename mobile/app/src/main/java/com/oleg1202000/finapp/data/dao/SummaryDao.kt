@@ -27,8 +27,8 @@ interface SummaryDao {
     )
     fun getSumAmount(
         isIncome: Boolean = false,
-        beginDate: Date,
-        endDate: Date
+        beginDate: Long,
+        endDate: Long
 
     ) : List<ReturnSumAmount>
 
@@ -47,14 +47,14 @@ interface SummaryDao {
         """
     )
     fun getHistory(
-        beginDate: Date,
-        endDate: Date
+        beginDate: Long,
+        endDate: Long
 
     ) : List<ReturnHistory>
 
 
     @Insert
-    fun setSummary(summary: Summary)
+     suspend fun setSummary(summary: Summary)
 
 
     //delete
@@ -64,9 +64,9 @@ interface SummaryDao {
         WHERE id = :id
         """
     )
-    fun deleteSummaryById(id: Long)
+    suspend fun deleteSummaryById(id: Long)
 
 
     @Update
-    fun updateSummary(summary: Summary)
+    suspend  fun updateSummary(summary: Summary)
 }

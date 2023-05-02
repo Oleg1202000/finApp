@@ -25,15 +25,15 @@ interface PlanDao {
     )
     fun getPlan(
         isIncome: Boolean = false,
-        beginDate: Date,
-        endDate: Date
+        beginDate: Long,
+        endDate: Long
 
     ) : List<ReturnSumAmount>
 
     @Update
-    fun setPlan(planned: Planned)
+    suspend fun setPlan(planned: Planned)
 
 
     @Delete
-    fun deletePlan(planned: Planned)
+    suspend fun deletePlan(planned: Planned)
 }

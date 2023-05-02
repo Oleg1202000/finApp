@@ -1,14 +1,13 @@
 package com.oleg1202000.finapp.data
 
 import androidx.room.*
-import java.util.Date
 
 @Entity(
     tableName = "summary",
 
     foreignKeys = [
         ForeignKey(
-            entity = Categories::class,
+            entity = Category::class,
             parentColumns = ["id"],
             childColumns = ["category_id"],
             onDelete = ForeignKey.RESTRICT,
@@ -24,7 +23,7 @@ data class Summary(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "category_id") val categoryId: Long,
     @ColumnInfo(name = "amount") val amount: Int,
-    @ColumnInfo(name = "date") val date: Date,
+    @ColumnInfo(name = "date") val date: Long,
     @ColumnInfo(name = "is_sync") val isSync: Boolean = false,
     @ColumnInfo(name = "about", defaultValue = "NULL") val about: String?
 )
@@ -44,6 +43,6 @@ data class ReturnHistory(
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val categoryName: String,
     @ColumnInfo(name = "amount") val amount: Int,
-    @ColumnInfo(name = "date") val date: Date,
+    @ColumnInfo(name = "date") val date: Long,
     @ColumnInfo(name = "about") val about: String?
 )
