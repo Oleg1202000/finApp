@@ -11,8 +11,7 @@ sealed class Screen(val route: String) {
     object Plan : Screen("plan")
 
     object AddData : Screen("home/add-data")
-    object Category : Screen("home/add-data/category")
-    object AddCategory : Screen("home/add-data/category/add-category")
+    object AddCategory : Screen("home/add-data/add-category")
 
     object AddPlan : Screen("plan/add-plan")
 }
@@ -36,18 +35,10 @@ class Navigation(navController: NavHostController) {
         }
     }
 
-
-
-    val navigateCategory: () -> Unit = {
-        navController.navigate(Screen.Category.route) {
-
-        }
-    }
-
     val navigateToAddCategory: () -> Unit = {
         navController.navigate(Screen.AddCategory.route) {
 
-            popUpTo(Screen.Category.route)
+            popUpTo(Screen.AddCategory.route)
         }
     }
 

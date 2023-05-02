@@ -1,7 +1,9 @@
 package com.oleg1202000.finapp.ui.home
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +20,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -52,7 +56,6 @@ fun HomeScreen(
 
 
     Scaffold(
-
         topBar = {
             FinappStatusBar(
                 item = "- ${uiState.sumAmount}    + 0",  // Для отображения суммы доходов и расходов
@@ -72,12 +75,18 @@ fun HomeScreen(
                 currentDestination = currentDestination
             )
         }
-
     ) { innerPadding ->
 
         LazyColumn(
             modifier = Modifier.padding(innerPadding)
         ) {
+
+            item {
+                Spacer(
+                    modifier = Modifier.height(20.dp)
+                )
+            }
+
             // график1
             item {
                 if (uiState.sumAmount == 0) {
@@ -93,16 +102,13 @@ fun HomeScreen(
                             Text(text = "Нет записей о расходах")
                         }
                     }
-                    
                 } else {
-
                     GraphAmount(
-                        dataHome = uiState.dataHome,
-                        defaultColor = defaultColor,
-                        viewModel = viewModel
+                        dataHome = uiState.dataHome
                     )
                 }
             }
+
 
             item { Spacer(modifier = Modifier.height(20.dp)) }
 
@@ -114,21 +120,20 @@ fun HomeScreen(
                     sumAmount = uiState.sumAmount
                 )
             }
-
         }
     }
 }
 
+
 @Composable
 fun GraphAmount(
     dataHome: List<DataHome>,
-    defaultColor: Color,
-    viewModel: HomeViewModel
 ) {
-
-    var deltaPeriod: Int = 0
-
     //val swipeableState = rememberSwipeableState(initialValue = )
+
+
+    val showDetailedInfo = remember { mutableStateOf(false) }
+
 
     Column {
         Surface(
@@ -139,72 +144,106 @@ fun GraphAmount(
             shape = Shapes.small,
             shadowElevation = 4.dp
         ) {
-            dataHome.forEach { item ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
 
-                    Icon(
-                        painter = painterResource(id = item.iconCategory),
-                        contentDescription = item.categoryName,
-                        tint = Color(item.colorIconCategory)
-                    )
+            Column {
 
-                    Canvas(
+                dataHome.forEach { item ->
+                    Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .height(50.dp)
+                            .fillMaxWidth()
+                            .clickable {
+                                showDetailedInfo.value = !showDetailedInfo.value
+                            },
+
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        val sizeHeight: Float = 30f
-
-                        drawRect(
-                            color = item.colorItem,
-                            topLeft = Offset(
-                                x = 0f,
-                                y = size.height * 0.20f
-                            ),
-                            size = Size(
-                                (size.width) * item.coefficientAmount,
-                                sizeHeight.dp.toPx()
-                            )
+                        Icon(
+                            painter = painterResource(id = item.iconCategory),
+                            contentDescription = item.categoryName,
+                            tint = Color(item.colorIconCategory.toULong())
                         )
+
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(50.dp)
+                        ) {
+                        Canvas(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+
+                            val sizeHeight = 30f
+                            drawRect(
+                                color = item.colorItem,
+                                topLeft = Offset(
+                                    x = 0f,
+                                    y = size.height * 0.20f
+                                ),
+                                size = Size(
+                                    (size.width) * item.coefficientAmount,
+                                    sizeHeight.dp.toPx()
+                                )
+                            )
+                        }
+
+
+                            if (showDetailedInfo.value) {
+                                Row(
+                                    modifier = Modifier.fillMaxSize(),
+                                    horizontalArrangement = Arrangement.Start,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+
+                                    Text(text = item.categoryName)
+                                }
+                            }
                     }
 
-                    Text(
-                        text = ((item.coefficientAmount * 100).toInt().toString() + " %"),
-                        style = Typography.bodyMedium
-                    )
+
+                        if (!showDetailedInfo.value) {
+                            Text(
+                                text = ((item.coefficientAmount * 100).toInt().toString() + " %"),
+                                style = Typography.bodyMedium
+                            )
+                        } else {
+                            Text(
+                                text = (item.amount.toString() + " ₽" ),
+                                style = Typography.bodyMedium
+                            )
+                        }
+                    }
                 }
             }
         }
 
+        Spacer(modifier = Modifier.height(20.dp))
 
-        // Кнопки День / неделя / месяц
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-
-            Button(onClick = {
-                /*TODO*/
-            }
+            // Кнопки День / неделя / месяц
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = GraphPeriod.Day.toString())
+
+                Button(onClick = {
+                    /*TODO*/
+                }
+                ) {
+                    Text(text = GraphPeriod.Day.toString())
+                }
+
+                Button(onClick = {
+                   // deltaPeriod = 0
+                }) {
+                    Text(text = GraphPeriod.Week.toString())
+                }
+
+                Button(onClick = { /*TODO*/ }) {
+                    Text(text = GraphPeriod.Month.toString())
+                }
             }
 
-            Button(onClick = {
-                    deltaPeriod = 0
-            }) {
-                Text(text = GraphPeriod.Week.toString())
-            }
-
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = GraphPeriod.Month.toString())
-            }
-        }
-
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
@@ -223,8 +262,8 @@ fun TableAmount(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            dataHome.forEach {item ->
 
+            dataHome.forEach {item ->
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -233,7 +272,7 @@ fun TableAmount(
                     Icon(
                         painter = painterResource(id = item.iconCategory),
                         contentDescription = item.categoryName,
-                        tint = Color(item.colorIconCategory)
+                        tint = Color(item.colorIconCategory.toULong())
                     )
 
                     Text(
@@ -249,16 +288,9 @@ fun TableAmount(
                             text = sumAmount.toString() + " ₽",
                             fontStyle = FontStyle.Italic
                         )
-
                     }
                 }
             }
         }
     }
 }
-
-/*@Preview(showBackground = true)
-@Composable
-fun HomePreview() {
-    HomeScreen()
-}*/
