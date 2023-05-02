@@ -9,7 +9,7 @@ import java.util.Date
 
     foreignKeys = [
         ForeignKey(
-            entity = Categories::class,
+            entity = Category::class,
             parentColumns = ["id"],
             childColumns = ["category_id"],
             onDelete = ForeignKey.RESTRICT,

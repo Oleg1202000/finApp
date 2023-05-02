@@ -24,44 +24,44 @@ import javax.inject.Inject
         emit(categoriesDao.getCategories(isIncome))
     }.flowOn(Dispatchers.IO)
 
-    fun setCategory (category: Categories) = categoriesDao.setCategory(category)
+     suspend fun setCategory (category: Category): Long = categoriesDao.setCategory(category)
 
-    fun deleteCategory (category: Categories) = categoriesDao.deleteCategory(category)
+     suspend fun deleteCategory (category: Category) = categoriesDao.deleteCategory(category)
 
 
      // Planned table
     fun getPlan(
          isIncome: Boolean,
-         beginDate: Date,
-         endDate: Date
+         beginDate: Long,
+         endDate: Long
      ) = flow {
         emit(planDao.getPlan(isIncome, beginDate, endDate))
     }.flowOn(Dispatchers.IO)
 
-    fun setPlan (plan: Planned) = planDao.setPlan(plan)
+    suspend fun setPlan (plan: Planned) = planDao.setPlan(plan)
 
-     fun deletePlan (plan: Planned) = planDao.deletePlan(plan)
+     suspend fun deletePlan (plan: Planned) = planDao.deletePlan(plan)
 
 
      // Summary table
     fun getSumAmount(
         isIncome: Boolean = false,
-        beginDate: Date,
-        endDate: Date
+        beginDate: Long,
+        endDate: Long
     ) = flow {
         emit(summaryDao.getSumAmount(isIncome, beginDate, endDate))
     }.flowOn(Dispatchers.IO)
 
     fun getHistory(
-        beginDate: Date,
-        endDate: Date
+        beginDate: Long,
+        endDate: Long
     ) = flow {
         emit(summaryDao.getHistory(endDate, beginDate))
     }.flowOn(Dispatchers.IO)
 
-    fun setSummary(summary: Summary) = summaryDao.setSummary(summary)
+     suspend fun setSummary(summary: Summary) = summaryDao.setSummary(summary)
 
-    fun deleteSummary(id: Long) = summaryDao.deleteSummaryById(id)
+     suspend fun deleteSummary(id: Long) = summaryDao.deleteSummaryById(id)
 
-    fun updateSummary(summary: Summary) = summaryDao.updateSummary(summary)
+     suspend fun updateSummary(summary: Summary) = summaryDao.updateSummary(summary)
 }

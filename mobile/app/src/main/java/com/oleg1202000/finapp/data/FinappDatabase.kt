@@ -11,7 +11,7 @@ import com.oleg1202000.finapp.data.dao.SummaryDao
 @Database (
 
     entities = [
-        Categories::class,
+        Category::class,
         Summary::class,
         Planned::class,
     ],

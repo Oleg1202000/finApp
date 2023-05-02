@@ -23,6 +23,7 @@ object DatabaseModule {
     fun provideLocalDatabase(@ApplicationContext context: Context):FinappDatabase = Room.databaseBuilder(
         context.applicationContext, FinappDatabase::class.java, "finappdatabase.db"
         )
+        .fallbackToDestructiveMigration() // FIXME:
         .build()
 
     @Singleton

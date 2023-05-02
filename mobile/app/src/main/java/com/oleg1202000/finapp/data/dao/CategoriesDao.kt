@@ -2,9 +2,11 @@ package com.oleg1202000.finapp.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.oleg1202000.finapp.data.Categories
+import com.oleg1202000.finapp.data.Category
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CategoriesDao {
@@ -16,13 +18,16 @@ interface CategoriesDao {
     fun getCategories(
         isIncome: Boolean = false
 
-    ) : List<Categories>
+    ) : List<Category>
+
+    // TODO: создать (или изменить) запрос, где не будет возвращаться is_income
 
 
-    @Update
-    fun setCategory(category: Categories)
+    @Insert
+    suspend  fun setCategory(category: Category): Long
+
 
 
     @Delete
-    fun deleteCategory(category: Categories)
+    suspend  fun deleteCategory(category: Category)
 }
