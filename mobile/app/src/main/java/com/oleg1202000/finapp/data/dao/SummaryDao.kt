@@ -2,7 +2,7 @@ package com.oleg1202000.finapp.data.dao
 
 import androidx.room.*
 import com.oleg1202000.finapp.data.*
-import java.util.Date
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -30,7 +30,7 @@ interface SummaryDao {
         beginDate: Long,
         endDate: Long
 
-    ) : List<ReturnSumAmount>
+    ) : Flow<List<ReturnSumAmount>>
 
 
     @Query(
@@ -50,7 +50,7 @@ interface SummaryDao {
         beginDate: Long,
         endDate: Long
 
-    ) : List<ReturnHistory>
+    ) : Flow<List<ReturnHistory>>
 
 
     @Insert

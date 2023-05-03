@@ -5,9 +5,7 @@ import com.oleg1202000.finapp.data.dao.CategoriesDao
 import com.oleg1202000.finapp.data.dao.PlanDao
 import com.oleg1202000.finapp.data.dao.SummaryDao
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.util.Date
 import javax.inject.Inject
 
 
@@ -20,11 +18,10 @@ import javax.inject.Inject
 
 
      // Categories table
-    fun getCategries(isIncome: Boolean) = flow {
-        emit(categoriesDao.getCategories(isIncome))
-    }.flowOn(Dispatchers.IO)
+    fun getCategries(isIncome: Boolean) =
+        categoriesDao.getCategories(isIncome).flowOn(Dispatchers.IO)
 
-     suspend fun setCategory (category: Category): Long = categoriesDao.setCategory(category)
+     suspend fun setCategory (category: Category) = categoriesDao.setCategory(category)
 
      suspend fun deleteCategory (category: Category) = categoriesDao.deleteCategory(category)
 
@@ -34,9 +31,7 @@ import javax.inject.Inject
          isIncome: Boolean,
          beginDate: Long,
          endDate: Long
-     ) = flow {
-        emit(planDao.getPlan(isIncome, beginDate, endDate))
-    }.flowOn(Dispatchers.IO)
+     ) = planDao.getPlan(isIncome, beginDate, endDate).flowOn(Dispatchers.IO)
 
     suspend fun setPlan (plan: Planned) = planDao.setPlan(plan)
 
@@ -48,16 +43,12 @@ import javax.inject.Inject
         isIncome: Boolean = false,
         beginDate: Long,
         endDate: Long
-    ) = flow {
-        emit(summaryDao.getSumAmount(isIncome, beginDate, endDate))
-    }.flowOn(Dispatchers.IO)
+    ) = summaryDao.getSumAmount(isIncome, beginDate, endDate).flowOn(Dispatchers.IO)
 
     fun getHistory(
         beginDate: Long,
         endDate: Long
-    ) = flow {
-        emit(summaryDao.getHistory(endDate, beginDate))
-    }.flowOn(Dispatchers.IO)
+    ) = summaryDao.getHistory(endDate, beginDate).flowOn(Dispatchers.IO)
 
      suspend fun setSummary(summary: Summary) = summaryDao.setSummary(summary)
 
