@@ -32,13 +32,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.oleg1202000.finapp.R
 import com.oleg1202000.finapp.ui.theme.colorCategories
 
 
 @Composable
 fun AddCategoryScreen(
-    viewModel: AddCategoryViewModel = viewModel()
+    viewModel: AddCategoryViewModel = viewModel(),
+    navController: NavHostController,
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -257,6 +259,7 @@ fun AddCategoryScreen(
             Button(
                 onClick = {
                     viewModel.addCategory()
+                    navController.popBackStack()
                 }
             ) {
                 Text(text = "Добавить категорию")

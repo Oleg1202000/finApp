@@ -70,7 +70,7 @@ fun  AddDataScreen(
             Spacer(modifier = Modifier.height(200.dp))
 
             TextField(
-                value = uiState.about,
+                value = uiState.about.orEmpty(),
                 onValueChange = { viewModel.setDescription(it) },
                 label = { Text("Описание") }
             )
@@ -113,7 +113,8 @@ fun  AddDataScreen(
 
             Button(
                 onClick = {
-                viewModel.addData()
+                    viewModel.addData()
+                    navController.popBackStack()
                 }
             ) {
                 Text(text = "Добавить запись")
@@ -134,7 +135,7 @@ fun  AddDataScreen(
                 showBottomSheet = showBottomSheet,
                 sheetState = sheetState,
                 coroutineScope = coroutineScope,
-                viewModel = viewModel
+                selectCategory = { viewModel.setCategory(selectedCategoryId = it) },
             )
         }
     }

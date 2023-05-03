@@ -70,7 +70,8 @@ fun NavGraph(
         composable(Screen.AddCategory.route) {
             val viewModel = hiltViewModel<AddCategoryViewModel>()
             AddCategoryScreen(
-                viewModel = viewModel
+                viewModel = viewModel,
+                navController = navController
             )
 
         }
