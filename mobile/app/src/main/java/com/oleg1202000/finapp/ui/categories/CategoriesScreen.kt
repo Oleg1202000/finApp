@@ -30,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.oleg1202000.finapp.ui.Screen
-import com.oleg1202000.finapp.ui.home.adddata.AddDataViewModel
 import com.oleg1202000.finapp.ui.home.adddata.CategoryItem
 import com.oleg1202000.finapp.ui.theme.Shapes
 import kotlinx.coroutines.CoroutineScope
@@ -44,8 +43,8 @@ fun CategoriesScreen(
     sheetState: SheetState,
     coroutineScope: CoroutineScope,
     categories: List<CategoryItem>,
-    viewModel: AddDataViewModel,
-    selectedCategoryId: Long?
+    selectedCategoryId: Long?,
+    selectCategory: (Long) -> Unit
 ) {
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -56,7 +55,7 @@ fun CategoriesScreen(
             showBottomSheet = showBottomSheet,
             sheetState = sheetState,
             coroutineScope = coroutineScope,
-            viewModel = viewModel,
+            selectCategory = selectCategory,
             selectedCategoryId = selectedCategoryId
         )
 
@@ -71,7 +70,7 @@ fun CategoryItems(
     sheetState: SheetState,
     coroutineScope: CoroutineScope,
     categories: List<CategoryItem>,
-    viewModel: AddDataViewModel,
+    selectCategory: (Long) -> Unit,
     selectedCategoryId: Long?
 ) {
 
@@ -93,7 +92,7 @@ fun CategoryItems(
                             showBottomSheet = showBottomSheet,
                             sheetState = sheetState,
                             coroutineScope = coroutineScope,
-                            viewModel = viewModel,
+                            selectCategory = selectCategory,
                             selectedCategoryId = selectedCategoryId
                         )
                     }
@@ -114,7 +113,7 @@ fun CategoryItems(
                         showBottomSheet = showBottomSheet,
                         sheetState = sheetState,
                         coroutineScope = coroutineScope,
-                        viewModel = viewModel,
+                        selectCategory = selectCategory,
                         selectedCategoryId = selectedCategoryId
                     )
 
@@ -139,7 +138,7 @@ fun CardItem(
     showBottomSheet: MutableState<Boolean>,
     sheetState: SheetState,
     coroutineScope: CoroutineScope,
-    viewModel: AddDataViewModel,
+    selectCategory: (Long) -> Unit,
     selectedCategoryId: Long?
 ) {
 
@@ -168,7 +167,7 @@ fun CardItem(
             )
             .clickable {
 
-                viewModel.setCategory(item.id)
+                selectCategory(item.id)
 
                 coroutineScope.launch {
                     sheetState.hide()
