@@ -28,17 +28,13 @@ class HomeViewModel  @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
 
-    private val beginDate = MutableStateFlow(Calendar.getInstance().timeInMillis)
-    private val endDate = MutableStateFlow(Calendar.getInstance().timeInMillis)
-
-
     init {
         viewModelScope.launch {
             getDate(deltaWeek = 0)
 
             localRepository.getSumAmount(
-                beginDate = beginDate.value,
-                endDate = endDate.value
+                beginDate = uiState.value.beginDate,
+                endDate = uiState.value.endDate
             )
                 .collect { items ->
                     val sumAmount = items.sumOf { it.amount }
@@ -78,14 +74,27 @@ class HomeViewModel  @Inject constructor(
         getMonth()
         getYear()*/
 
+        val beginDate: Long
+        val endDate: Long
+
         val currentDate : Calendar = Calendar.getInstance()
         currentDate.set(Calendar.WEEK_OF_YEAR, currentDate.get(Calendar.WEEK_OF_YEAR) + deltaWeek)
 
-        currentDate.set(Calendar.DAY_OF_WEEK, 1)
-        beginDate.value = currentDate.timeInMillis
 
-        currentDate.set(Calendar.DAY_OF_WEEK, 7)
-       endDate.value = currentDate.timeInMillis
+        currentDate.set(Calendar.DAY_OF_WEEK, 1)
+        beginDate = currentDate.timeInMillis
+
+
+        currentDate.set(Calendar.DAY_OF_WEEK, 7) // FIXME:  
+        endDate = currentDate.timeInMillis
+
+
+        _uiState.update {
+            it.copy(
+                beginDate = beginDate,
+                endDate = endDate
+            )
+        }
     }
 }
 
@@ -93,6 +102,8 @@ class HomeViewModel  @Inject constructor(
 data class HomeUiState(
     val dataHome: List<DataHome> = emptyList(),
     val sumAmount: Int = 0,
+    val beginDate: Long = Calendar.getInstance().timeInMillis,
+    val endDate: Long = Calendar.getInstance().timeInMillis
 )
 
 data class DataHome(
