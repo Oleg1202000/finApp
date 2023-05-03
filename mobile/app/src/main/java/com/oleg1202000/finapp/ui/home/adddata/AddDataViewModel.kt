@@ -120,9 +120,9 @@ data class CategoryItem(
     val colorIcon: Long,
 )
 
-data class AddDataUiState (
+data class AddDataUiState(
     val categories: List<CategoryItem> = emptyList(),
-    val about: String = "",
+    val about: String? = null,
     val amount: String = "",
     val selectedCategoryId: Long? = null,
     val selectedDate: Long? = Calendar.getInstance().timeInMillis,
