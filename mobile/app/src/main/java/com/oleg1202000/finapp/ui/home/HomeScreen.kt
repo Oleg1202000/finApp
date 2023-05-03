@@ -1,7 +1,8 @@
 package com.oleg1202000.finapp.ui.home
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,15 +11,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberSwipeableState
+import androidx.compose.material.swipeable
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -34,15 +41,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
-import com.oleg1202000.finapp.ui.components.FinappFloatingActionButton
-import com.oleg1202000.finapp.ui.components.FinappNavigationBar
-import com.oleg1202000.finapp.ui.components.FinappStatusBar
 import com.oleg1202000.finapp.ui.theme.Shapes
 import com.oleg1202000.finapp.ui.theme.Typography
 import com.oleg1202000.finapp.ui.theme.defaultColor
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel(),
@@ -55,82 +60,70 @@ fun HomeScreen(
     val defaultColor = defaultColor
 
 
-    Scaffold(
-        topBar = {
-            FinappStatusBar(
-                item = "- ${uiState.sumAmount}    + 0",  // Для отображения суммы доходов и расходов
-            )
-        },
+    LazyColumn(
+    ) {
 
-        bottomBar = {
-            FinappNavigationBar(
-                navController = navController,
-                currentDestination = currentDestination,
-            )
-        },
-
-        floatingActionButton = {
-            FinappFloatingActionButton(
-                navController = navController,
-                currentDestination = currentDestination
+        item {
+            Spacer(
+                modifier = Modifier.height(20.dp)
             )
         }
-    ) { innerPadding ->
 
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding)
-        ) {
-
-            item {
-                Spacer(
-                    modifier = Modifier.height(20.dp)
-                )
-            }
-
-            // график1
-            item {
-                if (uiState.sumAmount == 0) {
-                    Column(
-                        modifier = Modifier
-                            .height(300.dp),
-                        verticalArrangement = Arrangement.Center
+        // график1
+        item {
+            if (uiState.sumAmount == 0) {
+                Column(
+                    modifier = Modifier
+                        .height(300.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(text = "Нет записей о расходах")
-                        }
+                        Text(text = "Нет записей о расходах")
                     }
-                } else {
-                    GraphAmount(
-                        dataHome = uiState.dataHome
-                    )
                 }
-            }
-
-
-            item { Spacer(modifier = Modifier.height(20.dp)) }
-
-
-            // "таблица" из категорий и трат
-            item {
-                TableAmount(
-                    dataHome = uiState.dataHome,
-                    sumAmount = uiState.sumAmount
+            } else {
+                GraphAmount(
+                    dataHome = uiState.dataHome
                 )
             }
+        }
+
+        item { Spacer(modifier = Modifier.height(20.dp)) }
+
+        item {
+            ButtonSelect(
+                beginDate = uiState.beginDate,
+                endDate = uiState.endDate,
+                updateDate = { viewModel.getDate(deltaWeek = it) }
+            )
+        }
+
+
+        item { Spacer(modifier = Modifier.height(20.dp)) }
+
+
+        // "таблица" из категорий и трат
+        item {
+            TableAmount(
+                dataHome = uiState.dataHome,
+                sumAmount = uiState.sumAmount
+            )
         }
     }
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GraphAmount(
-    dataHome: List<DataHome>,
+    dataHome: List<DataHome>
 ) {
-    //val swipeableState = rememberSwipeableState(initialValue = )
-
+    val swipeableState = rememberSwipeableState(initialValue = 0)
+    val widthDp = LocalConfiguration.current.screenWidthDp
+    val anchors = mapOf(0f to 0, (widthDp / 2).toFloat() to 1, widthDp.toFloat() to 2)
 
     val showDetailedInfo = remember { mutableStateOf(false) }
 
@@ -139,8 +132,11 @@ fun GraphAmount(
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-            // TODO:   .swipeable()
-            ,
+                .swipeable(
+                    state = swipeableState,
+                    orientation = Orientation.Horizontal,
+                    anchors = anchors
+                ),
             shape = Shapes.small,
             shadowElevation = 4.dp
         ) {
@@ -151,8 +147,14 @@ fun GraphAmount(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                showDetailedInfo.value = !showDetailedInfo.value
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onPress = {
+                                        showDetailedInfo.value = !showDetailedInfo.value
+                                        // TODO:
+                                    }
+
+                                )
                             },
 
                         verticalAlignment = Alignment.CenterVertically
@@ -169,23 +171,23 @@ fun GraphAmount(
                                 .weight(1f)
                                 .height(50.dp)
                         ) {
-                        Canvas(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
+                            Canvas(
+                                modifier = Modifier.fillMaxSize()
+                            ) {
 
-                            val sizeHeight = 30f
-                            drawRect(
-                                color = item.colorItem,
-                                topLeft = Offset(
-                                    x = 0f,
-                                    y = size.height * 0.20f
-                                ),
-                                size = Size(
-                                    (size.width) * item.coefficientAmount,
-                                    sizeHeight.dp.toPx()
+                                val sizeHeight = 30f
+                                drawRect(
+                                    color = item.colorItem,
+                                    topLeft = Offset(
+                                        x = 0f,
+                                        y = size.height * 0.20f
+                                    ),
+                                    size = Size(
+                                        (size.width) * item.coefficientAmount,
+                                        sizeHeight.dp.toPx()
+                                    )
                                 )
-                            )
-                        }
+                            }
 
 
                             if (showDetailedInfo.value) {
@@ -198,7 +200,7 @@ fun GraphAmount(
                                     Text(text = item.categoryName)
                                 }
                             }
-                    }
+                        }
 
 
                         if (!showDetailedInfo.value) {
@@ -208,7 +210,7 @@ fun GraphAmount(
                             )
                         } else {
                             Text(
-                                text = (item.amount.toString() + " ₽" ),
+                                text = (item.amount.toString() + " ₽"),
                                 style = Typography.bodyMedium
                             )
                         }
@@ -216,36 +218,19 @@ fun GraphAmount(
                 }
             }
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-            // Кнопки День / неделя / месяц
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-
-                Button(onClick = {
-                    /*TODO*/
-                }
-                ) {
-                    Text(text = GraphPeriod.Day.toString())
-                }
-
-                Button(onClick = {
-                   // deltaPeriod = 0
-                }) {
-                    Text(text = GraphPeriod.Week.toString())
-                }
-
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = GraphPeriod.Month.toString())
-                }
-            }
-
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }
+
+
+// FIXME:
+    /*if (swipeableState.direction == 1f) {
+        delta += 1
+    } else if (swipeableState.direction == -1f) {
+        delta -= 1
+    }
+    Log.d("delta", delta.toString())
+    updateDate(delta)*/
+
 
 
 @Composable
@@ -253,7 +238,8 @@ fun TableAmount(
     dataHome: List<DataHome>,
     sumAmount: Int
 ) {
-    Surface (
+
+    Surface(
         modifier = Modifier.fillMaxSize(),
         shape = Shapes.small,
         shadowElevation = 4.dp
@@ -263,7 +249,7 @@ fun TableAmount(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            dataHome.forEach {item ->
+            dataHome.forEach { item ->
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -294,3 +280,85 @@ fun TableAmount(
         }
     }
 }
+    @Composable
+    fun ButtonSelect(
+        beginDate: Long,
+        endDate: Long,
+        updateDate: (Int) -> Unit
+    ) {
+        val delta: MutableState<Int> = remember {
+            mutableStateOf(0)
+        }
+
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            val format = SimpleDateFormat("dd.MM.yyyy", Locale.US)
+
+            Button(colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            ),
+                onClick = {
+                    delta.value -= 1
+                    updateDate(delta.value)
+                }
+            ) {
+                Text(text = "<")
+            }
+
+            Spacer(modifier = Modifier.width(20.dp))
+            Text(text = format.format(beginDate))
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Text(text = "-")
+
+            Spacer(modifier = Modifier.width(20.dp))
+            Text(text = format.format(endDate))
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                ),
+                onClick = {
+                    delta.value += 1
+                    updateDate(delta.value)
+                }) {
+                Text(text = ">")
+            }
+        }
+
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Кнопки День / неделя / месяц
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+
+            Button(onClick = {
+                /*TODO*/
+            }
+            ) {
+                Text(text = GraphPeriod.Day.toString())
+            }
+
+            Button(onClick = {
+                 delta.value = 0
+            }) {
+                Text(text = GraphPeriod.Week.toString())
+            }
+
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = GraphPeriod.Month.toString())
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+

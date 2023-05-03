@@ -5,10 +5,8 @@ import androidx.compose.material.*
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -23,9 +21,7 @@ fun FinappNavigationBar(
 ) {
 
     NavigationBar(
-        tonalElevation = 60.dp,
-        windowInsets = WindowInsets.navigationBars,
-        modifier = Modifier.height(140.dp)
+        windowInsets = WindowInsets.navigationBars
     ) {
 
         navItems.forEach { screen ->
@@ -64,7 +60,7 @@ fun FinappNavigationBar(
 data class ScreenItem(val route: String, val label: String, val icon: Int)
 
 val navItems = listOf(
-    ScreenItem(Screen.Home.route, "Home", R.drawable.ic_home),
-    ScreenItem(Screen.Plan.route, "Plan", R.drawable.ic_plan),
-    ScreenItem(Screen.History.route, "History", R.drawable.ic_history)
+    ScreenItem(Screen.Home.route, "Главная", R.drawable.ic_home),
+    ScreenItem(Screen.Plan.route, "План", R.drawable.ic_plan),
+    ScreenItem(Screen.History.route, "История", R.drawable.ic_history)
 )
