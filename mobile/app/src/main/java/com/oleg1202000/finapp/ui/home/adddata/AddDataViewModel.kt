@@ -37,7 +37,7 @@ class AddDataViewModel  @Inject constructor(
                                 CategoryItem(
                                 id = it.id,
                                 name = it.name,
-                                pathToIcon = it.pathToIcon,
+                                IconId = it.iconId,
                                 colorIcon = it.color
                             )
                         }
@@ -116,7 +116,7 @@ class AddDataViewModel  @Inject constructor(
 data class CategoryItem(
     val id: Long,
     val name: String,
-    val pathToIcon: Int,
+    val IconId: Int,
     val colorIcon: Long,
 )
 

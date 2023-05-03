@@ -48,7 +48,7 @@ class HomeViewModel  @Inject constructor(
                         dataHome = items.map {
                             DataHome(
                                 categoryName = it.categoryName,
-                                iconCategory = it.pathToIcon,
+                                iconCategory = it.iconId,
                                 colorIconCategory = it.color,
                                 amount = it.amount,
                                 coefficientAmount = it.amount.toFloat() / sumAmount.toFloat(),

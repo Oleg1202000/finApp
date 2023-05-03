@@ -33,7 +33,7 @@ data class ReturnSumAmount(
 
     @ColumnInfo(name = "category_name") val categoryName: String,
     @ColumnInfo(name = "color") val color: Long,
-    @ColumnInfo(name = "path_to_icon") val pathToIcon: Int,
+    @ColumnInfo(name = "icon_id") val iconId: Int,
     @ColumnInfo(name = "summary_amount") val amount: Int,
     @ColumnInfo(name = "planned") val plan: Int?
 )
