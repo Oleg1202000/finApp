@@ -16,12 +16,12 @@ data class Category(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "is_income") val isIncome: Boolean, // Доход или расход
     @ColumnInfo(name = "color") val color: Long,
-    @ColumnInfo(name = "path_to_icon") val pathToIcon: Int
+    @ColumnInfo(name = "icon_id") val iconId: Int
 )
 
 data class CategoryWithoutIsIncome(
     @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "color") val color: Long,
-    @ColumnInfo(name = "path_to_icon") val pathToIcon: Int
+    @ColumnInfo(name = "icon_id") val iconId: Int
 )

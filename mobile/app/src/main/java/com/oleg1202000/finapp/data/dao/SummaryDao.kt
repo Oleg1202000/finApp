@@ -10,7 +10,7 @@ interface SummaryDao {
 
     @Query(
         """
-        SELECT categories.name AS category_name, categories.color AS color, categories.path_to_icon AS path_to_icon, SUM(summary.amount) AS summary_amount, SUM(planned.amount) AS planned
+        SELECT categories.name AS category_name, categories.color AS color, categories.icon_id AS icon_id, SUM(summary.amount) AS summary_amount, SUM(planned.amount) AS planned
         
         FROM summary
 

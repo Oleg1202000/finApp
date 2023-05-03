@@ -60,13 +60,13 @@ class AddCategoryViewModel @Inject constructor(
     fun addCategory(
     ) {
         viewModelScope.launch {
-            val test = localRepository.setCategory(
+            localRepository.setCategory(
                 category = Category(
                     //id = 2L,
                     name = uiState.value.categoryName,
                     isIncome = false,
                     color = uiState.value.selectedCategoryColor!!.value.toLong(),
-                    pathToIcon = uiState.value.selectedCategoryIcon!!.toInt()
+                    iconId = uiState.value.selectedCategoryIcon!!.toInt()
                 )
             )
         }

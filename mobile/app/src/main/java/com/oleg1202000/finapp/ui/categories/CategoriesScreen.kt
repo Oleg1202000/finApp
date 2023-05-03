@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.oleg1202000.finapp.ui.categories
 
@@ -186,7 +186,7 @@ fun CardItem(
         ) {
 
             Icon(
-                painter = painterResource(id = item.pathToIcon),
+                painter = painterResource(id = item.IconId),
                 contentDescription = item.name,
                 tint = Color(item.colorIcon.toULong())
             )
