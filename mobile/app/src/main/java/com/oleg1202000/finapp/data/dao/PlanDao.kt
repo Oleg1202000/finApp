@@ -3,7 +3,7 @@ package com.oleg1202000.finapp.data.dao
 import androidx.room.*
 import com.oleg1202000.finapp.data.Planned
 import com.oleg1202000.finapp.data.ReturnSumAmount
-import java.util.Date
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -28,9 +28,9 @@ interface PlanDao {
         beginDate: Long,
         endDate: Long
 
-    ) : List<ReturnSumAmount>
+    ) : Flow<List<ReturnSumAmount>>
 
-    @Update
+    @Insert
     suspend fun setPlan(planned: Planned)
 
 
