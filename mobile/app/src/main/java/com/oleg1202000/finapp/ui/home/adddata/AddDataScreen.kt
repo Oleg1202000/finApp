@@ -14,11 +14,11 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -69,7 +69,7 @@ fun  AddDataScreen(
 
             Spacer(modifier = Modifier.height(200.dp))
 
-            TextField(
+            OutlinedTextField(
                 value = uiState.about.orEmpty(),
                 onValueChange = { viewModel.setDescription(it) },
                 label = { Text("Описание") }
@@ -77,7 +77,7 @@ fun  AddDataScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            TextField(
+            OutlinedTextField(
                 value = uiState.amount,
                 onValueChange = { viewModel.setAmount(it) },
                 label = { Text("Сумма") }
@@ -157,7 +157,6 @@ fun ShowDatePicker(
     selectedDate: Long?
 ) {
 
-
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = selectedDate
     )
@@ -184,15 +183,12 @@ fun ShowDatePicker(
 
         dismissButton = {
             TextButton(
-                onClick = {
-                    openDateDialog.value = false
-                }
+                onClick = { openDateDialog.value = false }
             ) {
                 Text("Cancel")
             }
         }
     ) {
-
         DatePicker(state = datePickerState)
     }
 }

@@ -22,8 +22,8 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -56,7 +56,7 @@ fun AddCategoryScreen(
         item { Spacer(modifier = Modifier.height(200.dp)) }
 
         item {
-            TextField(
+            OutlinedTextField(
                 value = uiState.categoryName,
                 onValueChange = { viewModel.setCategoryName(it) },
                 label = { Text("Название категории") }
