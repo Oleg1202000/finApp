@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
@@ -39,11 +40,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavDestination
-import androidx.navigation.NavHostController
 import com.oleg1202000.finapp.ui.theme.Shapes
 import com.oleg1202000.finapp.ui.theme.Typography
-import com.oleg1202000.finapp.ui.theme.defaultColor
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -51,42 +49,30 @@ import java.util.Locale
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel(),
-    navController: NavHostController,
-    currentDestination: NavDestination?
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val defaultColor = defaultColor
-
-
     LazyColumn(
     ) {
 
-        item {
-            Spacer(
-                modifier = Modifier.height(20.dp)
-            )
-        }
 
         // график1
         item {
             if (uiState.sumAmount == 0) {
-                Column(
+                Row(
                     modifier = Modifier
-                        .height(300.dp),
-                    verticalArrangement = Arrangement.Center
+                        .fillMaxWidth()
+                        .padding(
+                            top = 200.dp
+                        ),
+                    horizontalArrangement = Arrangement.Center,
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(text = "Нет записей о расходах")
-                    }
+                    Text(text = "Нет записей о расходах")
                 }
             } else {
                 GraphAmount(
-                    dataHome = uiState.dataHome
+                    dataGraph = uiState.dataGraph
                 )
             }
         }
@@ -97,19 +83,25 @@ fun HomeScreen(
             ButtonSelect(
                 beginDate = uiState.beginDate,
                 endDate = uiState.endDate,
-                updateDate = { viewModel.getDate(deltaWeek = it) }
+                updateDate = { viewModel.getDate(it) },
+                updateDataGraph = { viewModel.updateDataGraph() },
+                updateGraphPeriod = { viewModel.updateGraphPeriod(it) }
             )
         }
 
-
         item { Spacer(modifier = Modifier.height(20.dp)) }
-
 
         // "таблица" из категорий и трат
         item {
             TableAmount(
-                dataHome = uiState.dataHome,
+                dataGraph = uiState.dataGraph,
                 sumAmount = uiState.sumAmount
+            )
+        }
+
+        item {
+            Spacer(
+                modifier = Modifier.height(30.dp)
             )
         }
     }
@@ -119,7 +111,7 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GraphAmount(
-    dataHome: List<DataHome>
+    dataGraph: List<DataGraph>
 ) {
     val swipeableState = rememberSwipeableState(initialValue = 0)
     val widthDp = LocalConfiguration.current.screenWidthDp
@@ -128,114 +120,111 @@ fun GraphAmount(
     val showDetailedInfo = remember { mutableStateOf(false) }
 
 
-    Column {
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .swipeable(
-                    state = swipeableState,
-                    orientation = Orientation.Horizontal,
-                    anchors = anchors
-                ),
-            shape = Shapes.small,
-            shadowElevation = 4.dp
-        ) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .swipeable(
+                state = swipeableState,
+                orientation = Orientation.Horizontal,
+                anchors = anchors
+            ),
+        shape = Shapes.small,
+        shadowElevation = 4.dp
+    ) {
 
-            Column {
+        Column {
+            dataGraph.forEach { item ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
 
-                dataHome.forEach { item ->
-                    Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Icon(
+                        painter = painterResource(id = item.iconCategory),
+                        contentDescription = item.categoryName,
+                        tint = Color(item.colorIconCategory.toULong())
+                    )
+
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onPress = {
-                                        showDetailedInfo.value = !showDetailedInfo.value
-                                        // TODO:
-                                    }
-
-                                )
-                            },
-
-                        verticalAlignment = Alignment.CenterVertically
+                            .weight(1f)
+                            .height(50.dp)
                     ) {
-
-                        Icon(
-                            painter = painterResource(id = item.iconCategory),
-                            contentDescription = item.categoryName,
-                            tint = Color(item.colorIconCategory.toULong())
-                        )
-
-                        Box(
+                        Canvas(
                             modifier = Modifier
-                                .weight(1f)
-                                .height(50.dp)
+                                .fillMaxSize()
+                                .pointerInput(Unit) {
+                                    detectTapGestures(
+                                        onPress = {
+                                            showDetailedInfo.value = !showDetailedInfo.value
+                                        }
+
+                                    )
+                                }
+
                         ) {
-                            Canvas(
-                                modifier = Modifier.fillMaxSize()
+
+                            val sizeHeight = 30f
+                            drawRect(
+                                color = item.colorItem,
+                                topLeft = Offset(
+                                    x = 0f,
+                                    y = size.height * 0.20f
+                                ),
+                                size = Size(
+                                    (size.width) * item.coefficientAmount,
+                                    sizeHeight.dp.toPx()
+                                )
+                            )
+                        }
+
+
+                        if (showDetailedInfo.value) {
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
 
-                                val sizeHeight = 30f
-                                drawRect(
-                                    color = item.colorItem,
-                                    topLeft = Offset(
-                                        x = 0f,
-                                        y = size.height * 0.20f
-                                    ),
-                                    size = Size(
-                                        (size.width) * item.coefficientAmount,
-                                        sizeHeight.dp.toPx()
-                                    )
-                                )
-                            }
-
-
-                            if (showDetailedInfo.value) {
-                                Row(
-                                    modifier = Modifier.fillMaxSize(),
-                                    horizontalArrangement = Arrangement.Start,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-
-                                    Text(text = item.categoryName)
-                                }
+                                Text(text = item.categoryName)
                             }
                         }
+                    }
 
 
-                        if (!showDetailedInfo.value) {
-                            Text(
-                                text = ((item.coefficientAmount * 100).toInt().toString() + " %"),
-                                style = Typography.bodyMedium
-                            )
-                        } else {
-                            Text(
-                                text = (item.amount.toString() + " ₽"),
-                                style = Typography.bodyMedium
-                            )
-                        }
+                    if (!showDetailedInfo.value) {
+                        Text(
+                            text = ((item.coefficientAmount * 100).toInt().toString() + " %"),
+                            style = Typography.bodyMedium
+                        )
+                    } else {
+                        Text(
+                            text = (item.amount.toString() + " ₽"),
+                            style = Typography.bodyMedium
+                        )
                     }
                 }
             }
         }
+
     }
 }
 
-
 // FIXME:
-    /*if (swipeableState.direction == 1f) {
-        delta += 1
-    } else if (swipeableState.direction == -1f) {
-        delta -= 1
-    }
-    Log.d("delta", delta.toString())
-    updateDate(delta)*/
-
+/*if (swipeableState.direction == 1f) {
+    delta += 1
+} else if (swipeableState.direction == -1f) {
+    delta -= 1
+}
+Log.d("delta", delta.toString())
+updateDate(delta)*/
 
 
 @Composable
 fun TableAmount(
-    dataHome: List<DataHome>,
+    dataGraph: List<DataGraph>,
     sumAmount: Int
 ) {
 
@@ -249,9 +238,13 @@ fun TableAmount(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            dataHome.forEach { item ->
+            dataGraph.forEach { item ->
                 Row(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            bottom = 15.dp
+                        ),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 
@@ -265,11 +258,14 @@ fun TableAmount(
                         text = item.categoryName
                     )
 
-                    Column {
+                    Column(
+                        verticalArrangement = Arrangement.Center
+                    ) {
                         Text(
                             text = item.amount.toString() + " /",
-                            fontStyle = FontStyle.Italic
-                        )
+                            fontStyle = FontStyle.Italic,
+
+                            )
                         Text(
                             text = sumAmount.toString() + " ₽",
                             fontStyle = FontStyle.Italic
@@ -280,85 +276,107 @@ fun TableAmount(
         }
     }
 }
-    @Composable
-    fun ButtonSelect(
-        beginDate: Long,
-        endDate: Long,
-        updateDate: (Int) -> Unit
+
+
+@Composable
+fun ButtonSelect(
+    beginDate: Long,
+    endDate: Long,
+    updateDate: (Int) -> Unit,
+    updateDataGraph: () -> Unit,
+    updateGraphPeriod: (GraphPeriod) -> Unit
+) {
+    val delta: MutableState<Int> = remember { mutableStateOf(0) }
+
+
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        val delta: MutableState<Int> = remember {
-            mutableStateOf(0)
-        }
+        val format = SimpleDateFormat("dd.MM.yyyy", Locale.US)
 
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            val format = SimpleDateFormat("dd.MM.yyyy", Locale.US)
-
-            Button(colors = ButtonDefaults.buttonColors(
+        Button(
+            colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer
             ),
-                onClick = {
-                    delta.value -= 1
-                    updateDate(delta.value)
-                }
-            ) {
-                Text(text = "<")
+            onClick = {
+                delta.value -= 1
+                updateDate(delta.value)
+                updateDataGraph()
             }
-
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(text = format.format(beginDate))
-            Spacer(modifier = Modifier.width(20.dp))
-
-            Text(text = "-")
-
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(text = format.format(endDate))
-            Spacer(modifier = Modifier.width(20.dp))
-
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                ),
-                onClick = {
-                    delta.value += 1
-                    updateDate(delta.value)
-                }) {
-                Text(text = ">")
-            }
-        }
-
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Кнопки День / неделя / месяц
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-
-            Button(onClick = {
-                /*TODO*/
-            }
-            ) {
-                Text(text = GraphPeriod.Day.toString())
-            }
-
-            Button(onClick = {
-                 delta.value = 0
-            }) {
-                Text(text = GraphPeriod.Week.toString())
-            }
-
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = GraphPeriod.Month.toString())
-            }
+            Text(
+                text = "<"
+            )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.width(20.dp))
+        Text(text = format.format(beginDate))
+
+        Text(text = "-")
+
+        Text(text = format.format(endDate))
+        Spacer(modifier = Modifier.width(20.dp))
+
+
+
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            ),
+            onClick = {
+                delta.value += 1
+                updateDate(delta.value)
+                updateDataGraph()
+            }
+        ) {
+            Text(
+                text = ">"
+            )
+        }
     }
 
+    Spacer(modifier = Modifier.height(20.dp))
 
+
+    // Кнопки День / неделя / месяц
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+
+        Button(onClick = {
+            delta.value = 0
+            updateGraphPeriod(GraphPeriod.DAY)
+            updateDate(delta.value)
+            updateDataGraph()
+
+        }
+        ) {
+            Text(text = "День")
+        }
+
+        Button(onClick = {
+            delta.value = 0
+            updateGraphPeriod(GraphPeriod.Week)
+            updateDate(delta.value)
+            updateDataGraph()
+        }
+        ) {
+            Text(text = "Неделя")
+        }
+
+        Button(onClick = {
+            delta.value = 0
+            updateGraphPeriod(GraphPeriod.Month)
+            updateDate(delta.value)
+            updateDataGraph()
+        }) {
+            Text(text = "Месяц")
+        }
+    }
+
+    Spacer(modifier = Modifier.height(20.dp))
+}
