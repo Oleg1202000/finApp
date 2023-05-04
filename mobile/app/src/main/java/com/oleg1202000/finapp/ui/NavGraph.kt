@@ -32,8 +32,6 @@ fun NavGraph(
         composable(Screen.Home.route) {backStackEntry ->
             val viewModel = hiltViewModel<HomeViewModel>()
             HomeScreen(
-                navController = navController,
-                currentDestination = currentDestination,
                 viewModel = viewModel
             )
 
