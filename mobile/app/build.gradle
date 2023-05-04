@@ -158,6 +158,11 @@ dependencies {
     def appcompat_version = "1.6.1"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+
+
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation "androidx.datastore:datastore:1.0.0"
 }
 
 
