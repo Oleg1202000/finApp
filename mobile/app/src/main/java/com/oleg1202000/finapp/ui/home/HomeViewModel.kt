@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.TimeZone
 import javax.inject.Inject
 
 
@@ -52,7 +53,7 @@ class HomeViewModel  @Inject constructor(
                                  DataGraph(
                                      categoryName = it.categoryName,
                                      iconCategory = it.iconId,
-                                     colorIconCategory = it.color,
+                                     colorIcon = it.color,
                                      amount = it.amount,
                                      coefficientAmount = it.amount.toFloat() / sumAmount.toFloat(),
                                      colorItem =
@@ -84,44 +85,64 @@ class HomeViewModel  @Inject constructor(
 
         val beginDate: Long
         val endDate: Long
+        val currentDate : Calendar = Calendar.getInstance(TimeZone.getDefault())
+            // currentDate.get (Calendar.MONDAY)
 
-
-        val currentDate : Calendar = Calendar.getInstance()
 
         when (graphPeriod) {
 
             GraphPeriod.DAY -> {
-                currentDate.set(Calendar.DAY_OF_YEAR, currentDate.get(Calendar.DAY_OF_YEAR) + delta)
+                currentDate.add(Calendar.DAY_OF_YEAR, delta)
+
                 currentDate.set(Calendar.HOUR_OF_DAY, 0)
+                currentDate.set(Calendar.MINUTE, 0)
+                currentDate.set(Calendar.SECOND, 0)
+                currentDate.set(Calendar.MILLISECOND, 0)
                 beginDate = currentDate.timeInMillis
 
-                currentDate.set(Calendar.DAY_OF_YEAR, currentDate.get(Calendar.DAY_OF_YEAR) + delta)
-                currentDate.set(Calendar.HOUR_OF_DAY, 24)
+
+                currentDate.set(Calendar.HOUR_OF_DAY, 23)
+                currentDate.set(Calendar.MINUTE, 59)
+                currentDate.set(Calendar.SECOND, 59)
+                currentDate.set(Calendar.MILLISECOND, 999)
                 endDate = currentDate.timeInMillis
             }
 
             GraphPeriod.Week -> {
-                currentDate.set(Calendar.WEEK_OF_YEAR, currentDate.get(Calendar.WEEK_OF_YEAR) + delta)
+                currentDate.add(Calendar.WEEK_OF_YEAR, delta)
 
-
-                currentDate.set(Calendar.DAY_OF_WEEK, 2)
+                currentDate.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+                currentDate.set(Calendar.HOUR_OF_DAY, 0)
+                currentDate.set(Calendar.MINUTE, 0)
+                currentDate.set(Calendar.SECOND, 0)
+                currentDate.set(Calendar.MILLISECOND, 0)
                 beginDate = currentDate.timeInMillis
 
-
-                currentDate.set(Calendar.DAY_OF_WEEK, 1)
+                currentDate.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+                currentDate.set(Calendar.HOUR_OF_DAY, 23)
+                currentDate.set(Calendar.MINUTE, 59)
+                currentDate.set(Calendar.SECOND, 59)
+                currentDate.set(Calendar.MILLISECOND, 999)
                 endDate = currentDate.timeInMillis
 
             }
 
             GraphPeriod.Month -> {
-                currentDate.set(Calendar.MONTH, currentDate.get(Calendar.MONTH) + delta)
-
+                currentDate.add(Calendar.MONTH, delta)
 
                 currentDate.set(Calendar.DAY_OF_MONTH, 1)
+                currentDate.set(Calendar.HOUR_OF_DAY, 0)
+                currentDate.set(Calendar.MINUTE, 0)
+                currentDate.set(Calendar.SECOND, 0)
+                currentDate.set(Calendar.MILLISECOND, 0)
                 beginDate = currentDate.timeInMillis
 
 
                 currentDate.set(Calendar.DAY_OF_MONTH, currentDate.getActualMaximum(Calendar.DAY_OF_MONTH))
+                currentDate.set(Calendar.HOUR_OF_DAY, 23)
+                currentDate.set(Calendar.MINUTE, 59)
+                currentDate.set(Calendar.SECOND, 59)
+                currentDate.set(Calendar.MILLISECOND, 999)
                 endDate = currentDate.timeInMillis
             }
         }
@@ -165,7 +186,7 @@ enum class GraphPeriod {
 data class DataGraph(
     val categoryName: String,
     val iconCategory: Int,
-    val colorIconCategory: Long,
+    val colorIcon: Long,
     val amount: Int,
     val coefficientAmount: Float,
     val colorItem: Color
