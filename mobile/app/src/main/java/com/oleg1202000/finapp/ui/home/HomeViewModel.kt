@@ -1,9 +1,10 @@
 package com.oleg1202000.finapp.ui.home
 
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.di.LocalRepositoryModule
+import com.oleg1202000.finapp.ui.graphdraw.DataGraph
+import com.oleg1202000.finapp.ui.graphdraw.GraphPeriod
 import com.oleg1202000.finapp.ui.theme.defaultColor
 import com.oleg1202000.finapp.ui.theme.notOk80Color
 import com.oleg1202000.finapp.ui.theme.notOkColor
@@ -55,20 +56,19 @@ class HomeViewModel  @Inject constructor(
                                      iconCategory = it.iconId,
                                      colorIcon = it.color,
                                      amount = it.amount,
-                                     coefficientAmount = it.amount.toFloat() / sumAmount.toFloat(),
+                                     coefficientAmount = it.amount/ sumAmount.toFloat(),
                                      colorItem =
-                                     if (it.plan != null && it.amount.toFloat() / it.plan.toFloat() > 1) {
+                                     if (it.plan != null && it.amount / it.plan.toFloat() > 1) {
                                          notOkColor
-                                     } else if (it.plan != null && it.amount.toFloat() / it.plan.toFloat() >= 0.8) {
+                                     } else if (it.plan != null && it.amount / it.plan.toFloat() >= 0.8) {
                                          notOk80Color
-                                     } else if (it.plan != null && it.amount.toFloat() / it.plan.toFloat() < 0.8) {
+                                     } else if (it.plan != null && it.amount / it.plan.toFloat() < 0.8) {
                                          okColor
                                      } else {
                                          defaultColor
-                                     }
-                                 )
-                             },
-                             sumAmount = sumAmount,
+                                     },
+                                     sumAmount = sumAmount                                 )
+                             }
                          )
                      }
                  }
@@ -171,27 +171,7 @@ class HomeViewModel  @Inject constructor(
 
 data class HomeUiState(
     val dataGraph: List<DataGraph> = emptyList(),
-    val sumAmount: Int = 0,
     val beginDate: Long = 0L,
     val endDate: Long = 0L,
     val selectedGraphPeriod: GraphPeriod = GraphPeriod.Week
 )
-
-enum class GraphPeriod {
-    DAY,
-    Week,
-    Month
-}
-
-data class DataGraph(
-    val categoryName: String,
-    val iconCategory: Int,
-    val colorIcon: Long,
-    val amount: Int,
-    val coefficientAmount: Float,
-    val colorItem: Color
-)
-
-
-
-
