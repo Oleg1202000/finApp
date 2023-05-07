@@ -1,7 +1,6 @@
 package com.oleg1202000.finapp.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +23,7 @@ import com.oleg1202000.finapp.ui.theme.Typography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FinappStatusBar(
-    item: String = ""
+    title: String
 ){
     TopAppBar(
 
@@ -38,21 +37,18 @@ fun FinappStatusBar(
             ) {
 
                 Text(
-                    text = item,
+                    text = title,
                     style = Typography.titleLarge
                 )
             }
         },
 
         actions = {
-            Column() {
                 Icon(
                     modifier = Modifier.padding(10.dp),
                     painter = painterResource(id = R.drawable.ic_settings_40px),
                     contentDescription = "Settings"
                 )
-            }
-
         },
 
         windowInsets = WindowInsets.statusBars
