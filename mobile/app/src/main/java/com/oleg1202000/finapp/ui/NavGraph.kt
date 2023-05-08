@@ -1,6 +1,8 @@
 package com.oleg1202000.finapp.ui
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
@@ -15,6 +17,7 @@ import com.oleg1202000.finapp.ui.home.adddata.AddDataScreen
 import com.oleg1202000.finapp.ui.home.adddata.AddDataViewModel
 import com.oleg1202000.finapp.ui.plan.PlanScreen
 import com.oleg1202000.finapp.ui.plan.addplan.AddPlanScreen
+import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
@@ -22,6 +25,9 @@ fun NavGraph(
     navController: NavHostController,
     currentDestination: NavDestination?,
     startDestination: String = Screen.Home.route,
+    snackbarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope,
+    finappStatusbarTitle: MutableState<String>
 ) {
 
     NavHost(
@@ -32,21 +38,26 @@ fun NavGraph(
         composable(Screen.Home.route) {backStackEntry ->
             val viewModel = hiltViewModel<HomeViewModel>()
             HomeScreen(
-                viewModel = viewModel
+                viewModel = viewModel,
+                finappStatusbarTitle = finappStatusbarTitle
             )
 
         }
 
         composable(Screen.AddData.route) {
             val viewModel = hiltViewModel<AddDataViewModel>()
+            finappStatusbarTitle.value = ""
             AddDataScreen(
                 navController = navController,
-                viewModel = viewModel
+                viewModel = viewModel,
+                snackbarHostState = snackbarHostState,
+                coroutineScope = coroutineScope
             )
 
         }
 
         composable(Screen.Plan.route) {
+            finappStatusbarTitle.value = ""
             PlanScreen(
                 navController = navController,
                 currentDestination = currentDestination,
@@ -59,6 +70,7 @@ fun NavGraph(
         }
 
         composable(Screen.History.route) {
+            finappStatusbarTitle.value = ""
             HistoryScreen(
                 navController = navController,
                 currentDestination = currentDestination,
@@ -69,7 +81,9 @@ fun NavGraph(
             val viewModel = hiltViewModel<AddCategoryViewModel>()
             AddCategoryScreen(
                 viewModel = viewModel,
-                navController = navController
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                coroutineScope = coroutineScope
             )
 
         }
