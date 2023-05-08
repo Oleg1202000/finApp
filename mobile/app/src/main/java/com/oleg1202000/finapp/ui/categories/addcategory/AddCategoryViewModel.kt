@@ -1,11 +1,13 @@
 package com.oleg1202000.finapp.ui.categories.addcategory
 
+import android.database.sqlite.SQLiteConstraintException
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.data.Category
 import com.oleg1202000.finapp.di.LocalRepositoryModule
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,7 +31,7 @@ class AddCategoryViewModel @Inject constructor(
     ) {
         _uiState.update {
             it.copy(
-                categoryName = categoryName
+                categoryName = categoryName.trim()
             )
         }
     }
@@ -56,18 +58,48 @@ class AddCategoryViewModel @Inject constructor(
         }
     }
 
+    fun isLoading() {
+        _uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
+    }
+
 
     fun addCategory(
     ) {
+
+        var exceptionMessage: ErrorCategoryMessage? = null
         viewModelScope.launch {
-            localRepository.setCategory(
-                category = Category(
-                    name = uiState.value.categoryName,
-                    isIncome = false,
-                    color = uiState.value.selectedCategoryColor!!.value.toLong(),
-                    iconId = uiState.value.selectedCategoryIcon!!.toInt()
-                )
+        if (uiState.value.selectedCategoryIcon == null) {
+            exceptionMessage = ErrorCategoryMessage.IconNotSelected
+
+        } else if (uiState.value.selectedCategoryColor == null) {
+            exceptionMessage = ErrorCategoryMessage.ColorNotSelected
+
+        } else {
+                try {
+                    localRepository.setCategory(
+                        category = Category(
+                            name = uiState.value.categoryName,
+                            isIncome = false,
+                            color = uiState.value.selectedCategoryColor!!.value.toLong(),
+                            iconId = uiState.value.selectedCategoryIcon!!.toInt()
+                        )
+                    )
+                } catch (e: SQLiteConstraintException) {
+                    exceptionMessage = ErrorCategoryMessage.NameNotUnique
+                }
+            }
+            delay(1000)
+
+        _uiState.update {
+            it.copy(
+                errorCategoryMessage = exceptionMessage,
+                isLoading = false
             )
+        }
         }
     }
 }
@@ -77,4 +109,6 @@ data class AddCategoryUiState (
     val categoryName: String = "",
     val selectedCategoryIcon: Int? = null,
     val selectedCategoryColor: Color? = null,
+    val errorCategoryMessage: ErrorCategoryMessage? = null,
+    val isLoading: Boolean = false
 )

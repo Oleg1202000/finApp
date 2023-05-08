@@ -20,12 +20,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,16 +40,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.oleg1202000.finapp.R
 import com.oleg1202000.finapp.ui.theme.colorCategories
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun AddCategoryScreen(
     viewModel: AddCategoryViewModel = viewModel(),
     navController: NavHostController,
+    snackBarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+
+    var showAddResult by rememberSaveable { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -66,47 +77,6 @@ fun AddCategoryScreen(
         item { Spacer(modifier = Modifier.height(20.dp)) }
 
 
-        // "Демонстрация" карточки категории
-        if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryColor != null) {
-            item {
-                Card (
-                    modifier = Modifier
-                        .height(150.dp)
-                        .width(150.dp)
-                        .padding(
-                            start = 15.dp,
-                            end = 15.dp,
-                            top = 15.dp,
-                            bottom = 15.dp
-
-                        ),
-                ) {
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-
-                        Icon(
-                            painter = painterResource(id = uiState.selectedCategoryIcon!!),
-                            contentDescription = "CategoryItem",
-                            tint = uiState.selectedCategoryColor!!
-                        )
-
-                        Spacer(
-                            modifier = Modifier.height(15.dp)
-                        )
-
-                        Text(text = uiState.categoryName)
-                    }
-                }
-            }
-
-        }
-
-
         // "Сетка категорий"
         item {
             LazyRow {
@@ -117,20 +87,21 @@ fun AddCategoryScreen(
                         Column {
                             for (j in i..i + 2) {
 
-                                val colorCard = if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryIcon == iconCategoryItems[j]) {
+                                val colorCard =
+                                    if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryIcon == iconCategoryItems[j]) {
 
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.onSurface,
-                                        contentColor = MaterialTheme.colorScheme.surface
-                                    )
+                                        CardDefaults.cardColors(
+                                            containerColor = MaterialTheme.colorScheme.onSurface,
+                                            contentColor = MaterialTheme.colorScheme.surface
+                                        )
 
-                                } else {
+                                    } else {
 
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.surface,
-                                        contentColor = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
+                                        CardDefaults.cardColors(
+                                            containerColor = MaterialTheme.colorScheme.surface,
+                                            contentColor = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
 
                                 DrawItem(
                                     clickedItem = { viewModel.setCategoryIcon(iconCategoryItems[j]) },
@@ -151,17 +122,18 @@ fun AddCategoryScreen(
                     Column {
                         for (j in iconItemsSize - iconItemsSize % 3 until iconItemsSize) {
 
-                            val colorCard = if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryIcon == iconCategoryItems[j]) {
-                                CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.onSurface,
-                                    contentColor = MaterialTheme.colorScheme.surface
-                                )
-                            } else {
-                                CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.surface,
-                                    contentColor = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
+                            val colorCard =
+                                if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryIcon == iconCategoryItems[j]) {
+                                    CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.onSurface,
+                                        contentColor = MaterialTheme.colorScheme.surface
+                                    )
+                                } else {
+                                    CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.surface,
+                                        contentColor = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
 
                             DrawItem(
                                 clickedItem = { viewModel.setCategoryIcon(iconCategoryItems[j]) },
@@ -183,6 +155,7 @@ fun AddCategoryScreen(
         item { Spacer(modifier = Modifier.height(20.dp)) }
 
 
+        // Сетка цветов
         item {
             LazyRow {
 
@@ -192,17 +165,18 @@ fun AddCategoryScreen(
                         Column {
                             for (j in i..i + 2) {
 
-                                val colorCard = if (uiState.selectedCategoryColor != null && uiState.selectedCategoryColor == colorCategories[j]) {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.onSurface,
-                                        contentColor = MaterialTheme.colorScheme.surface
-                                    )
-                                } else {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.surface,
-                                        contentColor = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
+                                val colorCard =
+                                    if (uiState.selectedCategoryColor != null && uiState.selectedCategoryColor == colorCategories[j]) {
+                                        CardDefaults.cardColors(
+                                            containerColor = MaterialTheme.colorScheme.onSurface,
+                                            contentColor = MaterialTheme.colorScheme.surface
+                                        )
+                                    } else {
+                                        CardDefaults.cardColors(
+                                            containerColor = MaterialTheme.colorScheme.surface,
+                                            contentColor = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
 
                                 DrawItem(
                                     clickedItem = { viewModel.setCategoryColor(colorCategories[j]) },
@@ -223,17 +197,18 @@ fun AddCategoryScreen(
                     Column {
                         for (j in colorItemsSize - colorItemsSize % 3 until colorItemsSize) {
 
-                            val colorCard = if (uiState.selectedCategoryColor != null && uiState.selectedCategoryColor == colorCategories[j]) {
-                                CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.onSurface,
-                                    contentColor = MaterialTheme.colorScheme.surface
-                                )
-                            } else {
-                                CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.surface,
-                                    contentColor = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
+                            val colorCard =
+                                if (uiState.selectedCategoryColor != null && uiState.selectedCategoryColor == colorCategories[j]) {
+                                    CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.onSurface,
+                                        contentColor = MaterialTheme.colorScheme.surface
+                                    )
+                                } else {
+                                    CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.surface,
+                                        contentColor = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
 
                             DrawItem(
                                 clickedItem = { viewModel.setCategoryColor(colorCategories[j]) },
@@ -252,18 +227,94 @@ fun AddCategoryScreen(
         }
 
 
+        // Демонстрация карточки категории
+        if (
+            uiState.selectedCategoryIcon != null &&
+            uiState.selectedCategoryColor != null
+        ) {
+            item {
+                Card(
+                    modifier = Modifier
+                        .height(150.dp)
+                        .width(150.dp)
+                        .padding(
+                            start = 15.dp,
+                            end = 15.dp,
+                            top = 15.dp,
+                            bottom = 15.dp
+
+                        ),
+                ) {
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        if (!uiState.isLoading) {
+
+                            Icon(
+                                painter = painterResource(id = uiState.selectedCategoryIcon!!),
+                                contentDescription = "CategoryItem",
+                                tint = uiState.selectedCategoryColor!!
+                            )
+
+                            Spacer(
+                                modifier = Modifier.height(15.dp)
+                            )
+
+                            Text(text = uiState.categoryName)
+                        } else {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+            }
+        }
+
+
         item { Spacer(modifier = Modifier.height(30.dp)) }
 
 
         item {
             Button(
                 onClick = {
+                    viewModel.isLoading()
                     viewModel.addCategory()
-                    navController.popBackStack()
+                    showAddResult = true
                 }
             ) {
                 Text(text = "Добавить категорию")
             }
+        }
+
+
+        if (showAddResult && !uiState.isLoading) {
+            if (uiState.errorCategoryMessage != null) {
+
+                coroutineScope.launch {
+                    snackBarHostState.showSnackbar(
+                        message = if (uiState.errorCategoryMessage == ErrorCategoryMessage.NameNotUnique) {
+                            "Имя категории должно быть уникальным"
+                        } else if (uiState.errorCategoryMessage == ErrorCategoryMessage.IconNotSelected) {
+                            "Иконка не выбрана"
+                        } else {
+                            "Цвет не выбран"
+                        }
+                    )
+                }
+
+            } else {
+                coroutineScope.launch {
+                    snackBarHostState.showSnackbar(
+                        message = "Категория успешно добавлена!"
+                    )
+                }
+                navController.popBackStack()
+            }
+            showAddResult = false
         }
 
 
@@ -278,7 +329,7 @@ fun DrawItem(
     colorCard: CardColors,
     item: @Composable () -> Unit
 ) {
-    Card (
+    Card(
         modifier = Modifier
             .size(100.dp)
             .padding(
@@ -304,14 +355,6 @@ fun DrawItem(
         }
     }
 }
-
-
-/*
-@Preview
-@Composable
-fun AddCategoryPreview() {
-    AddCategoryScreen()
-}*/
 
 
 val iconCategoryItems: List<Int> = listOf(
