@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.data.Summary
 import com.oleg1202000.finapp.di.LocalRepositoryModule
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -147,7 +146,6 @@ class AddDataViewModel @Inject constructor(
                 }
             }
 
-            delay(5000)
             _uiState.update {
                 it.copy(
                     errorMessage = exceptionMessage,
