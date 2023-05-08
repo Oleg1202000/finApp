@@ -46,7 +46,7 @@ import java.util.Locale
 fun AddDataScreen(
     viewModel: AddDataViewModel = viewModel(),
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState,
+    snackBarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -126,7 +126,7 @@ fun AddDataScreen(
                 coroutineScope.launch {
                     if (uiState.errorMessage != null) {
 
-                        snackbarHostState.showSnackbar(
+                        snackBarHostState.showSnackbar(
                             message = if (uiState.errorMessage == ErrorMessage.AmountIsEmpty) {
                                 "Поле \"Сумма\" не может быть пустым!"
                             } else if (uiState.errorMessage == ErrorMessage.AmountNotInt) {
@@ -141,7 +141,7 @@ fun AddDataScreen(
                     } else {
                         coroutineScope.launch {
 
-                            snackbarHostState.showSnackbar(
+                            snackBarHostState.showSnackbar(
                                 message = "Запись успешно добавлена!"
                             )
                         }
