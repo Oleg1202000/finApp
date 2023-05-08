@@ -281,7 +281,6 @@ fun AddCategoryScreen(
         item {
             Button(
                 onClick = {
-                    viewModel.isLoading()
                     viewModel.addCategory()
                     showAddResult = true
                 }
