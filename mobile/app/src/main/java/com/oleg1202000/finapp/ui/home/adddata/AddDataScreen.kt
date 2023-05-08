@@ -1,7 +1,7 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.oleg1202000.finapp.ui.home.adddata
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +15,6 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -27,9 +26,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -38,88 +35,125 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.oleg1202000.finapp.ui.categories.CategoriesScreen
 import com.oleg1202000.finapp.ui.theme.Shapes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  AddDataScreen(
+fun AddDataScreen(
     viewModel: AddDataViewModel = viewModel(),
     navController: NavHostController,
+    snackbarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope
 ) {
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val coroutineScope = rememberCoroutineScope()
-
-    val snackState = remember { SnackbarHostState() }
-    SnackbarHost(hostState = snackState, Modifier)
-
 
     val showBottomSheet = rememberSaveable { mutableStateOf(false) }
-    var skipPartiallyExpanded by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = skipPartiallyExpanded
-    )
+    val sheetState = rememberModalBottomSheetState()
 
-    val openDateDialog = rememberSaveable() { mutableStateOf(false) }
+    val openDateDialog = rememberSaveable { mutableStateOf(false) }
 
 
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Spacer(modifier = Modifier.height(200.dp))
+
+        OutlinedTextField(
+            value = uiState.about.orEmpty(),
+            onValueChange = { viewModel.setDescription(it) },
+            label = { Text("Описание") }
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        OutlinedTextField(
+            value = uiState.amount,
+            singleLine = true,
+            onValueChange = { viewModel.setAmount(it) },
+            label = { Text("Сумма, ₽") },
+
+            supportingText = {
+                if (uiState.errorMessage == ErrorMessage.AmountOverLimit) {
+                    Text("Превышен лимит в 2 147 483 647 ₽")
+                } else if (uiState.errorMessage == ErrorMessage.AmountIsEmpty) {
+                    Text("Обязательное поле")
+                } else {
+                    Text("Целое число \nили выражение вида: x + y =")
+                }
+            },
+
+            isError = uiState.errorTextField
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            Spacer(modifier = Modifier.height(200.dp))
-
-            OutlinedTextField(
-                value = uiState.about.orEmpty(),
-                onValueChange = { viewModel.setDescription(it) },
-                label = { Text("Описание") }
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            OutlinedTextField(
-                value = uiState.amount,
-                onValueChange = { viewModel.setAmount(it) },
-                label = { Text("Сумма") }
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-
-                // Выбор категории
-                Button(
-                    onClick = {
-                            showBottomSheet.value = true
-                              },
-                    shape = Shapes.small
-                ) {
-                    Text(text = "Выбрать категорию")
-                }
-
-                // Выбор даты
-                Button(
-                    onClick = { openDateDialog.value = true },
-                    shape = Shapes.small
-                ) {
-                    Text(text = "Выбрать дату")
-                }
-            }
-
-            Spacer(modifier = Modifier.height(30.dp))
-
+            // Выбор категории
             Button(
                 onClick = {
-                    viewModel.addData()
-                    navController.popBackStack()
-                }
+                    showBottomSheet.value = true
+                },
+                shape = Shapes.small
             ) {
-                Text(text = "Добавить запись")
+                Text(text = "Выбрать категорию")
+            }
+
+            // Выбор даты
+            Button(
+                onClick = { openDateDialog.value = true },
+                shape = Shapes.small
+            ) {
+                Text(text = "Выбрать дату")
             }
         }
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Button(
+            onClick = {
+                viewModel.addData()
+
+                coroutineScope.launch {
+                    if (uiState.errorMessage != null) {
+
+                        snackbarHostState.showSnackbar(
+                            message = if (uiState.errorMessage == ErrorMessage.AmountIsEmpty) {
+                                "Поле \"Сумма\" не может быть пустым!"
+                            } else if (uiState.errorMessage == ErrorMessage.AmountNotInt) {
+                                "Поле \"Сумма\" должно содержать число"
+                            } else if (uiState.errorMessage == ErrorMessage.AmountOverLimit) {
+                                "Превышен лимит в 2 147 483 647 ₽"
+                            } else {
+                                "Категория не выбрана!"
+                            }
+                        )
+
+                    } else {
+                        coroutineScope.launch {
+
+                            snackbarHostState.showSnackbar(
+                                message = "Запись успешно добавлена!"
+                            )
+                        }
+                        navController.popBackStack()
+                    }
+                }
+
+            }
+        ) {
+            Text(text = "Добавить запись")
+        }
+    }
 
 
     if (showBottomSheet.value) {
@@ -147,9 +181,12 @@ fun  AddDataScreen(
             selectedDate = uiState.selectedDate
         )
     }
+
+
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowDatePicker(
     openDateDialog: MutableState<Boolean>,
@@ -174,6 +211,26 @@ fun ShowDatePicker(
                 onClick = {
                     viewModel.setDate(datePickerState.selectedDateMillis)
                     openDateDialog.value = false
+
+                    Log.d(
+                        "Calendar",
+                        "Date selected ${
+                            SimpleDateFormat(
+                                "dd.MM.yyyy HH:mm:ss:SSS",
+                                Locale.getDefault()
+                            ).format(datePickerState.selectedDateMillis)
+                        }"
+                    )
+                    Log.d(
+                        "Calendar",
+                        "Time zone selected ${
+                            SimpleDateFormat("Z", Locale.getDefault()).format(
+                                datePickerState.selectedDateMillis
+                            )
+                        }"
+                    )
+
+
                 },
                 enabled = confirmEnabled.value
             ) {
@@ -185,7 +242,7 @@ fun ShowDatePicker(
             TextButton(
                 onClick = { openDateDialog.value = false }
             ) {
-                Text("Cancel")
+                Text("Отмена")
             }
         }
     ) {

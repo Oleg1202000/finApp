@@ -1,5 +1,6 @@
 package com.oleg1202000.finapp.ui.home.adddata
 
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.data.Summary
@@ -11,11 +12,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.TimeZone
 import javax.inject.Inject
 
 
 @HiltViewModel
-class AddDataViewModel  @Inject constructor(
+class AddDataViewModel @Inject constructor(
     private val localRepository: LocalRepositoryModule
 ) : ViewModel() {
 
@@ -35,13 +37,13 @@ class AddDataViewModel  @Inject constructor(
                         it.copy(
                             categories = items.map {
                                 CategoryItem(
-                                id = it.id,
-                                name = it.name,
-                                IconId = it.iconId,
-                                colorIcon = it.color
-                            )
-                        }
-                    )
+                                    id = it.id,
+                                    name = it.name,
+                                    IconId = it.iconId,
+                                    colorIcon = it.color
+                                )
+                            }
+                        )
                     }
                 }
         }
@@ -62,9 +64,21 @@ class AddDataViewModel  @Inject constructor(
     fun setAmount(
         amount: String
     ) {
+        var tempAmount: String = amount
+
+        if (amount.isNotEmpty() && amount[amount.length - 1].toString() == "=") {
+            val expressionList: List<String> = amount.split(" ")
+            if (expressionList.size == 4 && expressionList[1] == "*") {
+                tempAmount = (expressionList[0].toInt() * expressionList[2].toInt()).toString()
+            }
+
+        }
+
         _uiState.update {
             it.copy(
-                amount = amount
+                amount = tempAmount,
+                errorMessage = null,
+                errorTextField = false
             )
         }
     }
@@ -93,20 +107,45 @@ class AddDataViewModel  @Inject constructor(
 
 
     fun addData() {
+        var exceptionMessage: ErrorMessage? = null
+        var tempErrorTextField = false
+
+
         if (uiState.value.selectedCategoryId == null) {
-            // TODO: Вывести сообщение об ошибке
+            exceptionMessage = ErrorMessage.CategoryNotSelected
+
+        } else if (uiState.value.amount.isEmpty()) {
+            exceptionMessage = ErrorMessage.AmountIsEmpty
+            tempErrorTextField = true
+
+        } else if (!uiState.value.amount.isDigitsOnly()) {
+            exceptionMessage = ErrorMessage.AmountNotInt
+            tempErrorTextField = true
+
+        } else {
+
+            viewModelScope.launch {
+                try {
+                    localRepository.setSummary(
+                        summary = Summary(
+                            id = 0L,
+                            categoryId = uiState.value.selectedCategoryId!!.toLong(),
+                            amount = uiState.value.amount.toInt(),
+                            date = uiState.value.selectedDate!!.toLong(),
+                            about = uiState.value.about
+                        )
+                    )
+                } catch (e: NumberFormatException) {
+                    exceptionMessage = ErrorMessage.AmountOverLimit
+                    tempErrorTextField = true
+                }
+            }
         }
 
-        viewModelScope.launch {
-
-            localRepository.setSummary(
-                summary = Summary(
-                    id = 0L,
-                    categoryId = uiState.value.selectedCategoryId!!.toLong(),
-                    amount = uiState.value.amount.toInt(),
-                    date = uiState.value.selectedDate!!.toLong(),
-                    about = uiState.value.about
-                )
+        _uiState.update {
+            it.copy(
+                errorMessage = exceptionMessage,
+                errorTextField = tempErrorTextField
             )
         }
     }
@@ -125,5 +164,7 @@ data class AddDataUiState(
     val about: String? = null,
     val amount: String = "",
     val selectedCategoryId: Long? = null,
-    val selectedDate: Long? = Calendar.getInstance().timeInMillis,
+    val selectedDate: Long? = Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
+    val errorTextField: Boolean = false,
+    val errorMessage: ErrorMessage? = null
 )
