@@ -58,17 +58,14 @@ class AddCategoryViewModel @Inject constructor(
         }
     }
 
-    fun isLoading() {
+
+    fun addCategory(
+    ) {
         _uiState.update {
             it.copy(
                 isLoading = true
             )
         }
-    }
-
-
-    fun addCategory(
-    ) {
 
         var exceptionMessage: ErrorCategoryMessage? = null
         viewModelScope.launch {
