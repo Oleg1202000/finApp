@@ -1,7 +1,5 @@
-
 package com.oleg1202000.finapp.ui.home.adddata
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,11 +21,13 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -37,8 +38,6 @@ import com.oleg1202000.finapp.ui.categories.CategoriesScreen
 import com.oleg1202000.finapp.ui.theme.Shapes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,6 +54,8 @@ fun AddDataScreen(
     val sheetState = rememberModalBottomSheetState()
 
     val openDateDialog = rememberSaveable { mutableStateOf(false) }
+
+    var showAddResult by rememberSaveable { mutableStateOf(false) }
 
 
     Column(
@@ -122,10 +123,20 @@ fun AddDataScreen(
         Button(
             onClick = {
                 viewModel.addData()
+                showAddResult = true
+            }
+        ) {
+            Text(text = "Добавить запись")
+        }
 
-                coroutineScope.launch {
-                    if (uiState.errorMessage != null) {
 
+        if (showAddResult && uiState.isLoading) {
+            CircularProgressIndicator()
+
+        } else if (showAddResult) {
+            if (uiState.errorMessage != null) {
+                SideEffect {
+                    coroutineScope.launch {
                         snackBarHostState.showSnackbar(
                             message = if (uiState.errorMessage == ErrorMessage.AmountIsEmpty) {
                                 "Поле \"Сумма\" не может быть пустым!"
@@ -137,22 +148,23 @@ fun AddDataScreen(
                                 "Категория не выбрана!"
                             }
                         )
-
-                    } else {
-                        coroutineScope.launch {
-
-                            snackBarHostState.showSnackbar(
-                                message = "Запись успешно добавлена!"
-                            )
-                        }
-                        navController.popBackStack()
                     }
                 }
 
+            } else {
+                SideEffect {
+                    coroutineScope.launch {
+
+                        snackBarHostState.showSnackbar(
+                            message = "Запись успешно добавлена!"
+                        )
+                    }
+                }
+                navController.popBackStack()
             }
-        ) {
-            Text(text = "Добавить запись")
+            showAddResult = false
         }
+
     }
 
 
@@ -193,7 +205,6 @@ fun ShowDatePicker(
     viewModel: AddDataViewModel,
     selectedDate: Long?
 ) {
-
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = selectedDate
     )
@@ -211,26 +222,6 @@ fun ShowDatePicker(
                 onClick = {
                     viewModel.setDate(datePickerState.selectedDateMillis)
                     openDateDialog.value = false
-
-                    Log.d(
-                        "Calendar",
-                        "Date selected ${
-                            SimpleDateFormat(
-                                "dd.MM.yyyy HH:mm:ss:SSS",
-                                Locale.getDefault()
-                            ).format(datePickerState.selectedDateMillis)
-                        }"
-                    )
-                    Log.d(
-                        "Calendar",
-                        "Time zone selected ${
-                            SimpleDateFormat("Z", Locale.getDefault()).format(
-                                datePickerState.selectedDateMillis
-                            )
-                        }"
-                    )
-
-
                 },
                 enabled = confirmEnabled.value
             ) {

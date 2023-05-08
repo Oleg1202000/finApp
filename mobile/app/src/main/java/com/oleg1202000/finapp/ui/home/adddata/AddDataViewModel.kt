@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.data.Summary
 import com.oleg1202000.finapp.di.LocalRepositoryModule
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -107,24 +108,29 @@ class AddDataViewModel @Inject constructor(
 
 
     fun addData() {
-        var exceptionMessage: ErrorMessage? = null
-        var tempErrorTextField = false
+
+        _uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
+        viewModelScope.launch {
+            var exceptionMessage: ErrorMessage? = null
+            var tempErrorTextField = false
 
 
-        if (uiState.value.selectedCategoryId == null) {
-            exceptionMessage = ErrorMessage.CategoryNotSelected
+            if (uiState.value.selectedCategoryId == null) {
+                exceptionMessage = ErrorMessage.CategoryNotSelected
 
-        } else if (uiState.value.amount.isEmpty()) {
-            exceptionMessage = ErrorMessage.AmountIsEmpty
-            tempErrorTextField = true
+            } else if (uiState.value.amount.isEmpty()) {
+                exceptionMessage = ErrorMessage.AmountIsEmpty
+                tempErrorTextField = true
 
-        } else if (!uiState.value.amount.isDigitsOnly()) {
-            exceptionMessage = ErrorMessage.AmountNotInt
-            tempErrorTextField = true
+            } else if (!uiState.value.amount.isDigitsOnly()) {
+                exceptionMessage = ErrorMessage.AmountNotInt
+                tempErrorTextField = true
 
-        } else {
-
-            viewModelScope.launch {
+            } else {
                 try {
                     localRepository.setSummary(
                         summary = Summary(
@@ -140,13 +146,15 @@ class AddDataViewModel @Inject constructor(
                     tempErrorTextField = true
                 }
             }
-        }
 
-        _uiState.update {
-            it.copy(
-                errorMessage = exceptionMessage,
-                errorTextField = tempErrorTextField
-            )
+            delay(5000)
+            _uiState.update {
+                it.copy(
+                    errorMessage = exceptionMessage,
+                    errorTextField = tempErrorTextField,
+                    isLoading = false
+                )
+            }
         }
     }
 }
@@ -166,5 +174,6 @@ data class AddDataUiState(
     val selectedCategoryId: Long? = null,
     val selectedDate: Long? = Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
     val errorTextField: Boolean = false,
-    val errorMessage: ErrorMessage? = null
+    val errorMessage: ErrorMessage? = null,
+    val isLoading: Boolean = false
 )
