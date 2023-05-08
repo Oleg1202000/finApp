@@ -50,7 +50,7 @@ fun NavGraph(
             AddDataScreen(
                 navController = navController,
                 viewModel = viewModel,
-                snackbarHostState = snackbarHostState,
+                snackBarHostState = snackbarHostState,
                 coroutineScope = coroutineScope
             )
 
@@ -82,7 +82,7 @@ fun NavGraph(
             AddCategoryScreen(
                 viewModel = viewModel,
                 navController = navController,
-                snackbarHostState = snackbarHostState,
+                snackBarHostState = snackbarHostState,
                 coroutineScope = coroutineScope
             )
 
