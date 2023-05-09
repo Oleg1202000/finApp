@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.di.LocalRepositoryModule
 import com.oleg1202000.finapp.ui.graphdraw.DataGraph
 import com.oleg1202000.finapp.ui.graphdraw.GraphPeriod
+import com.oleg1202000.finapp.ui.graphdraw.calculateDate
 import com.oleg1202000.finapp.ui.theme.defaultColor
 import com.oleg1202000.finapp.ui.theme.notOk80Color
 import com.oleg1202000.finapp.ui.theme.notOkColor
@@ -15,15 +16,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Calendar
-import java.util.TimeZone
 import javax.inject.Inject
 
 
  @HiltViewModel
-class HomeViewModel  @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val localRepository: LocalRepositoryModule
-
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -82,77 +80,13 @@ class HomeViewModel  @Inject constructor(
         delta: Int,
         graphPeriod: GraphPeriod = uiState.value.selectedGraphPeriod
     ) {
-
-        val beginDate: Long
-        val endDate: Long
-        val currentDate : Calendar = Calendar.getInstance(TimeZone.getDefault())
-            // currentDate.get (Calendar.MONDAY)
-
-
-        when (graphPeriod) {
-
-            GraphPeriod.DAY -> {
-                currentDate.add(Calendar.DAY_OF_YEAR, delta)
-
-                currentDate.set(Calendar.HOUR_OF_DAY, 0)
-                currentDate.set(Calendar.MINUTE, 0)
-                currentDate.set(Calendar.SECOND, 0)
-                currentDate.set(Calendar.MILLISECOND, 0)
-                beginDate = currentDate.timeInMillis
-
-
-                currentDate.set(Calendar.HOUR_OF_DAY, 23)
-                currentDate.set(Calendar.MINUTE, 59)
-                currentDate.set(Calendar.SECOND, 59)
-                currentDate.set(Calendar.MILLISECOND, 999)
-                endDate = currentDate.timeInMillis
-            }
-
-            GraphPeriod.Week -> {
-                currentDate.add(Calendar.WEEK_OF_YEAR, delta)
-
-                currentDate.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-                currentDate.set(Calendar.HOUR_OF_DAY, 0)
-                currentDate.set(Calendar.MINUTE, 0)
-                currentDate.set(Calendar.SECOND, 0)
-                currentDate.set(Calendar.MILLISECOND, 0)
-                beginDate = currentDate.timeInMillis
-
-                currentDate.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-                currentDate.set(Calendar.HOUR_OF_DAY, 23)
-                currentDate.set(Calendar.MINUTE, 59)
-                currentDate.set(Calendar.SECOND, 59)
-                currentDate.set(Calendar.MILLISECOND, 999)
-                endDate = currentDate.timeInMillis
-
-            }
-
-            GraphPeriod.Month -> {
-                currentDate.add(Calendar.MONTH, delta)
-
-                currentDate.set(Calendar.DAY_OF_MONTH, 1)
-                currentDate.set(Calendar.HOUR_OF_DAY, 0)
-                currentDate.set(Calendar.MINUTE, 0)
-                currentDate.set(Calendar.SECOND, 0)
-                currentDate.set(Calendar.MILLISECOND, 0)
-                beginDate = currentDate.timeInMillis
-
-
-                currentDate.set(Calendar.DAY_OF_MONTH, currentDate.getActualMaximum(Calendar.DAY_OF_MONTH))
-                currentDate.set(Calendar.HOUR_OF_DAY, 23)
-                currentDate.set(Calendar.MINUTE, 59)
-                currentDate.set(Calendar.SECOND, 59)
-                currentDate.set(Calendar.MILLISECOND, 999)
-                endDate = currentDate.timeInMillis
-            }
-        }
-
+        val arrayDate: Array<Long> = calculateDate(delta = delta, graphPeriod = graphPeriod)
 
 
         _uiState.update {
             it.copy(
-                beginDate = beginDate,
-                endDate = endDate
+                beginDate = arrayDate[0],
+                endDate = arrayDate[1]
             )
         }
     }
