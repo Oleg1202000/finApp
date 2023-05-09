@@ -1,10 +1,13 @@
 package com.oleg1202000.finapp.data
 
-import androidx.room.*
-import java.util.Date
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 
-@Entity (
+@Entity(
     tableName = "planned",
 
     foreignKeys = [
@@ -22,8 +25,8 @@ import java.util.Date
     ]
 )
 data class Planned(
-    @PrimaryKey (autoGenerate = true)  @ColumnInfo(name = "id") val id: Long,
-    @ColumnInfo (name = "category_id") val categoryId: Long,
+    @PrimaryKey(autoGenerate = true)  @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "category_id") val categoryId: Long,
     @ColumnInfo (name = "amount") val amount: Int,
-    @ColumnInfo (name = "date") val date: Date
+    @ColumnInfo (name = "date") val date: Long
 )
