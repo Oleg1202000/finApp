@@ -32,7 +32,7 @@ fun calculateDate(
             endDate = currentDate.timeInMillis
         }
 
-        GraphPeriod.Week -> {
+        GraphPeriod.WEEK -> {
             currentDate.add(Calendar.WEEK_OF_YEAR, delta)
 
             currentDate.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
@@ -51,7 +51,7 @@ fun calculateDate(
 
         }
 
-        GraphPeriod.Month -> {
+        GraphPeriod.MONTH -> {
             currentDate.add(Calendar.MONTH, delta)
 
             currentDate.set(Calendar.DAY_OF_MONTH, 1)
