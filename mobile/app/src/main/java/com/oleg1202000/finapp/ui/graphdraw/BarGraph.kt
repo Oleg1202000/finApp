@@ -117,7 +117,7 @@ fun BarGraph(
                         if (showDetailedInfo.value) {
                             Row(
                                 modifier = Modifier.fillMaxSize(),
-                                horizontalArrangement = Arrangement.Start,
+                                horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
 

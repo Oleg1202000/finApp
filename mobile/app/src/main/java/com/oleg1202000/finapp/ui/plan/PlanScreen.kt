@@ -34,7 +34,7 @@ fun PlanScreen(
         // график 1
         item {
             if (uiState.dataGraph.isEmpty()) {
-                finappStatusBarTitle.value = "- 0   + 0" // Для отображения суммы доходов и расходов
+                finappStatusBarTitle.value = "0 / 0 ₽" // Для отображения суммы доходов и расходов
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
