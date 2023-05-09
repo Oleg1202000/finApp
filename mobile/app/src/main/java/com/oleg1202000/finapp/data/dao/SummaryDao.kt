@@ -35,7 +35,7 @@ interface SummaryDao {
 
     @Query(
         """
-        SELECT summary.id, categories.name, summary.amount, summary.date, summary.about
+        SELECT summary.id, categories.name, categories.icon_id, categories.color, summary.amount, summary.date, summary.about
         
         FROM summary
 
@@ -50,7 +50,7 @@ interface SummaryDao {
         beginDate: Long,
         endDate: Long
 
-    ) : Flow<List<ReturnHistory>>
+    ) : Flow<List<ReturnSummaryHistory>>
 
 
     @Insert
