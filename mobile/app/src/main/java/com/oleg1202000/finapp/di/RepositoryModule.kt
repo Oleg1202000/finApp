@@ -48,6 +48,11 @@ class LocalRepositoryModule @Inject constructor(
 
      suspend fun deletePlan (plan: Planned) = planDao.deletePlan(plan)
 
+    fun getPlannedHistory(
+        beginDate: Long,
+        endDate: Long
+    ) = planDao.getHistory(endDate, beginDate).flowOn(Dispatchers.IO)
+
 
      // Summary table
     fun getSumAmount(
@@ -56,7 +61,7 @@ class LocalRepositoryModule @Inject constructor(
         endDate: Long
     ) = summaryDao.getSumAmount(isIncome, beginDate, endDate).flowOn(Dispatchers.IO)
 
-    fun getHistory(
+    fun getSummaryHistory(
         beginDate: Long,
         endDate: Long
     ) = summaryDao.getHistory(endDate, beginDate).flowOn(Dispatchers.IO)
