@@ -2,6 +2,7 @@ package com.oleg1202000.finapp.data.dao
 
 import androidx.room.*
 import com.oleg1202000.finapp.data.Planned
+import com.oleg1202000.finapp.data.ReturnPlannedHistory
 import com.oleg1202000.finapp.data.ReturnSumAmount
 import kotlinx.coroutines.flow.Flow
 
@@ -30,6 +31,27 @@ interface PlanDao {
         endDate: Long
 
     ) : Flow<List<ReturnSumAmount>>
+
+
+
+    @Query(
+        """
+        SELECT planned.id, categories.name, categories.icon_id, categories.color, planned.amount, planned.date
+        
+        FROM planned
+
+        INNER JOIN categories ON categories.id = planned.category_id
+
+        WHERE planned.date >= :beginDate AND planned.date <= :endDate
+        
+        ORDER BY planned.date DESC
+        """
+    )
+    fun getHistory(
+        beginDate: Long,
+        endDate: Long
+
+    ) : Flow<List<ReturnPlannedHistory>>
 
     @Insert
     suspend fun setPlan(planned: Planned)
