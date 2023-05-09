@@ -4,13 +4,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oleg1202000.finapp.ui.categories.addcategory.AddCategoryScreen
 import com.oleg1202000.finapp.ui.categories.addcategory.AddCategoryViewModel
 import com.oleg1202000.finapp.ui.history.HistoryScreen
+import com.oleg1202000.finapp.ui.history.HistoryViewModel
 import com.oleg1202000.finapp.ui.home.HomeScreen
 import com.oleg1202000.finapp.ui.home.HomeViewModel
 import com.oleg1202000.finapp.ui.home.adddata.AddDataScreen
@@ -25,7 +25,6 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    currentDestination: NavDestination?,
     startDestination: String = Screen.Home.route,
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
@@ -82,9 +81,9 @@ fun NavGraph(
 
         composable(Screen.History.route) {
             finappStatusbarTitle.value = ""
+            val viewModel = hiltViewModel<HistoryViewModel>()
             HistoryScreen(
-                navController = navController,
-                currentDestination = currentDestination,
+                viewModel = viewModel
             )
         }
 
