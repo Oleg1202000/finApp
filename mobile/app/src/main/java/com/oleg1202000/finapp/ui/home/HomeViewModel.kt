@@ -107,5 +107,5 @@ data class HomeUiState(
     val dataGraph: List<DataGraph> = emptyList(),
     val beginDate: Long = 0L,
     val endDate: Long = 0L,
-    val selectedGraphPeriod: GraphPeriod = GraphPeriod.Week
+    val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK
 )
