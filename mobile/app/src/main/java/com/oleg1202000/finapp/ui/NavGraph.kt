@@ -16,7 +16,9 @@ import com.oleg1202000.finapp.ui.home.HomeViewModel
 import com.oleg1202000.finapp.ui.home.adddata.AddDataScreen
 import com.oleg1202000.finapp.ui.home.adddata.AddDataViewModel
 import com.oleg1202000.finapp.ui.plan.PlanScreen
+import com.oleg1202000.finapp.ui.plan.PlanViewModel
 import com.oleg1202000.finapp.ui.plan.addplan.AddPlanScreen
+import com.oleg1202000.finapp.ui.plan.addplan.AddPlanViewModel
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -58,14 +60,23 @@ fun NavGraph(
 
         composable(Screen.Plan.route) {
             finappStatusbarTitle.value = ""
+            val viewModel = hiltViewModel<PlanViewModel>()
             PlanScreen(
-                navController = navController,
-                currentDestination = currentDestination,
+                viewModel = viewModel,
+                finappStatusBarTitle = finappStatusbarTitle
+
             )
         }
 
         composable(Screen.AddPlan.route) {
-            AddPlanScreen()
+            finappStatusbarTitle.value = ""
+            val viewModel = hiltViewModel<AddPlanViewModel>()
+            AddPlanScreen(
+                navController = navController,
+                viewModel = viewModel,
+                snackBarHostState = snackbarHostState,
+                coroutineScope = coroutineScope
+            )
 
         }
 
