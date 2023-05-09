@@ -15,12 +15,13 @@ interface PlanDao {
         FROM planned
         
         JOIN categories ON categories.id = planned.category_id
-        JOIN summary ON categories.id = summary.category_id
+        LEFT JOIN summary ON categories.id = summary.category_id
         
         WHERE planned.date >= :beginDate AND planned.date <= :endDate AND
         categories.is_income = :isIncome
         
         GROUP BY planned.category_id
+        ORDER BY planned DESC
         """
     )
     fun getPlan(
