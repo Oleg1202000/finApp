@@ -85,7 +85,7 @@ fun AddDataScreen(
                 } else if (uiState.errorMessage == ErrorMessage.AmountIsEmpty) {
                     Text("Обязательное поле")
                 } else {
-                    Text("Целое число \nили выражение вида: x + y =")
+                    Text("Целое число \nили выражение вида: x * y =")
                 }
             },
 
