@@ -5,5 +5,6 @@ enum class ErrorMessage {
     CategoryNotSelected,
     AmountIsEmpty,
     AmountNotInt,
-    AmountOverLimit
+    AmountOverLimit,
+    PeriodNotSelected
 }
