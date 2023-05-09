@@ -35,7 +35,7 @@ fun HomeScreen(
         // график 1
         item {
             if (uiState.dataGraph.isEmpty()) {
-                finappStatusbarTitle.value = "- 0   + 0" // Для отображения суммы доходов и расходов
+                finappStatusbarTitle.value = "- 0   + 0 ₽" // Для отображения суммы доходов и расходов
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -49,7 +49,7 @@ fun HomeScreen(
                 }
             } else {
 
-                finappStatusbarTitle.value = "- ${uiState.dataGraph[0].sumAmount}   + 0"
+                finappStatusbarTitle.value = "- ${uiState.dataGraph[0].sumAmount}   + 0 ₽"
                 BarGraph(
                     dataGraph = uiState.dataGraph
                 )
@@ -79,7 +79,7 @@ fun HomeScreen(
 
         item {
             Spacer(
-                modifier = Modifier.height(80.dp) //тобы кнопка "+" не закрывала контент
+                modifier = Modifier.height(80.dp) // Чтобы кнопка "+" не закрывала контент
             )
         }
     }

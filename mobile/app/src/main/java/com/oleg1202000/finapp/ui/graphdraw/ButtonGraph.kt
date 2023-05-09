@@ -44,7 +44,7 @@ Surface(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val format = SimpleDateFormat("dd.MM.yyyy HH:mm:SSS", Locale.getDefault())
+            val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
 
             Button(
                 colors = ButtonDefaults.buttonColors(

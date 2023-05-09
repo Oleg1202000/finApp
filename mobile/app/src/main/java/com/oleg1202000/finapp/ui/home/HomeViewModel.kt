@@ -56,7 +56,7 @@ class HomeViewModel @Inject constructor(
                                      amount = it.amount,
                                      coefficientAmount = it.amount/ sumAmount.toFloat(),
                                      colorItem =
-                                     if (it.plan != null && it.amount / it.plan.toFloat() > 1) {
+                                     if (it.plan != null && it.amount / it.plan.toFloat() >= 1) {
                                          notOkColor
                                      } else if (it.plan != null && it.amount / it.plan.toFloat() >= 0.8) {
                                          notOk80Color
@@ -65,7 +65,8 @@ class HomeViewModel @Inject constructor(
                                      } else {
                                          defaultColor
                                      },
-                                     sumAmount = sumAmount                                 )
+                                     sumAmount = sumAmount
+                                 )
                              }
                          )
                      }
