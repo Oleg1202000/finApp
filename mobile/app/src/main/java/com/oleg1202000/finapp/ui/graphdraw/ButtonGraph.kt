@@ -113,7 +113,7 @@ Surface(
 
             Button(onClick = {
                 delta.value = 0
-                updateGraphPeriod(GraphPeriod.Week)
+                updateGraphPeriod(GraphPeriod.WEEK)
                 updateDate(delta.value)
                 updateDataGraph()
             }
@@ -123,7 +123,7 @@ Surface(
 
             Button(onClick = {
                 delta.value = 0
-                updateGraphPeriod(GraphPeriod.Month)
+                updateGraphPeriod(GraphPeriod.MONTH)
                 updateDate(delta.value)
                 updateDataGraph()
             }) {
