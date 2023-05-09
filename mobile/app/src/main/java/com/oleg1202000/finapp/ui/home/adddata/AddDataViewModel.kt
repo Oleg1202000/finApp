@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.data.Summary
 import com.oleg1202000.finapp.di.LocalRepositoryModule
+import com.oleg1202000.finapp.ui.categories.CategoryItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -157,13 +158,6 @@ class AddDataViewModel @Inject constructor(
     }
 }
 
-
-data class CategoryItem(
-    val id: Long,
-    val name: String,
-    val IconId: Int,
-    val colorIcon: Long,
-)
 
 data class AddDataUiState(
     val categories: List<CategoryItem> = emptyList(),

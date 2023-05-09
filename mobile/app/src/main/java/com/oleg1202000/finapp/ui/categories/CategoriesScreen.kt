@@ -30,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.oleg1202000.finapp.ui.Screen
-import com.oleg1202000.finapp.ui.home.adddata.CategoryItem
 import com.oleg1202000.finapp.ui.theme.Shapes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
