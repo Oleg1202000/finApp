@@ -61,7 +61,6 @@ fun Finapp() {
             Box(Modifier.padding(innerPadding)) {
                 NavGraph(
                     navController = navController,
-                    currentDestination = currentDestination,
                     snackbarHostState = snackbarHostState,
                     coroutineScope = coroutineScope,
                     finappStatusbarTitle = finappStatusbarTitle
