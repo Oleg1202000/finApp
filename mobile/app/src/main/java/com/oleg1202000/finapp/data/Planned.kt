@@ -32,6 +32,16 @@ data class Planned(
 )
 
 
+data class ReturnPlanAmount(
+
+    @ColumnInfo(name = "category_name") val categoryName: String,
+    @ColumnInfo(name = "color") val color: Long,
+    @ColumnInfo(name = "icon_id") val iconId: Int,
+    @ColumnInfo(name = "summary_amount") val amount: Int?,
+    @ColumnInfo(name = "planned_amount") val plan: Int
+)
+
+
 data class ReturnPlannedHistory(
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val categoryName: String,

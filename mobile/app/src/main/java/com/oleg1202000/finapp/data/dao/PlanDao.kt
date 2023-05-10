@@ -2,8 +2,8 @@ package com.oleg1202000.finapp.data.dao
 
 import androidx.room.*
 import com.oleg1202000.finapp.data.Planned
+import com.oleg1202000.finapp.data.ReturnPlanAmount
 import com.oleg1202000.finapp.data.ReturnPlannedHistory
-import com.oleg1202000.finapp.data.ReturnSumAmount
 import kotlinx.coroutines.flow.Flow
 
 
@@ -11,32 +11,64 @@ import kotlinx.coroutines.flow.Flow
 interface PlanDao {
     @Query(
         """
-        SELECT categories.name AS category_name, categories.color AS color, categories.icon_id AS icon_id, SUM(summary.amount) AS summary_amount, SUM(planned.amount) AS planned
+        SELECT 
+        categories.name AS category_name,
+        categories.color AS color, 
+        categories.icon_id AS icon_id, 
+        SUM(planned.amount) AS planned_amount,
+        nested_summary.summary_amount AS summary_amount
+
         
         FROM planned
         
         JOIN categories ON categories.id = planned.category_id
-        LEFT JOIN summary ON categories.id = summary.category_id
+        LEFT JOIN 
+        
+        (SELECT
+         
+        categories.name AS category_name,
+        SUM(summary.amount) AS summary_amount
+        
+        FROM  summary
+        
+        JOIN categories ON categories.id = summary.category_id
+        
+        WHERE summary.date >= :beginDate AND summary.date <= :endDate AND
+        categories.is_income = :isIncome
+        
+        GROUP BY categories.id
+        ORDER BY summary_amount DESC
+         
+         
+         ) AS nested_summary ON nested_summary.category_name = categories.name
         
         WHERE planned.date >= :beginDate AND planned.date <= :endDate AND
         categories.is_income = :isIncome
         
-        GROUP BY planned.category_id
-        ORDER BY planned DESC
+        GROUP BY categories.id
+        ORDER BY summary_amount DESC
         """
     )
+
+    // LEFT JOIN summary ON categories.id = summary.category_id
     fun getPlan(
         isIncome: Boolean = false,
         beginDate: Long,
         endDate: Long
 
-    ) : Flow<List<ReturnSumAmount>>
+    ) : Flow<List<ReturnPlanAmount>>
 
 
 
     @Query(
         """
-        SELECT planned.id, categories.name, categories.icon_id, categories.color, planned.amount, planned.date
+        SELECT 
+        planned.id, 
+        categories.name, 
+        categories.icon_id, 
+        categories.color, 
+        planned.amount, 
+        planned.date
         
         FROM planned
 

@@ -3,13 +3,10 @@ package com.oleg1202000.finapp.ui.plan
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.di.LocalRepositoryModule
+import com.oleg1202000.finapp.ui.graphdraw.ColorGraph
 import com.oleg1202000.finapp.ui.graphdraw.DataGraph
 import com.oleg1202000.finapp.ui.graphdraw.GraphPeriod
 import com.oleg1202000.finapp.ui.graphdraw.calculateDate
-import com.oleg1202000.finapp.ui.theme.defaultColor
-import com.oleg1202000.finapp.ui.theme.notOk80Color
-import com.oleg1202000.finapp.ui.theme.notOkColor
-import com.oleg1202000.finapp.ui.theme.okColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,31 +39,35 @@ class PlanViewModel @Inject constructor(
                 endDate = uiState.value.endDate
             )
                 .collect { items ->
-                    _uiState.update {
+                    _uiState.update { it ->
                         it.copy(
                             dataGraph = items.map {
                                 DataGraph(
                                     categoryName = it.categoryName,
                                     iconCategory = it.iconId,
                                     colorIcon = it.color,
-                                    amount = it.amount,
-                                    coefficientAmount = it.amount / it.plan!!.toFloat(),
+                                    amount = it.amount ?: 0,
+                                    coefficientAmount = (it.amount?.toFloat() ?: 0f) / it.plan.toFloat(),
                                     colorItem =
-                                    if (it.amount / it.plan.toFloat() >= 1) {
-                                        notOkColor
-                                    } else if (it.amount / it.plan.toFloat() >= 0.8) {
-                                        notOk80Color
-                                    } else if (it.amount / it.plan.toFloat() < 0.8) {
-                                        okColor
+                                    if ((it.amount ?: 0) / it.plan.toFloat() >= 1) {
+                                        ColorGraph.NOT_OK_COLOR
+
+                                    } else if ((it.amount ?: 0) / it.plan.toFloat() >= 0.8) {
+                                        ColorGraph.NOT_OK_80_COLOR
+
+                                    } else if ((it.amount ?: 0) / it.plan.toFloat() < 0.8) {
+                                        ColorGraph.OK_COLOR
+
                                     } else {
-                                        defaultColor
+                                        ColorGraph.DEFAULT_COLOR
+
                                     },
                                     sumAmount = it.plan
                                 )
 
                             },
-                            sumPlanned = items.sumOf { it.plan ?: 0 },
-                            sumFact = items.sumOf { it.amount }
+                            sumPlanned = items.sumOf { it.plan },
+                            sumFact = items.sumOf { it.amount ?: 0 }
                         )
 
                     }

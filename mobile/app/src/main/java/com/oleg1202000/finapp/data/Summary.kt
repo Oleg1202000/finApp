@@ -35,7 +35,7 @@ data class ReturnSumAmount(
     @ColumnInfo(name = "color") val color: Long,
     @ColumnInfo(name = "icon_id") val iconId: Int,
     @ColumnInfo(name = "summary_amount") val amount: Int,
-    @ColumnInfo(name = "planned") val plan: Int?
+    @ColumnInfo(name = "planned_amount") val plan: Int?
 )
 
 
