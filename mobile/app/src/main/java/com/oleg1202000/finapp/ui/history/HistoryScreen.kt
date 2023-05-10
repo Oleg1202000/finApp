@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -42,7 +43,10 @@ fun HistoryScreen(
     val titles = listOf("Фактически \n потрачено", "Запланировано")
 
 
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
 
         item {
             TabRow(selectedTabIndex = stateTab) {
@@ -63,6 +67,11 @@ fun HistoryScreen(
         }
 
 
+        item {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
+
         if (stateTab == 0) {
             viewModel.updateDataSummary()
         } else {
@@ -80,67 +89,75 @@ fun HistoryScreen(
 fun HistoryItem(
     item: HistoryItem
 ) {
-    Card {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    top = 15.dp,
-                    bottom = 15.dp
-                ),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
 
-            Icon(
-                modifier = Modifier.weight(2f),
-                painter = painterResource(id = item.iconId),
-                contentDescription = null,
-                tint = Color(item.color.toULong())
-            )
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Card {
 
-            Column(
+            Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .weight(8f)
+                    .padding(
+                        top = 15.dp,
+                        bottom = 15.dp
+                    ),
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
+                val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
 
-                Row {
-                    Text(
-                        text = format.format(item.date),
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                Icon(
+                    modifier = Modifier.weight(2f),
+                    painter = painterResource(id = item.iconId),
+                    contentDescription = null,
+                    tint = Color(item.color.toULong())
+                )
 
-                    Spacer(modifier = Modifier.width(20.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(8f)
+                ) {
 
-                    if (item.about != null) {
+                    Row {
                         Text(
-                            text = item.about,
-                            style = MaterialTheme.typography.bodySmall,
-                            maxLines = 1
+                            text = format.format(item.date),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+
+                        Spacer(modifier = Modifier.width(20.dp))
+
+                        if (item.about != null) {
+                            Text(
+                                text = item.about,
+                                style = MaterialTheme.typography.bodySmall,
+                                maxLines = 1
+                            )
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = item.categoryName,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+
+                        Text(
+                            modifier = Modifier.weight(3f),
+                            text = "- ${item.amount} ₽",
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
                 }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-
-                    Text(
-                        text = item.categoryName,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-
-                    Spacer(modifier = Modifier.width(30.dp))
-
-                    Text(
-                        text = "- ${item.amount} ₽",
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                }
             }
         }
+        Spacer(modifier = Modifier.height(10.dp))
+
     }
 }
