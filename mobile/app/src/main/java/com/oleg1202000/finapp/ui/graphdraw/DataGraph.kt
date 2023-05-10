@@ -1,6 +1,5 @@
 package com.oleg1202000.finapp.ui.graphdraw
 
-import androidx.compose.ui.graphics.Color
 
 data class DataGraph(
     val categoryName: String,
@@ -9,5 +8,5 @@ data class DataGraph(
     val amount: Int,
     val sumAmount: Int = 0,
     val coefficientAmount: Float,
-    val colorItem: Color
+    val colorItem: ColorGraph
 )

@@ -3,13 +3,10 @@ package com.oleg1202000.finapp.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.di.LocalRepositoryModule
+import com.oleg1202000.finapp.ui.graphdraw.ColorGraph
 import com.oleg1202000.finapp.ui.graphdraw.DataGraph
 import com.oleg1202000.finapp.ui.graphdraw.GraphPeriod
 import com.oleg1202000.finapp.ui.graphdraw.calculateDate
-import com.oleg1202000.finapp.ui.theme.defaultColor
-import com.oleg1202000.finapp.ui.theme.notOk80Color
-import com.oleg1202000.finapp.ui.theme.notOkColor
-import com.oleg1202000.finapp.ui.theme.okColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,11 +31,9 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
      fun updateDataGraph() {
+
          viewModelScope.launch {
-
-
              localRepository.getSumAmount(
                  beginDate = uiState.value.beginDate,
                  endDate = uiState.value.endDate
@@ -57,13 +52,13 @@ class HomeViewModel @Inject constructor(
                                      coefficientAmount = it.amount/ sumAmount.toFloat(),
                                      colorItem =
                                      if (it.plan != null && it.amount / it.plan.toFloat() >= 1) {
-                                         notOkColor
+                                         ColorGraph.NOT_OK_COLOR
                                      } else if (it.plan != null && it.amount / it.plan.toFloat() >= 0.8) {
-                                         notOk80Color
+                                         ColorGraph.NOT_OK_80_COLOR
                                      } else if (it.plan != null && it.amount / it.plan.toFloat() < 0.8) {
-                                         okColor
+                                         ColorGraph.OK_COLOR
                                      } else {
-                                         defaultColor
+                                         ColorGraph.DEFAULT_COLOR
                                      },
                                      sumAmount = sumAmount
                                  )
@@ -72,8 +67,6 @@ class HomeViewModel @Inject constructor(
                      }
                  }
          }
-
-
      }
 
 
