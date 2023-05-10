@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.data.Planned
 import com.oleg1202000.finapp.di.LocalRepositoryModule
 import com.oleg1202000.finapp.ui.categories.CategoryItem
-import com.oleg1202000.finapp.ui.graphdraw.GraphPeriod
 import com.oleg1202000.finapp.ui.home.adddata.ErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import java.util.Calendar.getInstance
 import javax.inject.Inject
 
@@ -149,7 +147,9 @@ class AddPlanViewModel @Inject constructor(
     }
 
 
-    fun updatePlan() {
+       /*FIXME:
+       fun updatePlan() {
+
         var lastUpdateDate: Long = 0
         var datePeriod: GraphPeriod = GraphPeriod.WEEK
 
@@ -197,7 +197,7 @@ class AddPlanViewModel @Inject constructor(
                 }
 
 
-                /*if (lastUpdateDate < currentDate.timeInMillis) {
+                *//*if (lastUpdateDate < currentDate.timeInMillis) {
                     localRepository.setPlan(
                         plan = Planned(
 
@@ -206,10 +206,10 @@ class AddPlanViewModel @Inject constructor(
                 } else {
                     break
 
-                }*/
+                }*//*
             }
         }
-    }
+    }*/
 }
 
 
