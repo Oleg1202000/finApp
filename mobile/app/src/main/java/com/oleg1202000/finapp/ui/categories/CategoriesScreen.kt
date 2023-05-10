@@ -101,31 +101,42 @@ fun CategoryItems(
 
 
         item {
-            if (categories.size % 2 == 1) {
+
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.Center
                 ) {
 
-                    CardItem(
-                        item = categories[categories.lastIndex],
-                        showBottomSheet = showBottomSheet,
-                        sheetState = sheetState,
-                        coroutineScope = coroutineScope,
-                        selectCategory = selectCategory,
-                        selectedCategoryId = selectedCategoryId
-                    )
+                    if (categories.size % 2 == 1) {
+                        CardItem(
+                            item = categories[categories.lastIndex],
+                            showBottomSheet = showBottomSheet,
+                            sheetState = sheetState,
+                            coroutineScope = coroutineScope,
+                            selectCategory = selectCategory,
+                            selectedCategoryId = selectedCategoryId
+                        )
 
-                    ButtonItem(
-                        navController = navController
-                    )
+                        ButtonItem(
+                            navController = navController
+                        )
+                    } else {
+
+                        ButtonItem(
+                            navController = navController
+                        )
+                        Spacer(
+                            modifier = Modifier
+                                .size(150.dp)
+                                .padding(
+                                    start = 15.dp,
+                                    end = 15.dp,
+                                    top = 15.dp,
+                                    bottom = 30.dp
+                                )
+                        )
+                    }
                 }
-            } else {
-
-                ButtonItem(
-                    navController = navController
-                )
-            }
         }
     }
 }
