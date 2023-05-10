@@ -37,7 +37,6 @@ interface PlanDao {
         categories.is_income = :isIncome
         
         GROUP BY categories.id
-        ORDER BY summary_amount DESC
          
          
          ) AS nested_summary ON nested_summary.category_name = categories.name
@@ -46,7 +45,7 @@ interface PlanDao {
         categories.is_income = :isIncome
         
         GROUP BY categories.id
-        ORDER BY summary_amount DESC
+        ORDER BY planned_amount, summary_amount DESC
         """
     )
 
