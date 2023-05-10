@@ -15,6 +15,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +32,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.oleg1202000.finapp.ui.theme.Shapes
 import com.oleg1202000.finapp.ui.theme.Typography
+import com.oleg1202000.finapp.ui.theme.notOk80Color
+import com.oleg1202000.finapp.ui.theme.notOkColor
+import com.oleg1202000.finapp.ui.theme.okColor
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -62,6 +66,17 @@ fun BarGraph(
 
         Column {
             dataGraph.forEach { item ->
+                val colorItem = if (item.colorItem == ColorGraph.NOT_OK_COLOR) {
+                    notOkColor
+                } else if (item.colorItem == ColorGraph.NOT_OK_80_COLOR) {
+                    notOk80Color
+                } else if (item.colorItem == ColorGraph.OK_COLOR) {
+                    okColor
+                } else {
+                    MaterialTheme.colorScheme.tertiaryContainer
+                }
+
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -99,7 +114,7 @@ fun BarGraph(
 
                             val sizeHeight = 30f
                             drawRect(
-                                color = item.colorItem,
+                                color = colorItem,
                                 /* Добавляем отступ, чтобы прямоугольник
                                 находился по центру Row() */
                                 topLeft = Offset(
