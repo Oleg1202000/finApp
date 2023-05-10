@@ -65,6 +65,11 @@ fun BarGraph(
     ) {
 
         Column {
+            var maxCoefficientAmount = 1f
+            if (dataGraph[0].coefficientAmount > 1) {
+                 maxCoefficientAmount = dataGraph[0].coefficientAmount
+            }
+
             dataGraph.forEach { item ->
                 val colorItem = if (item.colorItem == ColorGraph.NOT_OK_COLOR) {
                     notOkColor
@@ -122,7 +127,7 @@ fun BarGraph(
                                     y = size.height * 0.20f
                                 ),
                                 size = Size(
-                                    size.width * item.coefficientAmount,
+                                    size.width * item.coefficientAmount / maxCoefficientAmount,
                                     sizeHeight.dp.toPx()
                                 )
                             )
