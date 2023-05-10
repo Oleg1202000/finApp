@@ -10,19 +10,42 @@ interface SummaryDao {
 
     @Query(
         """
-        SELECT categories.name AS category_name, categories.color AS color, categories.icon_id AS icon_id, SUM(summary.amount) AS summary_amount, SUM(planned.amount) AS planned
+        SELECT 
+        categories.name AS category_name,
+        categories.color AS color, 
+        categories.icon_id AS icon_id, 
+        SUM(summary.amount) AS summary_amount,
+        nested_planned.planned_amount AS planned_amount
+
         
         FROM summary
-
+        
         JOIN categories ON categories.id = summary.category_id
-        LEFT JOIN planned ON planned.category_id = categories.id
-
+        LEFT JOIN 
+        
+        (SELECT
+         
+        categories.name AS category_name,
+        SUM(planned.amount) AS planned_amount
+        
+        FROM  planned
+        
+        JOIN categories ON categories.id = planned.category_id
+        
+        WHERE planned.date >= :beginDate AND planned.date <= :endDate AND
+        categories.is_income = :isIncome
+        
+        GROUP BY categories.id
+        ORDER BY planned_amount DESC
+         
+         
+         ) AS nested_planned ON nested_planned.category_name = categories.name
+        
         WHERE summary.date >= :beginDate AND summary.date <= :endDate AND
         categories.is_income = :isIncome
         
-        GROUP BY summary.category_id
-        ORDER BY SUM(summary.amount) DESC
-        
+        GROUP BY categories.id
+        ORDER BY summary_amount DESC
         """
     )
     fun getSumAmount(
@@ -35,7 +58,14 @@ interface SummaryDao {
 
     @Query(
         """
-        SELECT summary.id, categories.name, categories.icon_id, categories.color, summary.amount, summary.date, summary.about
+        SELECT 
+        summary.id, 
+        categories.name, 
+        categories.icon_id, 
+        categories.color, 
+        summary.amount, 
+        summary.date, 
+        summary.about
         
         FROM summary
 
