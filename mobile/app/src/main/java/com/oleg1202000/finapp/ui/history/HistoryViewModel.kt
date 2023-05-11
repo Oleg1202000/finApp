@@ -39,7 +39,7 @@ class HistoryViewModel @Inject constructor(
                         it.copy(
                             historyItems = items.map {
                                 HistoryItem(
-                                    summaryId = it.id,
+                                    id = it.id,
                                     categoryName = it.categoryName,
                                     iconId = it.iconId,
                                     color = it.color,
@@ -66,7 +66,7 @@ class HistoryViewModel @Inject constructor(
                         it.copy(
                             historyItems = items.map {
                                 HistoryItem(
-                                    summaryId = it.id,
+                                    id = it.id,
                                     categoryName = it.categoryName,
                                     iconId = it.iconId,
                                     color = it.color,
@@ -80,6 +80,29 @@ class HistoryViewModel @Inject constructor(
                 }
         }
     }
+
+
+    fun deleteSummaryById(
+        id: Long
+    ) {
+
+        viewModelScope.launch {
+            localRepository.deleteSummaryById(
+                id = id
+            )
+        }
+    }
+
+    fun deletePlanById(
+        id: Long
+    ) {
+
+        viewModelScope.launch {
+            localRepository.deletePlanById(
+                id = id
+            )
+        }
+    }
 }
 
 
@@ -89,7 +112,7 @@ data class HistoryUiState(
 
 
 data class HistoryItem(
-    val summaryId: Long,
+    val id: Long,
     val categoryName: String,
     val iconId: Int,
     val color: Long,

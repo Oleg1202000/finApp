@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.oleg1202000.finapp.ui.plan.addplan
 
@@ -36,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPlanScreen(
     viewModel: AddPlanViewModel = viewModel(),
@@ -158,6 +158,7 @@ fun AddPlanScreen(
                 sheetState = sheetState,
                 coroutineScope = coroutineScope,
                 selectCategory = { viewModel.setCategory(selectedCategoryId = it) },
+                deleteCategoryById = {viewModel.deleteCategoryById(id = it)}
             )
         }
     }
