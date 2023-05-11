@@ -33,6 +33,12 @@ class PlanViewModel @Inject constructor(
 
     fun updateDataGraph() {
         viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+
             localRepository.getPlan(
                 isIncome = false,
                 beginDate = uiState.value.beginDate,
@@ -67,12 +73,12 @@ class PlanViewModel @Inject constructor(
 
                             },
                             sumPlanned = items.sumOf { it.plan },
-                            sumFact = items.sumOf { it.amount ?: 0 }
+                            sumFact = items.sumOf { it.amount ?: 0 },
+                            isLoading = false
                         )
 
                     }
                 }
-
         }
 
     }
@@ -113,5 +119,6 @@ data class PlanUiState(
     val endDate: Long = 0L,
     val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK,
     val sumPlanned: Int = 0,
-    val sumFact: Int = 0
+    val sumFact: Int = 0,
+    val isLoading: Boolean = false,
 )

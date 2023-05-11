@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -34,7 +35,7 @@ fun PlanScreen(
 
         // график 1
         item {
-            if (uiState.dataGraph.isEmpty()) {
+            if (uiState.isLoading || uiState.dataGraph.isEmpty()) {
                 finappStatusBarTitle.value = "0 / 0 ₽" // Для отображения суммы доходов и расходов
                 Card {
                     Row(
@@ -44,7 +45,11 @@ fun PlanScreen(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = "Ничего не запланировано")
+                        if (uiState.isLoading) {
+                            CircularProgressIndicator()
+                        } else {
+                            Text(text = "Нет записей о расходах")
+                        }
                     }
                 }
             } else {

@@ -34,6 +34,13 @@ class HomeViewModel @Inject constructor(
      fun updateDataGraph() {
 
          viewModelScope.launch {
+
+             _uiState.update {
+                 it.copy(
+                     isLoading = true
+                 )
+             }
+
              localRepository.getSumAmount(
                  beginDate = uiState.value.beginDate,
                  endDate = uiState.value.endDate
@@ -61,8 +68,11 @@ class HomeViewModel @Inject constructor(
                                          ColorGraph.DEFAULT_COLOR
                                      },
                                      sumAmount = sumAmount
+
                                  )
-                             }
+
+                             },
+                             isLoading = false
                          )
                      }
                  }
@@ -101,5 +111,6 @@ data class HomeUiState(
     val dataGraph: List<DataGraph> = emptyList(),
     val beginDate: Long = 0L,
     val endDate: Long = 0L,
-    val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK
+    val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK,
+    val isLoading: Boolean = false,
 )
