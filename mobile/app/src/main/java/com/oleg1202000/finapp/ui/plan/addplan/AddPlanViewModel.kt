@@ -29,7 +29,7 @@ class AddPlanViewModel @Inject constructor(
     init {
         viewModelScope.launch {
 
-            localRepository.getCategries(
+            localRepository.getCategories(
                 isIncome = false
             )
                 .collect { items ->
@@ -79,6 +79,21 @@ class AddPlanViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 selectedCategoryId = selectedCategoryId
+            )
+        }
+    }
+
+    fun deleteCategoryById(
+        id: Long
+    ) {
+        _uiState.update {
+            it.copy(
+                selectedCategoryId = null
+            )
+        }
+        viewModelScope.launch {
+            localRepository.deleteCategoryById(
+                id = id
             )
         }
     }

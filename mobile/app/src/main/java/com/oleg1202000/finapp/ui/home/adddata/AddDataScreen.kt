@@ -182,6 +182,7 @@ fun AddDataScreen(
                 sheetState = sheetState,
                 coroutineScope = coroutineScope,
                 selectCategory = { viewModel.setCategory(selectedCategoryId = it) },
+                deleteCategoryById = { viewModel.deleteCategoryById(id = it) }
             )
         }
     }
