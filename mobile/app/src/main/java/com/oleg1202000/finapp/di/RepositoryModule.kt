@@ -29,7 +29,7 @@ class LocalRepositoryModule @Inject constructor(
 
 
      // Categories table
-    fun getCategries (isIncome: Boolean) =
+    fun getCategories (isIncome: Boolean) =
         categoriesDao.getCategories(isIncome).flowOn(Dispatchers.IO)
 
      suspend fun setCategory (category: Category) = categoriesDao.setCategory(category)
