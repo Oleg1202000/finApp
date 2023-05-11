@@ -88,6 +88,11 @@ interface PlanDao {
     suspend fun setPlan(planned: Planned)
 
 
-    @Delete
-    suspend fun deletePlan(planned: Planned)
+    @Query(
+        """
+        DELETE FROM planned
+        WHERE id = :id
+        """
+    )
+    suspend fun deletePlanById(id: Long)
 }
