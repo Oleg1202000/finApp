@@ -8,9 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +38,7 @@ fun ButtonGraph(
 Surface(
     shadowElevation = 10.dp
 ) {
-    Column() {
+    Column {
 
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -46,7 +47,7 @@ Surface(
         ) {
             val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
 
-            Button(
+            OutlinedButton(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -74,7 +75,7 @@ Surface(
 
             Spacer(modifier = Modifier.width(20.dp))
 
-            Button(
+            OutlinedButton(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -100,7 +101,8 @@ Surface(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            Button(onClick = {
+            ElevatedButton(
+                onClick = {
                 delta.value = 0
                 updateGraphPeriod(GraphPeriod.DAY)
                 updateDate(delta.value)
@@ -111,7 +113,8 @@ Surface(
                 Text(text = "День")
             }
 
-            Button(onClick = {
+            ElevatedButton(
+                onClick = {
                 delta.value = 0
                 updateGraphPeriod(GraphPeriod.WEEK)
                 updateDate(delta.value)
@@ -121,7 +124,8 @@ Surface(
                 Text(text = "Неделя")
             }
 
-            Button(onClick = {
+            ElevatedButton(
+                onClick = {
                 delta.value = 0
                 updateGraphPeriod(GraphPeriod.MONTH)
                 updateDate(delta.value)
