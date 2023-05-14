@@ -8,9 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,104 +35,112 @@ fun ButtonGraph(
 ) {
     val delta: MutableState<Int> = remember { mutableStateOf(0) }
 
-Surface(
-    shadowElevation = 10.dp
-) {
-    Column() {
+    Surface(
+        shadowElevation = 10.dp
+    ) {
 
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+        Column {
 
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                ),
-                onClick = {
-                    delta.value -= 1
-                    updateDate(delta.value)
-                    updateDataGraph()
+
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+
+
+                OutlinedButton(
+
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    ),
+                    onClick = {
+                        delta.value -= 1
+                        updateDate(delta.value)
+                        updateDataGraph()
+                    }
+                ) {
+                    Text(
+                        text = "<"
+                    )
                 }
-            ) {
-                Text(
-                    text = "<"
-                )
-            }
 
-            Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = Modifier.width(20.dp))
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = format.format(beginDate))
-                Text(text = "-")
-                Text(text = format.format(endDate))
-            }
-
-            Spacer(modifier = Modifier.width(20.dp))
-
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                ),
-                onClick = {
-                    delta.value += 1
-                    updateDate(delta.value)
-                    updateDataGraph()
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = format.format(beginDate))
+                    Text(text = "-")
+                    Text(text = format.format(endDate))
                 }
-            ) {
-                Text(
-                    text = ">"
-                )
+
+                Spacer(modifier = Modifier.width(20.dp))
+
+
+                OutlinedButton(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    ),
+                    onClick = {
+                        delta.value += 1
+                        updateDate(delta.value)
+                        updateDataGraph()
+                    }
+                ) {
+                    Text(
+                        text = ">"
+                    )
+                }
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+
+            // Кнопки День / неделя / месяц
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+
+                ElevatedButton(
+                    onClick = {
+                        delta.value = 0
+                        updateGraphPeriod(GraphPeriod.DAY)
+                        updateDate(delta.value)
+                        updateDataGraph()
+
+                    }
+                ) {
+                    Text(text = "День")
+                }
+
+                ElevatedButton(
+                    onClick = {
+                        delta.value = 0
+                        updateGraphPeriod(GraphPeriod.WEEK)
+                        updateDate(delta.value)
+                        updateDataGraph()
+                    }
+                ) {
+                    Text(text = "Неделя")
+                }
+
+                ElevatedButton(
+                    onClick = {
+                        delta.value = 0
+                        updateGraphPeriod(GraphPeriod.MONTH)
+                        updateDate(delta.value)
+                        updateDataGraph()
+                    }) {
+                    Text(text = "Месяц")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-
-        // Кнопки День / неделя / месяц
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-
-            Button(onClick = {
-                delta.value = 0
-                updateGraphPeriod(GraphPeriod.DAY)
-                updateDate(delta.value)
-                updateDataGraph()
-
-            }
-            ) {
-                Text(text = "День")
-            }
-
-            Button(onClick = {
-                delta.value = 0
-                updateGraphPeriod(GraphPeriod.WEEK)
-                updateDate(delta.value)
-                updateDataGraph()
-            }
-            ) {
-                Text(text = "Неделя")
-            }
-
-            Button(onClick = {
-                delta.value = 0
-                updateGraphPeriod(GraphPeriod.MONTH)
-                updateDate(delta.value)
-                updateDataGraph()
-            }) {
-                Text(text = "Месяц")
-            }
-        }
-
-    Spacer(modifier = Modifier.height(20.dp))
     }
-}
 }

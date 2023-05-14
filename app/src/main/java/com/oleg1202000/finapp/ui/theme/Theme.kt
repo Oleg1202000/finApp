@@ -82,6 +82,7 @@ fun FinappTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
 
     MaterialTheme(
         colorScheme = colors,
-        content = content
+        content = content,
+        typography = typography
     )
 }
