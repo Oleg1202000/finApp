@@ -1,5 +1,6 @@
 package com.oleg1202000.finapp.ui.plan
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -41,7 +43,8 @@ fun PlanScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .size(300.dp),
+                            .size(300.dp)
+                            .background(MaterialTheme.colorScheme.background),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {

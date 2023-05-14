@@ -5,15 +5,15 @@ import androidx.compose.ui.graphics.Color
 val md_theme_light_primary = Color(0xFF5B53A8)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFE4DFFF)
-val md_theme_light_onPrimaryContainer = Color(0xFF160362)
-val md_theme_light_secondary = Color(0xFF006875)
+val md_theme_light_onPrimaryContainer = Color(0xFF160363)
+val md_theme_light_secondary = Color(0xFF0060A8)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)
-val md_theme_light_secondaryContainer = Color(0xFF9DEFFF)
-val md_theme_light_onSecondaryContainer = Color(0xFF001F24)
-val md_theme_light_tertiary = Color(0xFF865300)
+val md_theme_light_secondaryContainer = Color(0xFFD3E4FF)
+val md_theme_light_onSecondaryContainer = Color(0xFF001C38)
+val md_theme_light_tertiary = Color(0xFF805600)
 val md_theme_light_onTertiary = Color(0xFFFFFFFF)
-val md_theme_light_tertiaryContainer = Color(0xFFFFDDB8)
-val md_theme_light_onTertiaryContainer = Color(0xFF2A1700)
+val md_theme_light_tertiaryContainer = Color(0xFFFFDDB0)
+val md_theme_light_onTertiaryContainer = Color(0xFF291800)
 val md_theme_light_error = Color(0xFFBA1A1A)
 val md_theme_light_errorContainer = Color(0xFFFFDAD6)
 val md_theme_light_onError = Color(0xFFFFFFFF)
@@ -33,35 +33,35 @@ val md_theme_light_surfaceTint = Color(0xFF5B53A8)
 val md_theme_light_outlineVariant = Color(0xFFC9C5D0)
 val md_theme_light_scrim = Color(0xFF000000)
 
-val md_theme_dark_primary = Color(0xFF39DCCE)
-val md_theme_dark_onPrimary = Color(0xFF003733)
-val md_theme_dark_primaryContainer = Color(0xFF00504A)
-val md_theme_dark_onPrimaryContainer = Color(0xFF60F9EA)
-val md_theme_dark_secondary = Color(0xFF98CBFF)
-val md_theme_dark_onSecondary = Color(0xFF003354)
-val md_theme_dark_secondaryContainer = Color(0xFF004A77)
-val md_theme_dark_onSecondaryContainer = Color(0xFFCFE5FF)
-val md_theme_dark_tertiary = Color(0xFFFFB1C7)
-val md_theme_dark_onTertiary = Color(0xFF5E1132)
-val md_theme_dark_tertiaryContainer = Color(0xFF7B2949)
-val md_theme_dark_onTertiaryContainer = Color(0xFFFFD9E2)
+val md_theme_dark_primary = Color(0xFFC6BFFF)
+val md_theme_dark_onPrimary = Color(0xFF2C2277)
+val md_theme_dark_primaryContainer = Color(0xFF433A8E)
+val md_theme_dark_onPrimaryContainer = Color(0xFFE4DFFF)
+val md_theme_dark_secondary = Color(0xFFA1C9FF)
+val md_theme_dark_onSecondary = Color(0xFF00325B)
+val md_theme_dark_secondaryContainer = Color(0xFF004880)
+val md_theme_dark_onSecondaryContainer = Color(0xFFD3E4FF)
+val md_theme_dark_tertiary = Color(0xFFFFBA49)
+val md_theme_dark_onTertiary = Color(0xFF442B00)
+val md_theme_dark_tertiaryContainer = Color(0xFF614000)
+val md_theme_dark_onTertiaryContainer = Color(0xFFFFDDB0)
 val md_theme_dark_error = Color(0xFFFFB4AB)
 val md_theme_dark_errorContainer = Color(0xFF93000A)
 val md_theme_dark_onError = Color(0xFF690005)
 val md_theme_dark_onErrorContainer = Color(0xFFFFDAD6)
-val md_theme_dark_background = Color(0xFF191C1C)
-val md_theme_dark_onBackground = Color(0xFFE0E3E1)
-val md_theme_dark_surface = Color(0xFF191C1C)
-val md_theme_dark_onSurface = Color(0xFFE0E3E1)
-val md_theme_dark_surfaceVariant = Color(0xFF3F4947)
-val md_theme_dark_onSurfaceVariant = Color(0xFFBEC9C6)
-val md_theme_dark_outline = Color(0xFF899391)
-val md_theme_dark_inverseOnSurface = Color(0xFF191C1C)
-val md_theme_dark_inverseSurface = Color(0xFFE0E3E1)
-val md_theme_dark_inversePrimary = Color(0xFF006A63)
+val md_theme_dark_background = Color(0xFF1C1B1F)
+val md_theme_dark_onBackground = Color(0xFFE5E1E6)
+val md_theme_dark_surface = Color(0xFF1C1B1F)
+val md_theme_dark_onSurface = Color(0xFFE5E1E6)
+val md_theme_dark_surfaceVariant = Color(0xFF47464F)
+val md_theme_dark_onSurfaceVariant = Color(0xFFC9C5D0)
+val md_theme_dark_outline = Color(0xFF928F99)
+val md_theme_dark_inverseOnSurface = Color(0xFF1C1B1F)
+val md_theme_dark_inverseSurface = Color(0xFFE5E1E6)
+val md_theme_dark_inversePrimary = Color(0xFF5B53A8)
 val md_theme_dark_shadow = Color(0xFF000000)
-val md_theme_dark_surfaceTint = Color(0xFF39DCCE)
-val md_theme_dark_outlineVariant = Color(0xFF3F4947)
+val md_theme_dark_surfaceTint = Color(0xFFC6BFFF)
+val md_theme_dark_outlineVariant = Color(0xFF47464F)
 val md_theme_dark_scrim = Color(0xFF000000)
 
 
@@ -76,77 +76,77 @@ val notOk80Color = Color(0xFFFB8C00)  // 80 out of 100 %
 
 
 // Цвета для категорий
-private val Red500 = Color(0xFFF44336)
-private val RedA400 = Color(0xFFFF1744)
-private val Pink500 = Color(0xFFE91E63)
-private val PinkA400 = Color(0xFFF50057)
-private val Purple500 = Color(0xFF9C27B0)
-private val PurpleA400 = Color(0xFFD500F9)
-private val Deep_Purple500 = Color(0xFF673AB7)
-private val Deep_PurpleA400 = Color(0xFF651FFF)
-private val Indigo500 = Color(0xFF3F51B5)
-private val IndigoA400 = Color(0xFF3D5AFE)
-private val Blue500 = Color(0xFF2196F3)
-private val BlueA400 = Color(0xFF2979FF)
-private val Light_Blue500 = Color(0xFF03A9F4)
-private val Light_BlueA400 = Color(0xFF00B0FF)
-private val Cyan500 = Color(0xFF00BCD4)
-private val CyanA400 = Color(0xFF00E5FF)
-private val Teal500 = Color(0xFF009688)
-private val TealA400 = Color(0xFF1DE9B6)
-private val Green500 = Color(0xFF4CAF50)
-private val GreenA400 = Color(0xFF00E676)
-private val Light_Green500 = Color(0xFF8BC34A)
-private val Light_GreenA400 = Color(0xFF76FF03)
-private val Lime500 = Color(0xFFCDDC39)
-private val LimeA400 = Color(0xFFC6FF00)
-private val Yellow500 = Color(0xFFFFEB3B)
-private val YellowA400 = Color(0xFFFFEA00)
-private val Amber500 = Color(0xFFFFC107)
-private val AmberA400 = Color(0xFFFFC400)
-private val Orange500 = Color(0xFFFF9800)
-private val OrangeA400 = Color(0xFFFF9100)
-private val Deep_Orange500 = Color(0xFFFF5722)
-private val Deep_OrangeA400 = Color(0xFFFF3D00)
-private val Brown500 = Color(0xFF795548)
-private val Gray500 = Color(0xFF9E9E9E)
-private val Blue_Gray500 = Color(0xFF607D8B)
+private val Red700 = Color(0xFFD32F2F)
+private val RedA700 = Color(0xFFD50000)
+private val Pink700 = Color(0xFFC2185B)
+private val PinkA700 = Color(0xFFC51162)
+private val Purple700 = Color(0xFF7B1FA2)
+private val PurpleA700 = Color(0xFFAA00FF)
+private val Deep_Purple700 = Color(0xFF512DA8)
+private val Deep_PurpleA700 = Color(0xFF6200EA)
+private val Indigo700 = Color(0xFF303F9F)
+private val IndigoA700 = Color(0xFF304FFE)
+private val Blue700 = Color(0xFF1976D2)
+private val BlueA700 = Color(0xFF2962FF)
+private val Light_Blue700 = Color(0xFF0288D1)
+private val Light_BlueA700 = Color(0xFF0091EA)
+private val Cyan700 = Color(0xFF0097A7)
+private val CyanA700 = Color(0xFF00B8D4)
+private val Teal700 = Color(0xFF00796B)
+private val TealA700 = Color(0xFF00BFA5)
+private val Green700 = Color(0xFF388E3C)
+private val GreenA700 = Color(0xFF00C853)
+private val Light_Green700 = Color(0xFF689F38)
+private val Light_GreenA700 = Color(0xFF64DD17)
+private val Lime700 = Color(0xFFAFB42B)
+private val LimeA700 = Color(0xFFAEEA00)
+private val Yellow700 = Color(0xFFFBC02D)
+private val YellowA700 = Color(0xFFFFD600)
+private val Amber700 = Color(0xFFFFA000)
+private val AmberA700 = Color(0xFFFFAB00)
+private val Orange700 = Color(0xFFF57C00)
+private val OrangeA700 = Color(0xFFFF6D00)
+private val Deep_Orange700 = Color(0xFFE64A19)
+private val Deep_OrangeA700 = Color(0xFFDD2C00)
+private val Brown700 = Color(0xFF5D4037)
+private val Gray700 = Color(0xFF616161)
+private val Blue_Gray700 = Color(0xFF455A64)
 
 
 val colorCategories: List<Color> = listOf(
-    Red500,
-    RedA400,
-    Pink500,
-    PinkA400,
-    Purple500,
-    PurpleA400,
-    Deep_Purple500,
-    Deep_PurpleA400,
-    Indigo500,
-    IndigoA400,
-    Blue500,
-    BlueA400,
-    Light_Blue500,
-    Light_BlueA400,
-    Cyan500,
-    CyanA400,
-    Teal500,
-    TealA400,
-    Green500,
-    GreenA400,
-    Light_Green500,
-    Light_GreenA400,
-    Lime500,
-    LimeA400,
-    Yellow500,
-    YellowA400,
-    Amber500,
-    AmberA400,
-    Orange500,
-    OrangeA400,
-    Deep_Orange500,
-    Deep_OrangeA400,
-    Brown500,
-    Gray500,
-    Blue_Gray500
+    Red700,
+    RedA700,
+    Pink700,
+    PinkA700,
+    Purple700,
+    PurpleA700,
+    Deep_Purple700,
+    Deep_PurpleA700,
+    Indigo700,
+    IndigoA700,
+    Blue700,
+    BlueA700,
+    Light_Blue700,
+    Light_BlueA700,
+    Cyan700,
+    CyanA700,
+    Teal700,
+    TealA700,
+    Green700,
+    GreenA700,
+    Light_Green700,
+    Light_GreenA700,
+    Lime700,
+    LimeA700,
+    Yellow700,
+    YellowA700,
+    Amber700,
+    AmberA700,
+    Orange700,
+    OrangeA700,
+    Deep_Orange700,
+    Deep_OrangeA700,
+    Brown700,
+    Gray700,
+    Blue_Gray700
 )
