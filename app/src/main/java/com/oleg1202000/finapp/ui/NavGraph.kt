@@ -36,7 +36,7 @@ fun NavGraph(
         startDestination = startDestination
     ) {
 
-        composable(Screen.Home.route) {backStackEntry ->
+        composable(Screen.Home.route) {
             val viewModel = hiltViewModel<HomeViewModel>()
             HomeScreen(
                 viewModel = viewModel,
@@ -47,7 +47,7 @@ fun NavGraph(
 
         composable(Screen.AddData.route) {
             val viewModel = hiltViewModel<AddDataViewModel>()
-            finappStatusbarTitle.value = ""
+            finappStatusbarTitle.value = "Добавление записи"
             AddDataScreen(
                 navController = navController,
                 viewModel = viewModel,
@@ -58,7 +58,6 @@ fun NavGraph(
         }
 
         composable(Screen.Plan.route) {
-            finappStatusbarTitle.value = ""
             val viewModel = hiltViewModel<PlanViewModel>()
             PlanScreen(
                 viewModel = viewModel,
@@ -68,7 +67,7 @@ fun NavGraph(
         }
 
         composable(Screen.AddPlan.route) {
-            finappStatusbarTitle.value = ""
+            finappStatusbarTitle.value = "Планирование расходов"
             val viewModel = hiltViewModel<AddPlanViewModel>()
             AddPlanScreen(
                 navController = navController,
@@ -80,7 +79,7 @@ fun NavGraph(
         }
 
         composable(Screen.History.route) {
-            finappStatusbarTitle.value = ""
+            finappStatusbarTitle.value = "История"
             val viewModel = hiltViewModel<HistoryViewModel>()
             HistoryScreen(
                 viewModel = viewModel
@@ -89,6 +88,7 @@ fun NavGraph(
 
         composable(Screen.AddCategory.route) {
             val viewModel = hiltViewModel<AddCategoryViewModel>()
+            finappStatusbarTitle.value = "Создание категории"
             AddCategoryScreen(
                 viewModel = viewModel,
                 navController = navController,
