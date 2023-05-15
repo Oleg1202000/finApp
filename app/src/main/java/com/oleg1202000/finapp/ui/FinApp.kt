@@ -46,7 +46,7 @@ fun Finapp() {
             },
 
             floatingActionButton = {
-                if (currentDestination?.route == "home" || currentDestination?.route == "plan") {
+                if (currentDestination?.route == "home" || currentDestination?.route == "home/plan") {
                     FinappFloatingActionButton(
                         navController = navController,
                         currentDestination = currentDestination
