@@ -42,6 +42,7 @@ class HomeViewModel @Inject constructor(
              }
 
              localRepository.getSumAmount(
+                 isIncome = uiState.value.isIncome,
                  beginDate = uiState.value.beginDate,
                  endDate = uiState.value.endDate
              )
@@ -104,6 +105,16 @@ class HomeViewModel @Inject constructor(
              )
          }
      }
+
+     fun setIsIncomeValue(
+         changeValue: Boolean
+     ) {
+         _uiState.update {
+             it.copy(
+                 isIncome = changeValue
+             )
+         }
+     }
 }
 
 
@@ -113,4 +124,5 @@ data class HomeUiState(
     val endDate: Long = 0L,
     val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK,
     val isLoading: Boolean = false,
+    val isIncome: Boolean = false
 )
