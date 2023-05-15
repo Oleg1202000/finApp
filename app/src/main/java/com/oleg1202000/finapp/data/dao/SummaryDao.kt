@@ -60,7 +60,8 @@ interface SummaryDao {
         """
         SELECT 
         summary.id, 
-        categories.name, 
+        categories.name,
+        categories.is_income,
         categories.icon_id, 
         categories.color, 
         summary.amount, 

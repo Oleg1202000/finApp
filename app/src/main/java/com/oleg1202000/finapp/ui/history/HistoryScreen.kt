@@ -148,7 +148,12 @@ fun HistoryItem(
                         .weight(8f)
                 ) {
 
-                    Row {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
                         Text(
                             text = format.format(item.date),
                             style = MaterialTheme.typography.bodySmall
@@ -158,29 +163,52 @@ fun HistoryItem(
 
                         if (item.about != null) {
                             Text(
+                                text = "●",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                            Spacer(modifier = Modifier.width(20.dp))
+                            Text(
+                                modifier = Modifier.width(140.dp),
                                 text = item.about,
                                 style = MaterialTheme.typography.bodySmall,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                             )
                         }
+
+                        Text(
+                            text = "●",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        if (!item.isIncome) {
+                            Text(
+                                text = "Расход",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        } else {
+                            Text(
+                                text = "Доход",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
                     }
 
                     Row(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start
                     ) {
 
                         Text(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(6f),
                             text = item.categoryName,
                             style = MaterialTheme.typography.bodyMedium,
                         )
 
                         Text(
-                            modifier = Modifier.weight(3f),
-                            text = "- ${item.amount} ₽",
+                            modifier = Modifier.weight(4f),
+                            text = "${item.amount} ₽",
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }

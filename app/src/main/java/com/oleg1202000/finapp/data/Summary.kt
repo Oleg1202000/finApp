@@ -42,6 +42,7 @@ data class ReturnSumAmount(
 data class ReturnSummaryHistory(
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val categoryName: String,
+    @ColumnInfo(name = "is_income") val isIncome: Boolean,
     @ColumnInfo(name = "icon_id") val iconId: Int,
     @ColumnInfo(name = "color") val color: Long,
     @ColumnInfo(name = "amount") val amount: Int,

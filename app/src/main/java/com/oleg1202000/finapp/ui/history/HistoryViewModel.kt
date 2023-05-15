@@ -45,7 +45,8 @@ class HistoryViewModel @Inject constructor(
                                     color = it.color,
                                     amount = it.amount,
                                     date = it.date,
-                                    about = it.about
+                                    about = it.about,
+                                    isIncome = it.isIncome
                                 )
                             }
                         )
@@ -72,7 +73,8 @@ class HistoryViewModel @Inject constructor(
                                     color = it.color,
                                     amount = it.amount,
                                     date = it.date,
-                                    about = null
+                                    about = null,
+                                    isIncome = false
                                 )
                             }
                         )
@@ -118,5 +120,6 @@ data class HistoryItem(
     val color: Long,
     val amount: Int,
     val date: Long,
-    val about: String?
+    val about: String?,
+    val isIncome: Boolean
 )
