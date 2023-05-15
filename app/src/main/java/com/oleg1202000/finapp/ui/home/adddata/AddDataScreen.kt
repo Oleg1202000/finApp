@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
@@ -15,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -63,7 +65,7 @@ fun AddDataScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(200.dp))
+        Spacer(modifier = Modifier.height(150.dp))
 
         OutlinedTextField(
             value = uiState.about.orEmpty(),
@@ -99,15 +101,37 @@ fun AddDataScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            // Выбор категории
-            Button(
-                onClick = {
-                    showBottomSheet.value = true
-                },
-                shape = Shapes.small
-            ) {
-                Text(text = "Выбрать категорию")
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                // Выбор категории
+                Button(
+                    onClick = {
+                        showBottomSheet.value = true
+                    },
+                    shape = Shapes.small
+                ) {
+                    Text(text = "Выбрать категорию")
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Доход")
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    Switch(
+                        checked = uiState.isIncome,
+                        onCheckedChange = {
+                            viewModel.setIsIncomeValue(it)
+                            viewModel.updateData()
+                        }
+                    )
+
+                }
             }
+
 
             // Выбор даты
             Button(

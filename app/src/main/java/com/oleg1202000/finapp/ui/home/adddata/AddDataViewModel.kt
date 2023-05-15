@@ -27,10 +27,15 @@ class AddDataViewModel @Inject constructor(
 
 
     init {
+        updateData()
+    }
+
+    fun updateData() {
+
         viewModelScope.launch {
 
             localRepository.getCategories(
-                isIncome = false
+                isIncome = uiState.value.isIncome
             )
                 .collect { items ->
 
@@ -123,6 +128,16 @@ class AddDataViewModel @Inject constructor(
         }
     }
 
+    fun setIsIncomeValue(
+        changeValue: Boolean
+    ) {
+        _uiState.update {
+            it.copy(
+                isIncome = changeValue
+            )
+        }
+    }
+
 
     fun addData() {
 
@@ -184,5 +199,6 @@ data class AddDataUiState(
     val selectedDate: Long? = Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
     val errorTextField: Boolean = false,
     val errorMessage: ErrorMessage? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isIncome: Boolean = false
 )

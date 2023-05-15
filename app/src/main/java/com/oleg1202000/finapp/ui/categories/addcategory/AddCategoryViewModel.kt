@@ -58,6 +58,16 @@ class AddCategoryViewModel @Inject constructor(
         }
     }
 
+    fun setIsIncomeValue(
+        changeValue: Boolean
+    ) {
+        _uiState.update {
+            it.copy(
+                isIncome = changeValue
+            )
+        }
+    }
+
 
     fun addCategory(
     ) {
@@ -80,7 +90,7 @@ class AddCategoryViewModel @Inject constructor(
                     localRepository.setCategory(
                         category = Category(
                             name = uiState.value.categoryName,
-                            isIncome = false,
+                            isIncome = uiState.value.isIncome,
                             color = uiState.value.selectedCategoryColor!!.value.toLong(),
                             iconId = uiState.value.selectedCategoryIcon!!.toInt()
                         )
@@ -107,5 +117,6 @@ data class AddCategoryUiState (
     val selectedCategoryIcon: Int? = null,
     val selectedCategoryColor: Color? = null,
     val errorCategoryMessage: ErrorCategoryMessage? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isIncome: Boolean = false
 )
