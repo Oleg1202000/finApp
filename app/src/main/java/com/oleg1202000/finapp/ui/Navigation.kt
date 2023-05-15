@@ -7,13 +7,13 @@ import androidx.navigation.NavHostController
 
 sealed class Screen(val route: String) {
     object Home : Screen("home")
-    object History : Screen("history")
-    object Plan : Screen("plan")
+    object History : Screen("home/history")
+    object Plan : Screen("home/plan")
 
     object AddData : Screen("home/add-data")
     object AddCategory : Screen("home/add-data/add-category")
 
-    object AddPlan : Screen("plan/add-plan")
+    object AddPlan : Screen("home/plan/add-plan")
 }
 
 class Navigation(navController: NavHostController) {

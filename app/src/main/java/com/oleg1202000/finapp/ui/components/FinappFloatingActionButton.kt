@@ -22,7 +22,7 @@ fun FinappFloatingActionButton(
             if (currentDestination?.route == "home") {
                 navController.navigate(Screen.AddData.route)
             }
-            else if (currentDestination?.route == "plan") {
+            else if (currentDestination?.route == "home/plan") {
                 navController.navigate(Screen.AddPlan.route)
             }
         }
