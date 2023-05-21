@@ -91,7 +91,7 @@ fun HomeScreen(
                         if (uiState.isLoading) {
                             CircularProgressIndicator()
                         } else {
-                            Text(text = "Нет записей о расходах")
+                            Text(text = "Нет записей за выбранный период")
                         }
                     }
                 }
