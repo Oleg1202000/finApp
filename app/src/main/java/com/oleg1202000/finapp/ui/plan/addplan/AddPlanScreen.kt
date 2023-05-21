@@ -10,16 +10,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -49,6 +56,8 @@ fun AddPlanScreen(
     val sheetState = rememberModalBottomSheetState()
 
     var showAddResult by rememberSaveable { mutableStateOf(false) }
+
+    val openDateDialog = rememberSaveable { mutableStateOf(false) }
 
 
     Column(
@@ -92,6 +101,14 @@ fun AddPlanScreen(
                 shape = Shapes.small
             ) {
                 Text(text = "Выбрать категорию")
+            }
+
+            // Выбор даты
+            Button(
+                onClick = { openDateDialog.value = true },
+                shape = Shapes.small
+            ) {
+                Text(text = "Выбрать дату")
             }
         }
 
@@ -144,6 +161,15 @@ fun AddPlanScreen(
     }
 
 
+    if (openDateDialog.value) {
+        ShowDatePicker(
+            openDateDialog = openDateDialog,
+            setDate = { viewModel.setDate(selectedDate = it) },
+            selectedDate = uiState.selectedDate
+        )
+    }
+
+
     if (showBottomSheet.value) {
         ModalBottomSheet(
             onDismissRequest = { showBottomSheet.value = false },
@@ -161,5 +187,50 @@ fun AddPlanScreen(
                 deleteCategoryById = {viewModel.deleteCategoryById(id = it)}
             )
         }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ShowDatePicker(
+    openDateDialog: MutableState<Boolean>,
+    setDate: (Long?) -> Unit,
+    selectedDate: Long?
+) {
+    // TODO: Вынести в отдельный модуль
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = selectedDate
+    )
+    val confirmEnabled = remember {
+        derivedStateOf { datePickerState.selectedDateMillis != null }
+    }
+
+
+    DatePickerDialog(
+        onDismissRequest = {
+            openDateDialog.value = false
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    setDate(datePickerState.selectedDateMillis)
+                    openDateDialog.value = false
+                },
+                enabled = confirmEnabled.value
+            ) {
+                Text("OK")
+            }
+        },
+
+        dismissButton = {
+            TextButton(
+                onClick = { openDateDialog.value = false }
+            ) {
+                Text("Отмена")
+            }
+        }
+    ) {
+        DatePicker(state = datePickerState)
     }
 }
