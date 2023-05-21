@@ -101,9 +101,6 @@ fun AddDataScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally
-                    ){
                 // Выбор категории
                 Button(
                     onClick = {
@@ -113,25 +110,6 @@ fun AddDataScreen(
                 ) {
                     Text(text = "Выбрать категорию")
                 }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = "Доход")
-
-                    Spacer(modifier = Modifier.width(10.dp))
-
-                    Switch(
-                        checked = uiState.isIncome,
-                        onCheckedChange = {
-                            viewModel.setIsIncomeValue(it)
-                            viewModel.updateData()
-                        }
-                    )
-
-                }
-            }
-
 
             // Выбор даты
             Button(
@@ -198,6 +176,25 @@ fun AddDataScreen(
             sheetState = sheetState,
         ) {
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Text(text = "Доход")
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                Switch(
+                    checked = uiState.isIncome,
+                    onCheckedChange = {
+                        viewModel.setIsIncomeValue(it)
+                        viewModel.updateData()
+                    }
+                )
+
+            }
+
             CategoriesScreen(
                 categories = uiState.categories,
                 selectedCategoryId = uiState.selectedCategoryId,
@@ -214,7 +211,7 @@ fun AddDataScreen(
     if (openDateDialog.value) {
         ShowDatePicker(
             openDateDialog = openDateDialog,
-            viewModel = viewModel,
+            setDate = { viewModel.setDate(selectedDate = it) },
             selectedDate = uiState.selectedDate
         )
     }
@@ -227,7 +224,7 @@ fun AddDataScreen(
 @Composable
 fun ShowDatePicker(
     openDateDialog: MutableState<Boolean>,
-    viewModel: AddDataViewModel,
+    setDate: (Long?) -> Unit,
     selectedDate: Long?
 ) {
     val datePickerState = rememberDatePickerState(
@@ -245,7 +242,7 @@ fun ShowDatePicker(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.setDate(datePickerState.selectedDateMillis)
+                    setDate(datePickerState.selectedDateMillis)
                     openDateDialog.value = false
                 },
                 enabled = confirmEnabled.value
