@@ -59,7 +59,7 @@ class HomeViewModel @Inject constructor(
                                      amount = it.amount,
                                      coefficientAmount = it.amount/ sumAmount.toFloat(),
                                      colorItem =
-                                     if (it.plan != null && it.amount / it.plan.toFloat() >= 1) {
+                                     if (it.plan != null && it.amount / it.plan.toFloat() > 1) {
                                          ColorGraph.NOT_OK_COLOR
                                      } else if (it.plan != null && it.amount / it.plan.toFloat() >= 0.8) {
                                          ColorGraph.NOT_OK_80_COLOR
