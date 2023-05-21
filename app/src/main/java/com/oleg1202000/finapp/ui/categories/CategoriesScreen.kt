@@ -1,10 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
-
 package com.oleg1202000.finapp.ui.categories
 
-import android.util.Log
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,14 +39,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.OffsetEffect
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavHostController
 import com.oleg1202000.finapp.ui.Screen
 import com.oleg1202000.finapp.ui.theme.Shapes
@@ -58,6 +50,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesScreen(
     navController: NavHostController,
@@ -87,6 +80,7 @@ fun CategoriesScreen(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryItems(
     navController: NavHostController,
@@ -171,6 +165,7 @@ fun CategoryItems(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardItem(
     item: CategoryItem,
@@ -241,6 +236,7 @@ fun CardItem(
                             text = { Text(text = "Выбрать") },
                             onClick = {
                                 selectCategory(item.id)
+                                showDropdownMenu = false
                                 coroutineScope.launch {
                                     sheetState.hide()
                                     showBottomSheet.value = false
@@ -264,6 +260,7 @@ fun CardItem(
 
     
     if (showDialog) {
+        showDropdownMenu = false
         AlertDialog(
             onDismissRequest = { showDialog = false }
         ) {
