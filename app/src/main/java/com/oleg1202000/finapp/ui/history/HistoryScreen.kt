@@ -160,27 +160,12 @@ fun HistoryItem(
                         )
 
                         Spacer(modifier = Modifier.width(20.dp))
-
-                        if (item.about != null) {
-                            Text(
-                                text = "●",
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                            Spacer(modifier = Modifier.width(20.dp))
-                            Text(
-                                modifier = Modifier.width(140.dp),
-                                text = item.about,
-                                style = MaterialTheme.typography.bodySmall,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        }
-
                         Text(
                             text = "●",
                             style = MaterialTheme.typography.bodySmall
                         )
                         Spacer(modifier = Modifier.width(20.dp))
+
                         if (!item.isIncome) {
                             Text(
                                 text = "Расход",
@@ -192,6 +177,16 @@ fun HistoryItem(
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
+                    }
+
+                    if (item.about != null) {
+                        Text(
+                            modifier = Modifier.width(140.dp),
+                            text = item.about,
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
 
                     Row(
@@ -234,6 +229,9 @@ fun HistoryItem(
     }
 
     if (showDialog) {
+
+        showDropdownMenu = false
+
         AlertDialog(
             onDismissRequest = { showDialog = false }
         ) {
