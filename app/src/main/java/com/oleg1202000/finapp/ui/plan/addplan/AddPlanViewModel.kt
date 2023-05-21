@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar.getInstance
+import java.util.TimeZone
 import javax.inject.Inject
 
 
@@ -68,6 +69,16 @@ class AddPlanViewModel @Inject constructor(
                 amount = tempAmount,
                 errorMessage = null,
                 errorTextField = false
+            )
+        }
+    }
+
+    fun setDate(
+        selectedDate: Long?
+    ) {
+        _uiState.update {
+            it.copy(
+                selectedDate = selectedDate ?: 0
             )
         }
     }
@@ -137,7 +148,7 @@ class AddPlanViewModel @Inject constructor(
                             categoryId = uiState.value.selectedCategoryId!!.toLong(),
                             amount = uiState.value.amount.toInt(),
                             //date = date[0],
-                            date = getInstance().timeInMillis
+                            date = uiState.value.selectedDate
 
                         )
                     )
@@ -232,6 +243,7 @@ data class AddPlanUiState(
     val categories: List<CategoryItem> = emptyList(),
     val amount: String = "",
     val selectedCategoryId: Long? = null,
+    val selectedDate: Long = getInstance(TimeZone.getDefault()).timeInMillis,
     //val selectedPeriod: GraphPeriod? = null,
     val errorTextField: Boolean = false,
     val errorMessage: ErrorMessage? = null,

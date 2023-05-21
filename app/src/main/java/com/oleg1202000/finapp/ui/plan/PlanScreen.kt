@@ -38,7 +38,7 @@ fun PlanScreen(
         // график 1
         item {
             if (uiState.isLoading || uiState.dataGraph.isEmpty()) {
-                finappStatusBarTitle.value = "Потрачено / запланировано:    0 / 0 ₽" // Для отображения суммы доходов и расходов
+                finappStatusBarTitle.value = "Потрачено / запланировано:\n0 / 0 ₽" // Для отображения суммы доходов и расходов
                 Card {
                     Row(
                         modifier = Modifier
@@ -51,13 +51,13 @@ fun PlanScreen(
                         if (uiState.isLoading) {
                             CircularProgressIndicator()
                         } else {
-                            Text(text = "Нет записей о расходах")
+                            Text(text = "Ничего не запланировано")
                         }
                     }
                 }
             } else {
 
-                finappStatusBarTitle.value = "Потрачено / запланировано:    ${uiState.sumFact} / ${uiState.sumPlanned} ₽"
+                finappStatusBarTitle.value = "Потрачено / запланировано:\n${uiState.sumFact} / ${uiState.sumPlanned} ₽"
                 BarGraph(
                     dataGraph = uiState.dataGraph
                 )
