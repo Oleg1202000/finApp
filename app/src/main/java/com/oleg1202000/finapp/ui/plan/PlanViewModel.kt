@@ -55,7 +55,7 @@ class PlanViewModel @Inject constructor(
                                     amount = it.amount ?: 0,
                                     coefficientAmount = (it.amount?.toFloat() ?: 0f) / it.plan.toFloat(),
                                     colorItem =
-                                    if ((it.amount ?: 0) / it.plan.toFloat() >= 1) {
+                                    if ((it.amount ?: 0) / it.plan.toFloat() > 1) {
                                         ColorGraph.NOT_OK_COLOR
 
                                     } else if ((it.amount ?: 0) / it.plan.toFloat() >= 0.8) {
