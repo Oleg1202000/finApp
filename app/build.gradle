@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace 'com.oleg1202000.finapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.oleg1202000.finapp"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "0.0.1"
 
@@ -55,7 +55,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    implementation 'androidx.activity:activity-compose:1.7.1'
+    implementation 'androidx.activity:activity-compose:1.7.2'
 
 
     testImplementation 'junit:junit:4.13.2'
@@ -67,8 +67,8 @@ dependencies {
     implementation composeBom
     androidTestImplementation composeBom
 
-    implementation "androidx.compose.material3:material3:1.1.0"
-    implementation "androidx.compose.material:material:1.4.3"
+    implementation "androidx.compose.material3:material3:1.1.1"
+    implementation "androidx.compose.material:material:1.5.0"
 
     // Android Studio Preview support
     implementation 'androidx.compose.ui:ui-tooling-preview'
@@ -79,10 +79,10 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
     // Optional - Add window size utils
-    implementation "androidx.compose.material3:material3-window-size-class:1.1.0"
+    implementation "androidx.compose.material3:material3-window-size-class:1.1.1"
 
     // Optional - Integration with activities
-    implementation 'androidx.activity:activity-compose:1.7.1'
+    implementation 'androidx.activity:activity-compose:1.7.2'
     // Optional - Integration with ViewModels
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
     // Optional - Integration with LiveData
@@ -90,7 +90,7 @@ dependencies {
 
 
     // Navigation-compose
-    def nav_version = "2.5.3"
+    def nav_version = "2.7.0"
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
     //Hilt and Navigation
@@ -98,7 +98,7 @@ dependencies {
 
 
     // Room
-    def room_version = "2.5.1"
+    def room_version = "2.5.2"
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
@@ -109,7 +109,6 @@ dependencies {
     implementation "androidx.room:room-paging:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     ksp "androidx.room:room-compiler:$room_version"
-    //kapt "androidx.room:room-compiler:$room_version"
 
 
     // Hilt
