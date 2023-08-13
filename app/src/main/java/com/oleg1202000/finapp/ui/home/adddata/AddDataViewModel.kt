@@ -70,23 +70,25 @@ class AddDataViewModel @Inject constructor(
     fun setAmount(
         amount: String
     ) {
-        var tempAmount: String = amount
-
-        if (amount.isNotEmpty() && amount[amount.length - 1].toString() == "=") {
-            val expressionList: List<String> = amount.split(" ")
-            if (expressionList.size == 4 && expressionList[1] == "*") {
-                tempAmount = (expressionList[0].toInt() * expressionList[2].toInt()).toString()
-            }
-
-        }
-
         _uiState.update {
             it.copy(
-                amount = tempAmount,
+                amount = calculateAmount(amount = amount),
                 errorMessage = null,
                 errorTextField = false
             )
         }
+    }
+
+    private fun calculateAmount(
+        amount: String
+    ) : String {
+        if (amount.isNotEmpty() && amount[amount.length - 1].toString() == "=") {
+            val expressionList: List<String> = amount.split(" ")
+            if (expressionList.size == 4 && expressionList[1] == "*") {
+                return (expressionList[0].toInt() * expressionList[2].toInt()).toString()
+            }
+        }
+        return amount
     }
 
 
