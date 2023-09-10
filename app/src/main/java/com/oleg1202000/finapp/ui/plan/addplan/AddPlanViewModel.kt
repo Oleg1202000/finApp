@@ -4,7 +4,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.data.Planned
-import com.oleg1202000.finapp.di.LocalRepositoryModule
+import com.oleg1202000.finapp.di.IRepository
 import com.oleg1202000.finapp.ui.categories.CategoryItem
 import com.oleg1202000.finapp.ui.home.adddata.ErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddPlanViewModel @Inject constructor(
-    private val localRepository: LocalRepositoryModule
+    private val localRepository: IRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddPlanUiState())

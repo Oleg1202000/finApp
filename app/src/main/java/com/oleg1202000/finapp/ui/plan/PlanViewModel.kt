@@ -2,7 +2,7 @@ package com.oleg1202000.finapp.ui.plan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.oleg1202000.finapp.di.LocalRepositoryModule
+import com.oleg1202000.finapp.di.IRepository
 import com.oleg1202000.finapp.ui.graphdraw.ColorGraph
 import com.oleg1202000.finapp.ui.graphdraw.DataGraph
 import com.oleg1202000.finapp.ui.graphdraw.GraphPeriod
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlanViewModel @Inject constructor(
-    private val localRepository: LocalRepositoryModule
+    private val localRepository: IRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PlanUiState())

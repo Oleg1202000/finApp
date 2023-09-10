@@ -2,7 +2,7 @@ package com.oleg1202000.finapp.ui.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.oleg1202000.finapp.di.LocalRepositoryModule
+import com.oleg1202000.finapp.di.IRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val localRepository: LocalRepositoryModule
+    private val localRepository: IRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HistoryUiState())
