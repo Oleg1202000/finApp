@@ -53,8 +53,8 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
     implementation 'androidx.activity:activity-compose:1.7.2'
 
 
@@ -70,7 +70,7 @@ dependencies {
     androidTestImplementation composeBom
 
     implementation "androidx.compose.material3:material3:1.1.1"
-    implementation "androidx.compose.material:material:1.5.0"
+    implementation "androidx.compose.material:material:1.5.1"
 
     // Android Studio Preview support
     implementation 'androidx.compose.ui:ui-tooling-preview'
@@ -86,13 +86,13 @@ dependencies {
     // Optional - Integration with activities
     implementation 'androidx.activity:activity-compose:1.7.2'
     // Optional - Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2'
     // Optional - Integration with LiveData
     implementation 'androidx.compose.runtime:runtime-livedata'
 
 
     // Navigation-compose
-    def nav_version = "2.7.0"
+    def nav_version = "2.7.2"
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
     //Hilt and Navigation
@@ -121,7 +121,7 @@ dependencies {
 
 
     // Lifecycle
-    def lifecycle_version = "2.6.1"
+    def lifecycle_version = "2.6.2"
     def arch_version = "2.2.0"
 
     // ViewModel
