@@ -1,6 +1,5 @@
 package com.oleg1202000.finapp.ui.home.adddata
 
-import android.text.TextUtils
 import com.google.common.truth.Truth.assertThat
 import com.oleg1202000.finapp.R
 import com.oleg1202000.finapp.data.Category
@@ -17,19 +16,12 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class AddDataViewModelTest {
     private lateinit var repository: FakeData
     private lateinit var viewModel: AddDataViewModel
-
-    @Mock
-    private lateinit var mockTextUtils: TextUtils
 
     private val fakeCategories: List<Category> = listOf(
         Category(
@@ -73,6 +65,7 @@ class AddDataViewModelTest {
         Dispatchers.resetMain()
     }
 
+
     @Test
     fun updateCategoriesData_returnListCategoryItem() = runTest {
         val expectedCategoriesList =  fakeCategories.map {
@@ -83,7 +76,6 @@ class AddDataViewModelTest {
                 IconId = it.iconId,
             )
         }
-
         assertThat(viewModel.uiState.value.categories).containsAnyIn(expectedCategoriesList)
     }
 
@@ -171,8 +163,8 @@ class AddDataViewModelTest {
         viewModel.setIsIncomeValue(changeValue)
 
         assertThat(viewModel.uiState.value.isIncome).isFalse()
-
     }
+
 
     @Test
     fun addData_categoryIdIsNull_errorCategoryNotSelected() {
@@ -196,9 +188,6 @@ class AddDataViewModelTest {
 
     @Test
     fun addData_amountIsNotOnlyDigit_errorAmountNotNumber() {
-
-        // TODO:  mock<TextUtils>
-
 
         viewModel.setCategory(0L)
         viewModel.setAmount("2+2=")
@@ -234,8 +223,23 @@ class AddDataViewModelTest {
 
         viewModel.setCategory(0L)
         viewModel.setAmount("2147483647")
+        viewModel.setDate(0L)
+        viewModel.setDescription("fake about")
         viewModel.addData()
 
         assertThat(repository.fakeSummary).contains(expectedSummary)
+    }
+
+
+    @Test
+    fun amountIsDigit_returnFalse() {
+        viewModel.setAmount("2+2=")
+        assertThat(viewModel.uiState.value.amountIsDigit()).isFalse()
+    }
+
+    @Test
+    fun amountIsDigit_returnTrue() {
+        viewModel.setAmount("4")
+        assertThat(viewModel.uiState.value.amountIsDigit()).isTrue()
     }
 }

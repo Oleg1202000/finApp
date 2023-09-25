@@ -1,6 +1,5 @@
 package com.oleg1202000.finapp.ui.home.adddata
 
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oleg1202000.finapp.data.Summary
@@ -81,7 +80,7 @@ class AddDataViewModel @Inject constructor(
 
     private fun calculateAmount(
         amount: String
-    ) : String {
+    ): String {
         if (amount.isNotEmpty() && amount[amount.length - 1].toString() == "=") {
             val expressionList: List<String> = amount.split(" ")
             if (expressionList.size == 4 && expressionList[1] == "*") {
@@ -160,7 +159,7 @@ class AddDataViewModel @Inject constructor(
                 exceptionMessage = ErrorMessage.AmountIsEmpty
                 tempErrorTextField = true
 
-            } else if (!uiState.value.amount.isDigitsOnly()) {
+            } else if (!uiState.value.amountIsDigit()) {
                 exceptionMessage = ErrorMessage.AmountNotInt
                 tempErrorTextField = true
 
@@ -204,3 +203,15 @@ data class AddDataUiState(
     val isLoading: Boolean = false,
     val isIncome: Boolean = false
 )
+
+fun AddDataUiState.amountIsDigit(): Boolean {
+    var result = true
+
+    for (char in this.amount) {
+        if(!char.isDigit()) {
+            result = false
+            break
+        }
+    }
+    return result
+}
