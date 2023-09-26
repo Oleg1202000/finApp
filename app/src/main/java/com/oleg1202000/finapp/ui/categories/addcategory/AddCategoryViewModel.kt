@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteConstraintException
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.oleg1202000.finapp.data.Category
+import com.oleg1202000.finapp.data.database.Category
 import com.oleg1202000.finapp.di.IRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

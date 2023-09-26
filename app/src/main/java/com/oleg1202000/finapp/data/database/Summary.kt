@@ -1,14 +1,9 @@
-package com.oleg1202000.finapp.data
+package com.oleg1202000.finapp.data.database
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
-
+import androidx.room.*
 
 @Entity(
-    tableName = "planned",
+    tableName = "summary",
 
     foreignKeys = [
         ForeignKey(
@@ -21,32 +16,36 @@ import androidx.room.PrimaryKey
     ],
 
     indices = [
-        Index("category_id", unique = false)
+        Index("category_id", unique = false),
     ]
 )
-data class Planned(
-    @PrimaryKey(autoGenerate = true)  @ColumnInfo(name = "id") val id: Long,
+data class Summary(
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "category_id") val categoryId: Long,
-    @ColumnInfo (name = "amount") val amount: Int,
-    @ColumnInfo (name = "date") val date: Long
+    @ColumnInfo(name = "amount") val amount: Int,
+    @ColumnInfo(name = "date") val date: Long,
+    @ColumnInfo(name = "is_sync") val isSync: Boolean = false,
+    @ColumnInfo(name = "about", defaultValue = "NULL") val about: String?
 )
 
 
-data class ReturnPlanAmount(
+data class ReturnSumAmount(
 
     @ColumnInfo(name = "category_name") val categoryName: String,
     @ColumnInfo(name = "color") val color: Long,
     @ColumnInfo(name = "icon_id") val iconId: Int,
-    @ColumnInfo(name = "summary_amount") val amount: Int?,
-    @ColumnInfo(name = "planned_amount") val plan: Int
+    @ColumnInfo(name = "summary_amount") val amount: Int,
+    @ColumnInfo(name = "planned_amount") val plan: Int?
 )
 
 
-data class ReturnPlannedHistory(
+data class ReturnSummaryHistory(
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val categoryName: String,
+    @ColumnInfo(name = "is_income") val isIncome: Boolean,
     @ColumnInfo(name = "icon_id") val iconId: Int,
     @ColumnInfo(name = "color") val color: Long,
     @ColumnInfo(name = "amount") val amount: Int,
     @ColumnInfo(name = "date") val date: Long,
+    @ColumnInfo(name = "about") val about: String?
 )

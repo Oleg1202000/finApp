@@ -2,10 +2,10 @@ package com.oleg1202000.finapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.oleg1202000.finapp.data.FinappDatabase
-import com.oleg1202000.finapp.data.dao.CategoriesDao
-import com.oleg1202000.finapp.data.dao.PlanDao
-import com.oleg1202000.finapp.data.dao.SummaryDao
+import com.oleg1202000.finapp.data.database.FinappDatabase
+import com.oleg1202000.finapp.data.database.dao.CategoriesDao
+import com.oleg1202000.finapp.data.database.dao.PlanDao
+import com.oleg1202000.finapp.data.database.dao.SummaryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +20,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideLocalDatabase(@ApplicationContext context: Context):FinappDatabase = Room.databaseBuilder(
+    fun provideLocalDatabase(@ApplicationContext context: Context): FinappDatabase = Room.databaseBuilder(
         context.applicationContext, FinappDatabase::class.java, "finappdatabase.db"
         )
         .build()

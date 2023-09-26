@@ -1,11 +1,11 @@
-package com.oleg1202000.finapp.data
+package com.oleg1202000.finapp.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.oleg1202000.finapp.data.dao.CategoriesDao
-import com.oleg1202000.finapp.data.dao.PlanDao
-import com.oleg1202000.finapp.data.dao.SummaryDao
+import com.oleg1202000.finapp.data.database.dao.CategoriesDao
+import com.oleg1202000.finapp.data.database.dao.PlanDao
+import com.oleg1202000.finapp.data.database.dao.SummaryDao
 
 
 @Database (

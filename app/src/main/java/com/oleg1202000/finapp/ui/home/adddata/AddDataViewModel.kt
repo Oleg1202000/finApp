@@ -2,7 +2,7 @@ package com.oleg1202000.finapp.ui.home.adddata
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.oleg1202000.finapp.data.Summary
+import com.oleg1202000.finapp.data.database.Summary
 import com.oleg1202000.finapp.di.IRepository
 import com.oleg1202000.finapp.ui.categories.CategoryItem
 import dagger.hilt.android.lifecycle.HiltViewModel

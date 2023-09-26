@@ -1,4 +1,4 @@
-package com.oleg1202000.finapp.data
+package com.oleg1202000.finapp.data.database
 
 import androidx.room.TypeConverter
 import java.util.Date

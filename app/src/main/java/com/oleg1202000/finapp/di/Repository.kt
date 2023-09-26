@@ -1,11 +1,11 @@
 package com.oleg1202000.finapp.di
 
-import com.oleg1202000.finapp.data.Category
-import com.oleg1202000.finapp.data.Planned
-import com.oleg1202000.finapp.data.Summary
-import com.oleg1202000.finapp.data.dao.CategoriesDao
-import com.oleg1202000.finapp.data.dao.PlanDao
-import com.oleg1202000.finapp.data.dao.SummaryDao
+import com.oleg1202000.finapp.data.database.Category
+import com.oleg1202000.finapp.data.database.Planned
+import com.oleg1202000.finapp.data.database.Summary
+import com.oleg1202000.finapp.data.database.dao.CategoriesDao
+import com.oleg1202000.finapp.data.database.dao.PlanDao
+import com.oleg1202000.finapp.data.database.dao.SummaryDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject

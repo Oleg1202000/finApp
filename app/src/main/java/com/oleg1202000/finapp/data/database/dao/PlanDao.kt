@@ -1,9 +1,9 @@
-package com.oleg1202000.finapp.data.dao
+package com.oleg1202000.finapp.data.database.dao
 
 import androidx.room.*
-import com.oleg1202000.finapp.data.Planned
-import com.oleg1202000.finapp.data.ReturnPlanAmount
-import com.oleg1202000.finapp.data.ReturnPlannedHistory
+import com.oleg1202000.finapp.data.database.Planned
+import com.oleg1202000.finapp.data.database.ReturnPlanAmount
+import com.oleg1202000.finapp.data.database.ReturnPlannedHistory
 import kotlinx.coroutines.flow.Flow
 
 

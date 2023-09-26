@@ -3,7 +3,7 @@ package com.oleg1202000.finapp.ui.plan.addplan
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.oleg1202000.finapp.data.Planned
+import com.oleg1202000.finapp.data.database.Planned
 import com.oleg1202000.finapp.di.IRepository
 import com.oleg1202000.finapp.ui.categories.CategoryItem
 import com.oleg1202000.finapp.ui.home.adddata.ErrorMessage

@@ -2,9 +2,9 @@ package com.oleg1202000.finapp.ui.home.adddata
 
 import com.google.common.truth.Truth.assertThat
 import com.oleg1202000.finapp.R
-import com.oleg1202000.finapp.data.Category
+import com.oleg1202000.finapp.data.database.Category
 import com.oleg1202000.finapp.data.FakeData
-import com.oleg1202000.finapp.data.Summary
+import com.oleg1202000.finapp.data.database.Summary
 import com.oleg1202000.finapp.ui.categories.CategoryItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

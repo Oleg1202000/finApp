@@ -1,10 +1,10 @@
-package com.oleg1202000.finapp.data.dao
+package com.oleg1202000.finapp.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.oleg1202000.finapp.data.Category
-import com.oleg1202000.finapp.data.CategoryWithoutIsIncome
+import com.oleg1202000.finapp.data.database.Category
+import com.oleg1202000.finapp.data.database.CategoryWithoutIsIncome
 import kotlinx.coroutines.flow.Flow
 
 @Dao
