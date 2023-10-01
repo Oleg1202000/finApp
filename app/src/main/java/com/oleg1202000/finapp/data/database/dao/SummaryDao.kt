@@ -80,7 +80,7 @@ interface SummaryDao {
         ORDER BY summary.date DESC
         """
     )
-    fun getHistory(
+    fun getSummaryHistory(
         beginDate: Long,
         endDate: Long
 

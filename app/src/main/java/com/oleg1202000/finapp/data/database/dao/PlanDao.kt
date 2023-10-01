@@ -49,7 +49,6 @@ interface PlanDao {
         """
     )
 
-    // LEFT JOIN summary ON categories.id = summary.category_id
     fun getPlan(
         isIncome: Boolean = false,
         beginDate: Long,
@@ -78,7 +77,7 @@ interface PlanDao {
         ORDER BY planned.date DESC
         """
     )
-    fun getHistory(
+    fun getPlannedHistory(
         beginDate: Long,
         endDate: Long
 
