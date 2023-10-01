@@ -1,15 +1,17 @@
 package com.oleg1202000.finapp.ui.home.adddata
 
 import com.google.common.truth.Truth.assertThat
-import com.oleg1202000.finapp.R
-import com.oleg1202000.finapp.data.database.Category
-import com.oleg1202000.finapp.data.FakeData
+import com.oleg1202000.finapp.data.FakeRepository
 import com.oleg1202000.finapp.data.database.Summary
+import com.oleg1202000.finapp.data.fakeCategories
+import com.oleg1202000.finapp.data.fakeDeletedCategory
 import com.oleg1202000.finapp.ui.categories.CategoryItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -20,42 +22,22 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddDataViewModelTest {
-    private lateinit var repository: FakeData
+    private lateinit var repository: FakeRepository
     private lateinit var viewModel: AddDataViewModel
 
-    private val fakeCategories: List<Category> = listOf(
-        Category(
-            id = 0L,
-            name = "test name",
-            isIncome = false,
-            color = 0xFFD32F2F,
-            iconId = R.drawable.ic_category_apartment_40px,
-        ),
-        Category(
-            id = 1L,
-            name = "test name 2",
-            isIncome = true,
-            color = 0xFFD32F2F,
-            iconId = R.drawable.ic_category_apartment_40px,
-        ),
-    )
-
-    private val fakeDeletedCategory = Category(
-        id = 3L,
-        name = "test name 3",
-        isIncome = true,
-        color = 0xFFD32F2F,
-        iconId = R.drawable.ic_category_apartment_40px,
-    )
-
-
     @Before
-    fun setUp() {
+    fun setUp() = runTest {
         val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
         Dispatchers.setMain(testDispatcher)
 
-        repository = FakeData()
-        repository.initCategories(fakeCategories)
+        repository = FakeRepository()
+
+        launch {
+            fakeCategories.forEach {
+                repository.setCategory(it)
+            }
+        }
+        advanceUntilIdle()
 
         viewModel = AddDataViewModel(localRepository = repository)
     }
