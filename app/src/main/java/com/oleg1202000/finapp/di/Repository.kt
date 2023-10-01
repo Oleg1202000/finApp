@@ -6,21 +6,21 @@ import com.oleg1202000.finapp.data.database.Summary
 import com.oleg1202000.finapp.data.database.dao.CategoriesDao
 import com.oleg1202000.finapp.data.database.dao.PlanDao
 import com.oleg1202000.finapp.data.database.dao.SummaryDao
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class Repository @Inject constructor(
-
     private val categoriesDao: CategoriesDao,
     private val summaryDao: SummaryDao,
     private val planDao: PlanDao,
+    private val dispatcher: CoroutineDispatcher,
 ) : IRepository {
 
 
     // Categories table
     override fun getCategories (isIncome: Boolean) =
-        categoriesDao.getCategories(isIncome).flowOn(Dispatchers.IO)
+        categoriesDao.getCategories(isIncome).flowOn(dispatcher) //Dispatchers.IO)
 
     override suspend fun setCategory (category: Category) = categoriesDao.setCategory(category)
 
@@ -32,7 +32,7 @@ class Repository @Inject constructor(
         isIncome: Boolean,
         beginDate: Long,
         endDate: Long
-    ) = planDao.getPlan(isIncome, beginDate, endDate).flowOn(Dispatchers.IO)
+    ) = planDao.getPlan(isIncome, beginDate, endDate).flowOn(dispatcher)
 
     override suspend fun setPlan (plan: Planned) = planDao.setPlan(plan)
 
@@ -41,7 +41,7 @@ class Repository @Inject constructor(
     override fun getPlannedHistory(
         beginDate: Long,
         endDate: Long
-    ) = planDao.getHistory(endDate, beginDate).flowOn(Dispatchers.IO)
+    ) = planDao.getPlannedHistory(endDate, beginDate).flowOn(dispatcher)
 
 
     // Summary table
@@ -49,12 +49,12 @@ class Repository @Inject constructor(
         isIncome: Boolean,
         beginDate: Long,
         endDate: Long
-    ) = summaryDao.getSumAmount(isIncome, beginDate, endDate).flowOn(Dispatchers.IO)
+    ) = summaryDao.getSumAmount(isIncome, beginDate, endDate).flowOn(dispatcher)
 
     override fun getSummaryHistory(
         beginDate: Long,
         endDate: Long
-    ) = summaryDao.getHistory(endDate, beginDate).flowOn(Dispatchers.IO)
+    ) = summaryDao.getSummaryHistory(endDate, beginDate).flowOn(dispatcher)
 
     override suspend fun setSummary(summary: Summary) = summaryDao.setSummary(summary)
 
