@@ -12,31 +12,24 @@ import com.oleg1202000.finapp.di.IRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class FakeData : IRepository {
+class FakeRepository : IRepository {
 
     private var fakeCategories: MutableList<Category> = mutableListOf()
     var fakeSummary: MutableList<Summary> = mutableListOf()
 
-    fun initCategories(categories: List<Category>){
-        fakeCategories.addAll(categories)
 
-        // TODO: заменить на setCategory
+    override fun getCategories(isIncome: Boolean): Flow<List<CategoryWithoutIsIncome>> = flow {
+        emit(
+            fakeCategories.map {
+                CategoryWithoutIsIncome(
+                    id = it.id,
+                    name = it.name,
+                    color = it.color,
+                    iconId = it.iconId,
+                )
+            }
+        )
     }
-
-
-    override fun getCategories(isIncome: Boolean): Flow<List<CategoryWithoutIsIncome>> =
-        flow {
-            emit(
-                fakeCategories.map {
-                    CategoryWithoutIsIncome(
-                        id = it.id,
-                        name = it.name,
-                        color = it.color,
-                        iconId = it.iconId,
-                    )
-                }
-            )
-        }
 
     override suspend fun setCategory(category: Category) {
         fakeCategories.add(category)
