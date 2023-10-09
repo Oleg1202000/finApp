@@ -67,7 +67,9 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    androidTestImplementation "androidx.test:runner:1.5.2"
+    androidTestImplementation "androidx.test:rules:1.5.0"
+    androidTestImplementation "com.google.truth:truth:1.1.4"
 
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
@@ -78,8 +80,8 @@ dependencies {
     implementation composeBom
     androidTestImplementation composeBom
 
-    implementation "androidx.compose.material3:material3:1.1.1"
-    implementation "androidx.compose.material:material:1.5.1"
+    implementation "androidx.compose.material3:material3:1.1.2"
+    implementation "androidx.compose.material:material:1.5.2"
 
     // Android Studio Preview support
     implementation 'androidx.compose.ui:ui-tooling-preview'
@@ -90,7 +92,7 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
     // Optional - Add window size utils
-    implementation "androidx.compose.material3:material3-window-size-class:1.1.1"
+    implementation "androidx.compose.material3:material3-window-size-class:1.1.2"
 
     // Optional - Integration with activities
     implementation 'androidx.activity:activity-compose:1.7.2'
@@ -101,7 +103,7 @@ dependencies {
 
 
     // Navigation-compose
-    def nav_version = "2.7.2"
+    def nav_version = "2.7.3"
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
     //Hilt and Navigation
