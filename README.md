@@ -5,3 +5,4 @@
 - Flow
 - Room
 - Jetpack compose
+- Junit 4 and Truth [in progress]
