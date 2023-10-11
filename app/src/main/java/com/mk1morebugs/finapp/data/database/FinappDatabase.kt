@@ -1,11 +1,10 @@
-package com.oleg1202000.finapp.data.database
+package com.mk1morebugs.finapp.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.oleg1202000.finapp.data.database.dao.CategoriesDao
-import com.oleg1202000.finapp.data.database.dao.PlanDao
-import com.oleg1202000.finapp.data.database.dao.SummaryDao
+import com.mk1morebugs.finapp.data.database.dao.CategoriesDao
+import com.mk1morebugs.finapp.data.database.dao.PlanDao
+import com.mk1morebugs.finapp.data.database.dao.SummaryDao
 
 
 @Database (
@@ -21,7 +20,6 @@ import com.oleg1202000.finapp.data.database.dao.SummaryDao
     exportSchema = false
 )
 
-@TypeConverters(DateConverter::class)
 abstract class FinappDatabase : RoomDatabase() {
 
     abstract fun categoriesDao(): CategoriesDao
