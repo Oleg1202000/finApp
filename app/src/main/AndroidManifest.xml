@@ -11,10 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fin_app"
         tools:targetApi="31"
-        android:name = ".FinappAplication">
+        android:name = "com.mk1morebugs.finapp.FinappAplication">
 
         <activity
-        android:name=".ui.MainActivity"
+        android:name="com.mk1morebugs.finapp.ui.MainActivity"
         android:exported="true"
         android:label="@string/app_name"
         android:theme="@style/Theme.Fin_app">
