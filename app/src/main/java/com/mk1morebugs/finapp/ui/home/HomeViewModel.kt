@@ -3,8 +3,7 @@ package com.mk1morebugs.finapp.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mk1morebugs.finapp.di.IRepository
-import com.mk1morebugs.finapp.ui.graphdraw.ColorGraph
-import com.mk1morebugs.finapp.ui.graphdraw.DataGraph
+import com.mk1morebugs.finapp.ui.graphdraw.DetailData
 import com.mk1morebugs.finapp.ui.graphdraw.GraphPeriod
 import com.mk1morebugs.finapp.ui.graphdraw.calculateDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,43 +39,60 @@ class HomeViewModel @Inject constructor(
                      isLoading = true
                  )
              }
+             if (uiState.value.isFactIncome) {
 
-             localRepository.getSumAmount(
-                 isIncome = uiState.value.isIncome,
-                 beginDate = uiState.value.beginDate,
-                 endDate = uiState.value.endDate
-             )
-                 .collect { items ->
-                     val sumAmount = items.sumOf { it.amount }
-
-                     _uiState.update {
-                         it.copy(
-                             dataGraph = items.map {
-                                 DataGraph(
-                                     categoryName = it.categoryName,
-                                     iconCategory = it.iconId,
-                                     colorIcon = it.color,
-                                     amount = it.amount,
-                                     coefficientAmount = it.amount/ sumAmount.toFloat(),
-                                     colorItem =
-                                     if (it.plan != null && it.amount / it.plan.toFloat() > 1) {
-                                         ColorGraph.NOT_OK_COLOR
-                                     } else if (it.plan != null && it.amount / it.plan.toFloat() >= 0.8) {
-                                         ColorGraph.NOT_OK_80_COLOR
-                                     } else if (it.plan != null && it.amount / it.plan.toFloat() < 0.8) {
-                                         ColorGraph.OK_COLOR
-                                     } else {
-                                         ColorGraph.DEFAULT_COLOR
-                                     },
-                                     sumAmount = sumAmount
-
-                                 )
-
-                             },
-                             isLoading = false
-                         )
+                 localRepository.getSumAmount(
+                     //isIncome = uiState.value.isIncome,
+                     beginDate = uiState.value.beginDate,
+                     endDate = uiState.value.endDate
+                 )
+                     .collect { items ->
+                         _uiState.update {
+                             it.copy(
+                                 detailData = items.map {
+                                     DetailData(
+                                         categoryName = it.categoryName,
+                                         iconCategory = it.iconId,
+                                         colorIcon = it.color,
+                                         factAmount = it.amount,
+                                         planAmount = null, // TODO: изменить SQL запрос
+                                     )
+                                 },
+                                 sumIncome = items.sumOf { it.amount },
+                                 isLoading = false
+                             )
+                         }
                      }
-                 }
+             } else {
+                 localRepository.getPlan(
+                     isIncome = false,
+                     beginDate = uiState.value.beginDate,
+                     endDate = uiState.value.endDate
+                 )
+                     .collect { items ->
+                         _uiState.update { it ->
+                             it.copy(
+                                 detailData = items.map {
+                                     DetailData(
+                                         categoryName = it.categoryName,
+                                         iconCategory = it.iconId,
+                                         colorIcon = it.color,
+                                         //factAmount = it.amount ?: 0,
+                                         factAmount =  it.plan,
+                                         planAmount = it.plan
+                                     )
+
+                                 },
+                                 sumIncome = items.sumOf { it.plan },
+                                 isLoading = false
+                             )
+
+                         }
+                     }
+
+
+
+             }
          }
      }
 
@@ -106,12 +122,12 @@ class HomeViewModel @Inject constructor(
          }
      }
 
-     fun setIsIncomeValue(
+     fun switchIsFactIncomeValue(
          changeValue: Boolean
      ) {
          _uiState.update {
              it.copy(
-                 isIncome = changeValue
+                 isFactIncome = changeValue
              )
          }
      }
@@ -119,10 +135,11 @@ class HomeViewModel @Inject constructor(
 
 
 data class HomeUiState(
-    val dataGraph: List<DataGraph> = emptyList(),
+    val detailData: List<DetailData> = emptyList(),
     val beginDate: Long = 0L,
     val endDate: Long = 0L,
     val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK,
     val isLoading: Boolean = false,
-    val isIncome: Boolean = false
+    val isFactIncome: Boolean = true,
+    val sumIncome: Int = 0,
 )
