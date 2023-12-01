@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mk1morebugs.finapp.ui.graphdraw.BarGraph
+import com.mk1morebugs.finapp.ui.graphdraw.PieChart
 import com.mk1morebugs.finapp.ui.graphdraw.ButtonGraph
 import com.mk1morebugs.finapp.ui.graphdraw.TableAmount
 
@@ -30,66 +30,8 @@ fun PlanScreen(
     viewModel: PlanViewModel = viewModel(),
     finappStatusBarTitle: MutableState<String>
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    finappStatusBarTitle.value = "запланировано" // Для отображения суммы доходов и расходов
 
-    LazyColumn {
-
-        // график 1
-        item {
-            if (uiState.isLoading || uiState.dataGraph.isEmpty()) {
-                finappStatusBarTitle.value = "Потрачено / запланировано:\n0 / 0 ₽" // Для отображения суммы доходов и расходов
-                Card {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .size(300.dp)
-                            .background(MaterialTheme.colorScheme.background),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        if (uiState.isLoading) {
-                            CircularProgressIndicator()
-                        } else {
-                            Text(text = "Ничего не запланировано")
-                        }
-                    }
-                }
-            } else {
-
-                finappStatusBarTitle.value = "Потрачено / запланировано:\n${uiState.sumFact} / ${uiState.sumPlanned} ₽"
-                BarGraph(
-                    dataGraph = uiState.dataGraph
-                )
-            }
-        }
-
-
-        item { Spacer(modifier = Modifier.height(20.dp)) }
-
-        item {
-            ButtonGraph(
-                beginDate = uiState.beginDate,
-                endDate = uiState.endDate,
-                updateDate = { viewModel.getDate(it) },
-                updateDataGraph = { viewModel.updateDataGraph() },
-                updateGraphPeriod = { viewModel.updateGraphPeriod(it) }
-            )
-        }
-
-        item { Spacer(modifier = Modifier.height(20.dp)) }
-
-        // "таблица" из категорий и трат
-        item {
-            TableAmount(
-                dataGraph = uiState.dataGraph
-            )
-        }
-
-        item {
-            Spacer(
-                modifier = Modifier.height(80.dp) // Чтобы кнопка "+" не закрывала контент
-            )
-        }
-    }
+    Text(text = "Планируется удалить")
 }
