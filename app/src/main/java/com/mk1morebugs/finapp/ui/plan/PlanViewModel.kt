@@ -3,8 +3,7 @@ package com.mk1morebugs.finapp.ui.plan
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mk1morebugs.finapp.di.IRepository
-import com.mk1morebugs.finapp.ui.graphdraw.ColorGraph
-import com.mk1morebugs.finapp.ui.graphdraw.DataGraph
+import com.mk1morebugs.finapp.ui.graphdraw.DetailData
 import com.mk1morebugs.finapp.ui.graphdraw.GraphPeriod
 import com.mk1morebugs.finapp.ui.graphdraw.calculateDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,46 +38,7 @@ class PlanViewModel @Inject constructor(
                 )
             }
 
-            localRepository.getPlan(
-                isIncome = false,
-                beginDate = uiState.value.beginDate,
-                endDate = uiState.value.endDate
-            )
-                .collect { items ->
-                    _uiState.update { it ->
-                        it.copy(
-                            dataGraph = items.map {
-                                DataGraph(
-                                    categoryName = it.categoryName,
-                                    iconCategory = it.iconId,
-                                    colorIcon = it.color,
-                                    amount = it.amount ?: 0,
-                                    coefficientAmount = (it.amount?.toFloat() ?: 0f) / it.plan.toFloat(),
-                                    colorItem =
-                                    if ((it.amount ?: 0) / it.plan.toFloat() > 1) {
-                                        ColorGraph.NOT_OK_COLOR
 
-                                    } else if ((it.amount ?: 0) / it.plan.toFloat() >= 0.8) {
-                                        ColorGraph.NOT_OK_80_COLOR
-
-                                    } else if ((it.amount ?: 0) / it.plan.toFloat() < 0.8) {
-                                        ColorGraph.OK_COLOR
-
-                                    } else {
-                                        ColorGraph.DEFAULT_COLOR
-
-                                    },
-                                    sumAmount = it.plan
-                                )
-
-                            },
-                            sumPlanned = items.sumOf { it.plan },
-                            sumFact = items.sumOf { it.amount ?: 0 },
-                            isLoading = false
-                        )
-
-                    }
-                }
         }
 
     }
@@ -114,7 +74,7 @@ class PlanViewModel @Inject constructor(
 
 
 data class PlanUiState(
-    val dataGraph: List<DataGraph> = emptyList(),
+    val detailData: List<DetailData> = emptyList(),
     val beginDate: Long = 0L,
     val endDate: Long = 0L,
     val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK,

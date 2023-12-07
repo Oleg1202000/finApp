@@ -68,11 +68,9 @@ val md_theme_dark_scrim = Color(0xFF000000)
 val seed = Color(0xFFEAE5FF)
 
 
-// Цвета для графиков
-val defaultColor = Color(0xFFA6ACAA)
-val okColor = Color(0xFF43A047)
-val notOkColor = Color(0xFFE53935)
-val notOk80Color = Color(0xFFFB8C00)  // 80 out of 100 %
+// Цвета для таблицы
+val redColor = Color(0x33E53935)
+val yellowColor = Color(0x33FB8C00)  // 80 out of 100 %
 
 
 // Цвета для категорий
