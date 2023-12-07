@@ -3,8 +3,9 @@ package com.mk1morebugs.finapp.ui.graphdraw
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -15,52 +16,60 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.oleg1202000.finapp.R
 
 
 @Composable
 fun PieChart(
     dataPie: List<DetailData>,
     sumIncome: Int,
-) {
-
+    ) {
     BoxWithConstraints(
         modifier = Modifier
     ) {
 
         var startAngle = -90f
+        var delta = 10
+        if (dataPie.size == 1){
+            delta = 0
+        }
         val coordinateCentreCircleX = minWidth * 0.5f
         val coordinateCentreCircleY = minHeight * 0.5f
 
         Canvas(
             modifier = Modifier
-                .width(coordinateCentreCircleX * 2)
+                .fillMaxWidth()
+                .height(minHeight)
                 .pointerInput(Unit) {
 
                     detectTapGestures(
                         onPress = {
-                            // TODO:
+                            // TODO: write tap handler
                             awaitRelease()
+
                         }
                     )
                 }
+
         ) {
             dataPie.forEachIndexed { index, item ->
-                val widthArc = if (false) Stroke(60f) else Stroke(30f, cap = StrokeCap.Round) // TODO:
-                val sweepAngle = item.factAmount / sumIncome.toFloat() * 360f
+                val widthArc = Stroke(30f, cap = StrokeCap.Round)
+                val sweepAngle = item.factAmount / sumIncome.toFloat() * 360f // TODO: Учесть значения <5-10 градусов 
+
                 drawArc(
                     color = Color(item.colorIcon.toULong()),
                     startAngle = startAngle,
-                    sweepAngle = sweepAngle - 10,
+                    sweepAngle = sweepAngle - delta,
                     useCenter = false,
                     style = widthArc,
                     size = Size(
-                        coordinateCentreCircleX.toPx() * 1.2f, // 1.2 + 2 * 0.4 == 2.0
-                        coordinateCentreCircleX.toPx() * 1.2f,
+                        minHeight.toPx() * 0.8f, // 1.2 + 2 * 0.4 == 2.0
+                        minHeight.toPx() * 0.8f,
                     ),
-                    topLeft = Offset(x = coordinateCentreCircleX.toPx() * 0.4f, y = 50f),
+                    topLeft = Offset(
+                        x = (coordinateCentreCircleX - coordinateCentreCircleY * 0.8f).toPx(),
+                        y = 50f
+                    ),
                 )
                 startAngle += sweepAngle
             }
@@ -70,44 +79,11 @@ fun PieChart(
             modifier = Modifier
                 .offset(
                     coordinateCentreCircleX.minus(40.dp),
-                    coordinateCentreCircleY.minus(20.dp),
+                    coordinateCentreCircleY.minus(10.dp),
                 ),
-            text = "${sumIncome.toString()} ₽",
-            style = MaterialTheme.typography.headlineLarge
+            text = "${sumIncome} ₽",
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.onBackground,
         )
     }
 }
-
-
-@Preview
-@Composable
-fun PieChartPreview() {
-    PieChart(
-        dataPie = previewData,
-        sumIncome = 0,
-    )
-}
-
-val previewData = listOf(
-    DetailData(
-        categoryName = "previewCategory 1",
-        iconCategory = R.drawable.ic_category_apartment_40px,
-        colorIcon = Color(0xFF00BFA5).value.toLong(),
-        factAmount = 100,
-        planAmount = 500,
-    ),
-    DetailData(
-        categoryName = "previewCategory 2",
-        iconCategory = R.drawable.ic_category_apartment_40px,
-        colorIcon = Color(0xFF00BFA5).value.toLong(),
-        factAmount = 200,
-        planAmount = 500,
-    ),
-    DetailData(
-        categoryName = "previewCategory 3",
-        iconCategory = R.drawable.ic_category_apartment_40px,
-        colorIcon = Color(0xFF00BFA5).value.toLong(),
-        factAmount = 200,
-        planAmount = 500,
-    ),
-)

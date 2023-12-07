@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.Tab
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +38,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(),
     finappStatusbarTitle: MutableState<String>,
 ) {
-    finappStatusbarTitle.value = "Главная"
+    finappStatusbarTitle.value = "Расходы"
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var stateTab by rememberSaveable { mutableIntStateOf(0) }
@@ -83,7 +82,7 @@ fun HomeScreen(
         Surface(
             modifier = Modifier
                 .defaultMinSize(
-                    minHeight = 300.dp,
+                    minHeight = 200.dp,
                 )
                 .fillMaxWidth()
                 /*.swipeable(
@@ -98,8 +97,6 @@ fun HomeScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-
-                        .size(300.dp)
                         .background(MaterialTheme.colorScheme.background),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -117,8 +114,6 @@ fun HomeScreen(
                 )
             }
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
 
         ButtonGraph(beginDate = uiState.beginDate,
             endDate = uiState.endDate,
