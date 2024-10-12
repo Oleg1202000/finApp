@@ -10,7 +10,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.oleg1202000.finapp.R
+import com.mk1morebugs.finapp.R
 import com.mk1morebugs.finapp.ui.Screen
 
 

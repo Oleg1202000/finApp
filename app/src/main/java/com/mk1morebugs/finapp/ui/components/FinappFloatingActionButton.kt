@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
-import com.oleg1202000.finapp.R
+import com.mk1morebugs.finapp.R
 import com.mk1morebugs.finapp.ui.Screen
 
 

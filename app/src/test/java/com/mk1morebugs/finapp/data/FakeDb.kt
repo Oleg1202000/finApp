@@ -1,6 +1,6 @@
 package com.mk1morebugs.finapp.data
 
-import com.oleg1202000.finapp.R
+import com.mk1morebugs.finapp.R
 import com.mk1morebugs.finapp.data.database.Category
 import com.mk1morebugs.finapp.data.database.Planned
 import com.mk1morebugs.finapp.data.database.Summary

@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.oleg1202000.finapp.R
+import com.mk1morebugs.finapp.R
 import com.mk1morebugs.finapp.ui.theme.colorCategories
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
