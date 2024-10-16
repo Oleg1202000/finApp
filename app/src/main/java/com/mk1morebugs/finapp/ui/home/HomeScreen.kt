@@ -86,7 +86,7 @@ fun HomeScreen(
             shape = Shapes.small,
             shadowElevation = 4.dp
         )  {
-           if (uiState.isLoading || uiState.detailData.isEmpty()) {
+           if (uiState.isLoading || uiState.categoriesDetails.isEmpty()) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -102,7 +102,7 @@ fun HomeScreen(
                 }
             } else {
                 PieChart(
-                    dataPie = uiState.detailData,
+                    pieChartItems = uiState.categoriesDetails,
                     sumAmount = uiState.sumAmount
                 )
             }
@@ -118,7 +118,7 @@ fun HomeScreen(
 
         // таблица из категорий и трат
         TableAmount(
-            detailData = uiState.detailData,
+            detailData = uiState.categoriesDetails,
             sumIncome = uiState.sumAmount
         )
     }

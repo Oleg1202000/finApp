@@ -1,92 +1,92 @@
 package com.mk1morebugs.finapp.ui.graphdraw
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mk1morebugs.finapp.R
 import com.mk1morebugs.finapp.ui.theme.FinappTheme
-
+import kotlin.math.sin
 
 @Composable
 fun PieChart(
-    dataPie: List<DetailData>,
+    modifier: Modifier = Modifier,
+    pieChartItems: List<CategoryDetails>,
     sumAmount: Int,
 ) {
     BoxWithConstraints(
-        modifier = Modifier
+        modifier = modifier
     ) {
+        val coordinateCenter = maxWidth * 0.5f
+        val arcStrokeWidth = 30f
 
-        var startAngle = -90f
-        var delta = 10
-        if (dataPie.size == 1){
-            delta = 0
-        }
-        val coordinateCentreCircleX = minWidth * 0.5f
-        val coordinateCentreCircleY = minHeight * 0.5f
         Canvas(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(minHeight)
-                .pointerInput(Unit) {
-
-                    detectTapGestures(
-                        onPress = {
-                            // TODO: write tap handler
-                            awaitRelease()
-
-                        }
-                    )
-                }
-
+                .size(width = minWidth, height = minHeight)
         ) {
-            dataPie.forEachIndexed { index, item ->
-                val widthArc = Stroke(30f, cap = StrokeCap.Round)
-                val sweepAngle = item.categoryAmount / sumAmount.toFloat() * 360f // TODO: Учесть значения <5-10 градусов
+            var offsetAngle = -90f
+            val deltaAngle = if (pieChartItems.size == 1) 0 else 10
 
+            pieChartItems.forEach { item ->
+                val arcStroke = Stroke(arcStrokeWidth, cap = StrokeCap.Round)
+                val sweepAngle = item.categoryAmount / sumAmount.toFloat() * 360f // TODO: Учесть значения <5-10 градусов
                 drawArc(
-                    color = Color(item.categoryIconColor.toULong()),
-                    startAngle = startAngle,
-                    sweepAngle = sweepAngle - delta,
+                    color = Color(item.categoryIconColor),
+                    startAngle = offsetAngle + deltaAngle,
+                    sweepAngle = sweepAngle - deltaAngle,
                     useCenter = false,
-                    style = widthArc,
+                    style = arcStroke,
                     size = Size(
-                        minHeight.toPx() * 0.8f, // 1.2 + 2 * 0.4 == 2.0
-                        minHeight.toPx() * 0.8f,
+                        width = maxWidth.toPx() - arcStrokeWidth,
+                        height = maxHeight.toPx() - arcStrokeWidth,
                     ),
                     topLeft = Offset(
-                        x = (coordinateCentreCircleX - coordinateCentreCircleY * 0.8f).toPx(),
-                        y = 50f
+                        x = arcStrokeWidth / 2,
+                        y = arcStrokeWidth / 2
                     ),
                 )
-                startAngle += sweepAngle
+                offsetAngle += sweepAngle
             }
         }
 
-        Text(
+        // (radius - arc width / 2) * sine 45 degrees
+        // maxWidth = diameter = 2 * radius
+        val textSize = (maxWidth.value - arcStrokeWidth) * sin(45f * kotlin.math.PI / 180)
+        val textOffset = coordinateCenter.value - textSize / 2
+        Box(
             modifier = Modifier
+                .size(width = textSize.dp,
+                    height = textSize.dp
+                )
                 .offset(
-                    coordinateCentreCircleX.minus(40.dp),
-                    coordinateCentreCircleY.minus(10.dp),
+                    x = textOffset.dp,
+                    y = textOffset.dp
                 ),
-            text = "$sumAmount ₽",
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "$sumAmount ₽",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 }
 
@@ -95,30 +95,31 @@ fun PieChart(
 @Composable
 private fun PieChartPreview() {
     FinappTheme{
-        val dataPie: List<DetailData> = listOf(
-            DetailData(
+        val dataPie: List<CategoryDetails> = listOf(
+            CategoryDetails(
                 categoryName = "categoryName 1",
                 categoryIconId = R.drawable.ic_category_coffee_40px,
-                categoryIconColor = Color.Cyan.value.toLong(),
+                categoryIconColor = Color.Cyan.value,
                 categoryAmount = 1000
             ),
-            DetailData(
+            CategoryDetails(
                 categoryName = "categoryName 1",
                 categoryIconId = R.drawable.ic_category_coffee_40px,
-                categoryIconColor = Color.Yellow.value.toLong(),
+                categoryIconColor = Color.Yellow.value,
                 categoryAmount = 500
             ),
-            DetailData(
+            CategoryDetails(
                 categoryName = "categoryName 1",
                 categoryIconId = R.drawable.ic_category_coffee_40px,
-                categoryIconColor = Color.Magenta.value.toLong(),
+                categoryIconColor = Color.Magenta.value,
                 categoryAmount = 500
             )
         )
         val sumAmount = dataPie.sumOf { it.categoryAmount }
 
         PieChart(
-         dataPie = dataPie,
+            modifier = Modifier.size(150.dp),
+         pieChartItems = dataPie,
             sumAmount = sumAmount
         )
     }

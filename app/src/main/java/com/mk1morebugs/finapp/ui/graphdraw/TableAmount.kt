@@ -25,7 +25,7 @@ import com.mk1morebugs.finapp.ui.theme.yellowColor
 
 @Composable
 fun TableAmount(
-    detailData: List<DetailData>,
+    detailData: List<CategoryDetails>,
     sumIncome: Int,
 ) {
 
@@ -63,7 +63,7 @@ fun TableAmount(
                     Icon(
                         painter = painterResource(id = it.categoryIconId),
                         contentDescription = it.categoryName,
-                        tint = Color(it.categoryIconColor.toULong())
+                        tint = Color(it.categoryIconColor)
                     )
 
                     Text(

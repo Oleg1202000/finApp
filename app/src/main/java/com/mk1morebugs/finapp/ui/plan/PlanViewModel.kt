@@ -3,7 +3,7 @@ package com.mk1morebugs.finapp.ui.plan
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mk1morebugs.finapp.di.IRepository
-import com.mk1morebugs.finapp.ui.graphdraw.DetailData
+import com.mk1morebugs.finapp.ui.graphdraw.CategoryDetails
 import com.mk1morebugs.finapp.ui.graphdraw.GraphPeriod
 import com.mk1morebugs.finapp.ui.graphdraw.calculateDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -74,7 +74,7 @@ class PlanViewModel @Inject constructor(
 
 
 data class PlanUiState(
-    val detailData: List<DetailData> = emptyList(),
+    val detailData: List<CategoryDetails> = emptyList(),
     val beginDate: Long = 0L,
     val endDate: Long = 0L,
     val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK,

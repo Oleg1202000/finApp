@@ -3,7 +3,7 @@ package com.mk1morebugs.finapp.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mk1morebugs.finapp.di.IRepository
-import com.mk1morebugs.finapp.ui.graphdraw.DetailData
+import com.mk1morebugs.finapp.ui.graphdraw.CategoryDetails
 import com.mk1morebugs.finapp.ui.graphdraw.GraphPeriod
 import com.mk1morebugs.finapp.ui.graphdraw.calculateDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val localRepository: IRepository,
@@ -22,7 +21,6 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-
 
     init {
         getDate(delta = 0)
@@ -48,11 +46,11 @@ class HomeViewModel @Inject constructor(
                     .collect { items ->
                         _uiState.update {
                             it.copy(
-                                detailData = items.map {
-                                    DetailData(
+                                categoriesDetails = items.map {
+                                    CategoryDetails(
                                         categoryName = it.categoryName,
                                         categoryIconId = it.iconId,
-                                        categoryIconColor = it.color,
+                                        categoryIconColor = it.color.toULong(),
                                         categoryAmount = it.amount,
                                     )
                                 },
@@ -69,11 +67,11 @@ class HomeViewModel @Inject constructor(
                 ).collect { items ->
                     _uiState.update { it ->
                         it.copy(
-                            detailData = items.map {
-                                DetailData(
+                            categoriesDetails = items.map {
+                                CategoryDetails(
                                     categoryName = it.categoryName,
                                     categoryIconId = it.iconId,
-                                    categoryIconColor = it.color,
+                                    categoryIconColor = it.color.toULong(),
                                     categoryAmount = it.plan,
                                 )
                             },
@@ -122,9 +120,8 @@ class HomeViewModel @Inject constructor(
     }
 }
 
-
 data class HomeUiState(
-    val detailData: List<DetailData> = emptyList(),
+    val categoriesDetails: List<CategoryDetails> = emptyList(),
     val beginDate: Long = 0L,
     val endDate: Long = 0L,
     val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK,
