@@ -41,9 +41,9 @@ fun TableAmount(
 
                 items(detailData) {
                     val backgroundColor =
-                        if (it.planAmount != null && it.factAmount / sumIncome.toFloat() > 1) {
+                        if (it.categoryAmount / sumIncome.toFloat() > 1) {
                             redColor
-                        } else if (it.planAmount != null && it.factAmount / sumIncome.toFloat() >= 0.8) {
+                        } else if (it.categoryAmount / sumIncome.toFloat() >= 0.8) {
                             yellowColor
                         } else {
                             MaterialTheme.colorScheme.background
@@ -61,9 +61,9 @@ fun TableAmount(
                 ) {
 
                     Icon(
-                        painter = painterResource(id = it.iconCategory),
+                        painter = painterResource(id = it.categoryIconId),
                         contentDescription = it.categoryName,
-                        tint = Color(it.colorIcon.toULong())
+                        tint = Color(it.categoryIconColor.toULong())
                     )
 
                     Text(
@@ -71,7 +71,7 @@ fun TableAmount(
                     )
 
                     Text(
-                        text = it.factAmount.toString() + " ₽",
+                        text = it.categoryAmount.toString() + " ₽",
                         fontStyle = FontStyle.Italic,
                         )
                 }

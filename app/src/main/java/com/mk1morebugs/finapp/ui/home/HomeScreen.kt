@@ -32,7 +32,6 @@ import com.mk1morebugs.finapp.ui.graphdraw.ButtonGraph
 import com.mk1morebugs.finapp.ui.graphdraw.TableAmount
 import com.mk1morebugs.finapp.ui.theme.Shapes
 
-
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel(),
@@ -43,12 +42,6 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var stateTab by rememberSaveable { mutableIntStateOf(0) }
     val titles = listOf("Факт", "План")
-
-    /*val swipeableState = rememberSwipeableState(initialValue = 0)
-    val widthDp = LocalConfiguration.current.screenWidthDp
-    val anchors = mapOf(0f to 0, (widthDp / 2).toFloat() to 1, widthDp.toFloat() to 2)
-    */
-
 
     Column(
         modifier = Modifier.
@@ -110,7 +103,7 @@ fun HomeScreen(
             } else {
                 PieChart(
                     dataPie = uiState.detailData,
-                    sumIncome = uiState.sumIncome,
+                    sumAmount = uiState.sumAmount
                 )
             }
         }
@@ -126,8 +119,7 @@ fun HomeScreen(
         // таблица из категорий и трат
         TableAmount(
             detailData = uiState.detailData,
-            sumIncome = uiState.sumIncome
+            sumIncome = uiState.sumAmount
         )
-
     }
 }

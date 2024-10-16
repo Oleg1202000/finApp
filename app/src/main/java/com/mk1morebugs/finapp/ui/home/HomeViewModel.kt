@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
- @HiltViewModel
+@HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val localRepository: IRepository
+    private val localRepository: IRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -30,79 +30,68 @@ class HomeViewModel @Inject constructor(
     }
 
 
-     fun updateDataGraph() {
+    fun updateDataGraph() {
 
-         viewModelScope.launch {
+        viewModelScope.launch {
 
-             _uiState.update {
-                 it.copy(
-                     isLoading = true
-                 )
-             }
-             if (uiState.value.isFactIncome) {
+            _uiState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+            if (uiState.value.isFactIncome) {
 
-                 localRepository.getSumAmount(
-                     //isIncome = uiState.value.isIncome,
-                     beginDate = uiState.value.beginDate,
-                     endDate = uiState.value.endDate
-                 )
-                     .collect { items ->
-                         _uiState.update {
-                             it.copy(
-                                 detailData = items.map {
-                                     DetailData(
-                                         categoryName = it.categoryName,
-                                         iconCategory = it.iconId,
-                                         colorIcon = it.color,
-                                         factAmount = it.amount,
-                                         planAmount = null, // TODO: изменить SQL запрос
-                                     )
-                                 },
-                                 sumIncome = items.sumOf { it.amount },
-                                 isLoading = false
-                             )
-                         }
-                     }
-             } else {
-                 localRepository.getPlan(
-                     isIncome = false,
-                     beginDate = uiState.value.beginDate,
-                     endDate = uiState.value.endDate
-                 )
-                     .collect { items ->
-                         _uiState.update { it ->
-                             it.copy(
-                                 detailData = items.map {
-                                     DetailData(
-                                         categoryName = it.categoryName,
-                                         iconCategory = it.iconId,
-                                         colorIcon = it.color,
-                                         //factAmount = it.amount ?: 0,
-                                         factAmount =  it.plan,
-                                         planAmount = it.plan
-                                     )
-
-                                 },
-                                 sumIncome = items.sumOf { it.plan },
-                                 isLoading = false
-                             )
-
-                         }
-                     }
-
-
-
-             }
-         }
-     }
+                localRepository.getSumAmount(
+                    beginDate = uiState.value.beginDate,
+                    endDate = uiState.value.endDate
+                )
+                    .collect { items ->
+                        _uiState.update {
+                            it.copy(
+                                detailData = items.map {
+                                    DetailData(
+                                        categoryName = it.categoryName,
+                                        categoryIconId = it.iconId,
+                                        categoryIconColor = it.color,
+                                        categoryAmount = it.amount,
+                                    )
+                                },
+                                sumAmount = items.sumOf { it.amount },
+                                isLoading = false
+                            )
+                        }
+                    }
+            } else {
+                localRepository.getPlan(
+                    isIncome = false,
+                    beginDate = uiState.value.beginDate,
+                    endDate = uiState.value.endDate
+                ).collect { items ->
+                    _uiState.update { it ->
+                        it.copy(
+                            detailData = items.map {
+                                DetailData(
+                                    categoryName = it.categoryName,
+                                    categoryIconId = it.iconId,
+                                    categoryIconColor = it.color,
+                                    categoryAmount = it.plan,
+                                )
+                            },
+                            sumAmount = items.sumOf { it.plan },
+                            isLoading = false
+                        )
+                    }
+                }
+            }
+        }
+    }
 
 
     fun getDate(
         delta: Int,
-        graphPeriod: GraphPeriod = uiState.value.selectedGraphPeriod
+        graphPeriod: GraphPeriod = uiState.value.selectedGraphPeriod,
     ) {
         val arrayDate: Array<Long> = calculateDate(delta = delta, graphPeriod = graphPeriod)
-
 
         _uiState.update {
             it.copy(
@@ -112,25 +101,25 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-     fun updateGraphPeriod(
-         selectedGraphPeriod: GraphPeriod
-     ) {
-         _uiState.update {
-             it.copy(
-                 selectedGraphPeriod = selectedGraphPeriod
-             )
-         }
-     }
+    fun updateGraphPeriod(
+        selectedGraphPeriod: GraphPeriod,
+    ) {
+        _uiState.update {
+            it.copy(
+                selectedGraphPeriod = selectedGraphPeriod
+            )
+        }
+    }
 
-     fun switchIsFactIncomeValue(
-         changeValue: Boolean
-     ) {
-         _uiState.update {
-             it.copy(
-                 isFactIncome = changeValue
-             )
-         }
-     }
+    fun switchIsFactIncomeValue(
+        changeValue: Boolean,
+    ) {
+        _uiState.update {
+            it.copy(
+                isFactIncome = changeValue
+            )
+        }
+    }
 }
 
 
@@ -141,5 +130,5 @@ data class HomeUiState(
     val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK,
     val isLoading: Boolean = false,
     val isFactIncome: Boolean = true,
-    val sumIncome: Int = 0,
+    val sumAmount: Int = 0,
 )
