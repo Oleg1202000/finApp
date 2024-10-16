@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -36,22 +35,19 @@ fun ButtonGraph(
     val delta: MutableState<Int> = remember { mutableStateOf(0) }
 
     Surface(
-        shadowElevation = 10.dp
+        shadowElevation = 4.dp
     ) {
-
         Column {
 
-
             Row(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                val format = SimpleDateFormat("dd.MM", Locale.getDefault())
 
 
                 OutlinedButton(
-
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -66,20 +62,11 @@ fun ButtonGraph(
                         text = "<"
                     )
                 }
-
                 Spacer(modifier = Modifier.width(20.dp))
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = format.format(beginDate))
-                    Text(text = "-")
-                    Text(text = format.format(endDate))
-                }
+                Text(text = "${format.format(beginDate)} - ${format.format(endDate)}")
 
                 Spacer(modifier = Modifier.width(20.dp))
-
-
                 OutlinedButton(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -97,9 +84,8 @@ fun ButtonGraph(
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
 
-
+            Spacer(modifier = Modifier.height(10.dp))
             // Кнопки День / неделя / месяц
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -140,7 +126,7 @@ fun ButtonGraph(
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }
