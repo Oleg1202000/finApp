@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Tab
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -27,8 +29,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mk1morebugs.finapp.ui.graphdraw.PieChart
 import com.mk1morebugs.finapp.ui.graphdraw.ButtonGraph
+import com.mk1morebugs.finapp.ui.graphdraw.PieChart
 import com.mk1morebugs.finapp.ui.graphdraw.TableAmount
 import com.mk1morebugs.finapp.ui.theme.Shapes
 
@@ -44,8 +46,7 @@ fun HomeScreen(
     val titles = listOf("Факт", "План")
 
     Column(
-        modifier = Modifier.
-        fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         TabRow(
             selectedTabIndex = stateTab
@@ -61,11 +62,11 @@ fun HomeScreen(
                             viewModel.switchIsFactIncomeValue(true)
                         }
                         viewModel.updateDataGraph()
-                              },
+                    },
                     text = {
-                    Text(
-                        text = title, maxLines = 2, overflow = TextOverflow.Ellipsis
-                    )
+                        Text(
+                            text = title, maxLines = 2, overflow = TextOverflow.Ellipsis
+                        )
                     }
                 )
             }
@@ -78,33 +79,41 @@ fun HomeScreen(
                     minHeight = 200.dp,
                 )
                 .fillMaxWidth()
-                /*.swipeable(
-                    state = swipeableState,
-                    orientation = Orientation.Horizontal,
-                    anchors = anchors
-                )*/,
+            /*.swipeable(
+                state = swipeableState,
+                orientation = Orientation.Horizontal,
+                anchors = anchors
+            )*/,
             shape = Shapes.small,
             shadowElevation = 4.dp
-        )  {
-           if (uiState.isLoading || uiState.categoriesDetails.isEmpty()) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.background),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (uiState.isLoading) {
-                        CircularProgressIndicator()
-                    } else {
-                        Text(text = "Нет записей за выбранный период")
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (uiState.isLoading || uiState.categoriesDetails.isEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.background),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        if (uiState.isLoading) {
+                            CircularProgressIndicator()
+                        } else {
+                            Text(text = "Нет записей за выбранный период")
+                        }
                     }
+                } else {
+                    PieChart(
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .size(300.dp),
+                        pieChartItems = uiState.categoriesDetails,
+                    )
                 }
-            } else {
-                PieChart(
-                    pieChartItems = uiState.categoriesDetails,
-                    sumAmount = uiState.sumAmount
-                )
             }
         }
 
