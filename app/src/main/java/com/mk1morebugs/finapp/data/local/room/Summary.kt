@@ -4,7 +4,6 @@ import androidx.room.*
 
 @Entity(
     tableName = "summary",
-
     foreignKeys = [
         ForeignKey(
             entity = Category::class,
@@ -14,7 +13,6 @@ import androidx.room.*
             onUpdate = ForeignKey.CASCADE
         )
     ],
-
     indices = [
         Index("category_id", unique = false),
     ]
@@ -28,16 +26,13 @@ data class Summary(
     @ColumnInfo(name = "about", defaultValue = "NULL") val about: String?
 )
 
-
 data class ReturnSumAmount(
-
     @ColumnInfo(name = "category_name") val categoryName: String,
     @ColumnInfo(name = "color") val color: Long,
     @ColumnInfo(name = "icon_id") val iconId: Int,
     @ColumnInfo(name = "summary_amount") val amount: Int,
     @ColumnInfo(name = "planned_amount") val plan: Int?
 )
-
 
 data class ReturnSummaryHistory(
     @ColumnInfo(name = "id") val id: Long,

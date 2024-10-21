@@ -6,16 +6,15 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "categories" ,
+    tableName = "categories",
     indices = [
         Index("name", unique = true)
     ]
-
 )
 data class Category(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "is_income") val isIncome: Boolean, // Доход или расход
+    @ColumnInfo(name = "is_income") val isIncome: Boolean,
     @ColumnInfo(name = "color") val color: Long,
     @ColumnInfo(name = "icon_id") val iconId: Int
 )

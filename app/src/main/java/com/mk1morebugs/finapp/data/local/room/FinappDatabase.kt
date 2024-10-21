@@ -6,20 +6,15 @@ import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
 import com.mk1morebugs.finapp.data.local.room.dao.PlanDao
 import com.mk1morebugs.finapp.data.local.room.dao.SummaryDao
 
-
 @Database (
-
     entities = [
         Category::class,
         Summary::class,
         Planned::class,
     ],
-
     version = 1,
-
-    exportSchema = false
+    exportSchema = true,
 )
-
 abstract class FinappDatabase : RoomDatabase() {
 
     abstract fun categoriesDao(): CategoriesDao

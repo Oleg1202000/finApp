@@ -6,7 +6,6 @@ import com.mk1morebugs.finapp.data.local.room.ReturnPlanAmount
 import com.mk1morebugs.finapp.data.local.room.ReturnPlannedHistory
 import kotlinx.coroutines.flow.Flow
 
-
 @Dao
 interface PlanDao {
     @Query(
@@ -17,46 +16,31 @@ interface PlanDao {
         categories.icon_id AS icon_id, 
         SUM(planned.amount) AS planned_amount,
         nested_summary.summary_amount AS summary_amount
-
-        
         FROM planned
-        
         JOIN categories ON categories.id = planned.category_id
-        LEFT JOIN 
+        LEFT JOIN
         
         (SELECT
-         
         categories.name AS category_name,
         SUM(summary.amount) AS summary_amount
-        
         FROM  summary
-        
         JOIN categories ON categories.id = summary.category_id
-        
         WHERE summary.date >= :beginDate AND summary.date <= :endDate AND
         categories.is_income = :isIncome
-        
         GROUP BY categories.id
-         
-         
          ) AS nested_summary ON nested_summary.category_name = categories.name
         
         WHERE planned.date >= :beginDate AND planned.date <= :endDate AND
         categories.is_income = :isIncome
-        
         GROUP BY categories.id
         ORDER BY planned_amount, summary_amount DESC
         """
     )
-
     fun getPlan(
         isIncome: Boolean = false,
         beginDate: Long,
         endDate: Long
-
     ) : Flow<List<ReturnPlanAmount>>
-
-
 
     @Query(
         """
@@ -67,13 +51,9 @@ interface PlanDao {
         categories.color, 
         planned.amount, 
         planned.date
-        
         FROM planned
-
         INNER JOIN categories ON categories.id = planned.category_id
-
         WHERE planned.date >= :beginDate AND planned.date <= :endDate
-        
         ORDER BY planned.date DESC
         """
     )
@@ -86,11 +66,9 @@ interface PlanDao {
     @Insert
     suspend fun setPlan(planned: Planned)
 
-
     @Query(
         """
-        DELETE FROM planned
-        WHERE id = :id
+        DELETE FROM planned WHERE id = :id
         """
     )
     suspend fun deletePlanById(id: Long)

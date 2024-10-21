@@ -6,10 +6,8 @@ import com.mk1morebugs.finapp.data.local.room.ReturnSummaryHistory
 import com.mk1morebugs.finapp.data.local.room.Summary
 import kotlinx.coroutines.flow.Flow
 
-
 @Dao
 interface SummaryDao {
-
     @Query(
         """
         SELECT 
@@ -18,33 +16,23 @@ interface SummaryDao {
         categories.icon_id AS icon_id, 
         SUM(summary.amount) AS summary_amount,
         nested_planned.planned_amount AS planned_amount
-        
         FROM summary
-        
         JOIN categories ON categories.id = summary.category_id
         LEFT JOIN 
         
         (SELECT
-         
         categories.name AS category_name,
         SUM(planned.amount) AS planned_amount
-        
         FROM  planned
-        
         JOIN categories ON categories.id = planned.category_id
-        
         WHERE planned.date >= :beginDate AND planned.date <= :endDate AND
         categories.is_income = :isIncome
-        
         GROUP BY categories.id
         ORDER BY planned_amount DESC
-         
-         
-         ) AS nested_planned ON nested_planned.category_name = categories.name
+        ) AS nested_planned ON nested_planned.category_name = categories.name
         
         WHERE summary.date >= :beginDate AND summary.date <= :endDate AND
         categories.is_income = :isIncome
-        
         GROUP BY categories.id
         ORDER BY summary_amount DESC
         """
@@ -52,10 +40,8 @@ interface SummaryDao {
     fun getSumAmount(
         isIncome: Boolean = false,
         beginDate: Long,
-        endDate: Long
-
+        endDate: Long,
     ) : Flow<List<ReturnSumAmount>>
-
 
     @Query(
         """
@@ -68,36 +54,26 @@ interface SummaryDao {
         summary.amount, 
         summary.date, 
         summary.about
-        
         FROM summary
-
         INNER JOIN categories ON categories.id = summary.category_id
-
         WHERE summary.date >= :beginDate AND summary.date <= :endDate
-        
         ORDER BY summary.date DESC
         """
     )
     fun getSummaryHistory(
         beginDate: Long,
         endDate: Long
-
     ) : Flow<List<ReturnSummaryHistory>>
-
 
     @Insert
      suspend fun setSummary(summary: Summary)
 
-
-    //delete
     @Query(
         """
-        DELETE FROM summary
-        WHERE id = :id
+        DELETE FROM summary WHERE id = :id
         """
     )
     suspend fun deleteSummaryById(id: Long)
-
 
     @Update
     suspend  fun updateSummary(summary: Summary)

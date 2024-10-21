@@ -6,20 +6,17 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-
 @Entity(
     tableName = "planned",
-
     foreignKeys = [
         ForeignKey(
             entity = Category::class,
             parentColumns = ["id"],
             childColumns = ["category_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
+            onUpdate = ForeignKey.CASCADE,
         )
     ],
-
     indices = [
         Index("category_id", unique = false)
     ]
@@ -31,16 +28,13 @@ data class Planned(
     @ColumnInfo (name = "date") val date: Long
 )
 
-
 data class ReturnPlanAmount(
-
     @ColumnInfo(name = "category_name") val categoryName: String,
     @ColumnInfo(name = "color") val color: Long,
     @ColumnInfo(name = "icon_id") val iconId: Int,
     @ColumnInfo(name = "summary_amount") val amount: Int?,
     @ColumnInfo(name = "planned_amount") val plan: Int
 )
-
 
 data class ReturnPlannedHistory(
     @ColumnInfo(name = "id") val id: Long,
