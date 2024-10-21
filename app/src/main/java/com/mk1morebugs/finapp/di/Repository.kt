@@ -14,7 +14,7 @@ class Repository @Inject constructor(
     private val categoriesDao: CategoriesDao,
     private val summaryDao: SummaryDao,
     private val planDao: PlanDao,
-    private val dispatcher: CoroutineDispatcher,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : IRepository {
 
 
