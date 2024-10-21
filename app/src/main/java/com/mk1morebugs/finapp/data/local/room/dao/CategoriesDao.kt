@@ -1,10 +1,10 @@
-package com.mk1morebugs.finapp.data.database.dao
+package com.mk1morebugs.finapp.data.local.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.mk1morebugs.finapp.data.database.Category
-import com.mk1morebugs.finapp.data.database.CategoryWithoutIsIncome
+import com.mk1morebugs.finapp.data.local.room.Category
+import com.mk1morebugs.finapp.data.local.room.CategoryWithoutIsIncome
 import kotlinx.coroutines.flow.Flow
 
 @Dao

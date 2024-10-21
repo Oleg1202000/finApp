@@ -4,7 +4,10 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
-import com.mk1morebugs.finapp.data.database.FinappDatabase
+import com.mk1morebugs.finapp.data.local.room.FinappDatabase
+import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
+import com.mk1morebugs.finapp.data.local.room.dao.PlanDao
+import com.mk1morebugs.finapp.data.local.room.dao.SummaryDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest

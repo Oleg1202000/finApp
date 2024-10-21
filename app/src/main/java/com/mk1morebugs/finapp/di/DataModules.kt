@@ -6,10 +6,10 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
-import com.mk1morebugs.finapp.data.database.FinappDatabase
-import com.mk1morebugs.finapp.data.database.dao.CategoriesDao
-import com.mk1morebugs.finapp.data.database.dao.PlanDao
-import com.mk1morebugs.finapp.data.database.dao.SummaryDao
+import com.mk1morebugs.finapp.data.local.room.FinappDatabase
+import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
+import com.mk1morebugs.finapp.data.local.room.dao.PlanDao
+import com.mk1morebugs.finapp.data.local.room.dao.SummaryDao
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

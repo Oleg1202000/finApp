@@ -2,7 +2,7 @@ package com.mk1morebugs.finapp.ui.home.adddata
 
 import com.google.common.truth.Truth.assertThat
 import com.mk1morebugs.finapp.data.FakeRepository
-import com.mk1morebugs.finapp.data.database.Summary
+import com.mk1morebugs.finapp.data.local.room.Summary
 import com.mk1morebugs.finapp.data.fakeCategories
 import com.mk1morebugs.finapp.data.fakeDeletedCategory
 import com.mk1morebugs.finapp.ui.categories.CategoryItem

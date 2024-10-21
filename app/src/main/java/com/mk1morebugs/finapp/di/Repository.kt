@@ -1,11 +1,11 @@
 package com.mk1morebugs.finapp.di
 
-import com.mk1morebugs.finapp.data.database.Category
-import com.mk1morebugs.finapp.data.database.Planned
-import com.mk1morebugs.finapp.data.database.Summary
-import com.mk1morebugs.finapp.data.database.dao.CategoriesDao
-import com.mk1morebugs.finapp.data.database.dao.PlanDao
-import com.mk1morebugs.finapp.data.database.dao.SummaryDao
+import com.mk1morebugs.finapp.data.local.room.Category
+import com.mk1morebugs.finapp.data.local.room.Planned
+import com.mk1morebugs.finapp.data.local.room.Summary
+import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
+import com.mk1morebugs.finapp.data.local.room.dao.PlanDao
+import com.mk1morebugs.finapp.data.local.room.dao.SummaryDao
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject

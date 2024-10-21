@@ -3,12 +3,15 @@ package com.mk1morebugs.finapp.data.database.dao
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.filters.SmallTest
-import com.mk1morebugs.finapp.data.database.FinappDatabase
+import com.mk1morebugs.finapp.data.local.room.FinappDatabase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import com.google.common.truth.Truth.assertThat
+import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
+import com.mk1morebugs.finapp.data.local.room.dao.PlanDao
+import com.mk1morebugs.finapp.data.local.room.dao.SummaryDao
 import kotlinx.coroutines.flow.firstOrNull
 import org.junit.Test
 

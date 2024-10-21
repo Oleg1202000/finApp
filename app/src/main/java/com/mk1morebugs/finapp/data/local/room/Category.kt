@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.data.database
+package com.mk1morebugs.finapp.data.local.room
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

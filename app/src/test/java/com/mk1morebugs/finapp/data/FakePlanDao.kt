@@ -1,9 +1,9 @@
 package com.mk1morebugs.finapp.data
 
-import com.mk1morebugs.finapp.data.database.Planned
-import com.mk1morebugs.finapp.data.database.ReturnPlanAmount
-import com.mk1morebugs.finapp.data.database.ReturnPlannedHistory
-import com.mk1morebugs.finapp.data.database.dao.PlanDao
+import com.mk1morebugs.finapp.data.local.room.Planned
+import com.mk1morebugs.finapp.data.local.room.ReturnPlanAmount
+import com.mk1morebugs.finapp.data.local.room.ReturnPlannedHistory
+import com.mk1morebugs.finapp.data.local.room.dao.PlanDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

@@ -1,10 +1,9 @@
-package com.mk1morebugs.finapp.data.database.dao
+package com.mk1morebugs.finapp.data.local.room.dao
 
 import androidx.room.*
-import com.mk1morebugs.finapp.data.*
-import com.mk1morebugs.finapp.data.database.ReturnSumAmount
-import com.mk1morebugs.finapp.data.database.ReturnSummaryHistory
-import com.mk1morebugs.finapp.data.database.Summary
+import com.mk1morebugs.finapp.data.local.room.ReturnSumAmount
+import com.mk1morebugs.finapp.data.local.room.ReturnSummaryHistory
+import com.mk1morebugs.finapp.data.local.room.Summary
 import kotlinx.coroutines.flow.Flow
 
 

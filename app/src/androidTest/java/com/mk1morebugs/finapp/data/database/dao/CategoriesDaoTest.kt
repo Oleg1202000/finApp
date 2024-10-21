@@ -4,9 +4,10 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
-import com.mk1morebugs.finapp.data.database.Category
-import com.mk1morebugs.finapp.data.database.CategoryWithoutIsIncome
-import com.mk1morebugs.finapp.data.database.FinappDatabase
+import com.mk1morebugs.finapp.data.local.room.Category
+import com.mk1morebugs.finapp.data.local.room.CategoryWithoutIsIncome
+import com.mk1morebugs.finapp.data.local.room.FinappDatabase
+import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest

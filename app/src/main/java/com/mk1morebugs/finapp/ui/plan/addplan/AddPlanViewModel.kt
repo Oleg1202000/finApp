@@ -3,7 +3,7 @@ package com.mk1morebugs.finapp.ui.plan.addplan
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mk1morebugs.finapp.data.database.Planned
+import com.mk1morebugs.finapp.data.local.room.Planned
 import com.mk1morebugs.finapp.di.IRepository
 import com.mk1morebugs.finapp.ui.categories.CategoryItem
 import com.mk1morebugs.finapp.ui.home.adddata.ErrorMessage

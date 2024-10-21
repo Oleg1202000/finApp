@@ -1,9 +1,9 @@
 package com.mk1morebugs.finapp.data
 
 import com.mk1morebugs.finapp.R
-import com.mk1morebugs.finapp.data.database.Category
-import com.mk1morebugs.finapp.data.database.Planned
-import com.mk1morebugs.finapp.data.database.Summary
+import com.mk1morebugs.finapp.data.local.room.Category
+import com.mk1morebugs.finapp.data.local.room.Planned
+import com.mk1morebugs.finapp.data.local.room.Summary
 
 
 val fakeCategories: MutableList<Category> = mutableListOf(

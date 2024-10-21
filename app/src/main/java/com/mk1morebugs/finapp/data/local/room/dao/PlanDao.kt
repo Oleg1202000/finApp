@@ -1,9 +1,9 @@
-package com.mk1morebugs.finapp.data.database.dao
+package com.mk1morebugs.finapp.data.local.room.dao
 
 import androidx.room.*
-import com.mk1morebugs.finapp.data.database.Planned
-import com.mk1morebugs.finapp.data.database.ReturnPlanAmount
-import com.mk1morebugs.finapp.data.database.ReturnPlannedHistory
+import com.mk1morebugs.finapp.data.local.room.Planned
+import com.mk1morebugs.finapp.data.local.room.ReturnPlanAmount
+import com.mk1morebugs.finapp.data.local.room.ReturnPlannedHistory
 import kotlinx.coroutines.flow.Flow
 
 
