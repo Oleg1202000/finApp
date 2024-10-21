@@ -2,7 +2,7 @@ package com.mk1morebugs.finapp.ui.plan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mk1morebugs.finapp.di.IRepository
+import com.mk1morebugs.finapp.data.IRepository
 import com.mk1morebugs.finapp.ui.graphdraw.CategoryDetails
 import com.mk1morebugs.finapp.ui.graphdraw.GraphPeriod
 import com.mk1morebugs.finapp.ui.graphdraw.calculateDate

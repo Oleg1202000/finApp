@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.di
+package com.mk1morebugs.finapp.data
 
 import com.mk1morebugs.finapp.data.local.room.Category
 import com.mk1morebugs.finapp.data.local.room.CategoryWithoutIsIncome
