@@ -2,7 +2,7 @@ package com.mk1morebugs.finapp.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mk1morebugs.finapp.data.IRepository
+import com.mk1morebugs.finapp.data.Repository
 import com.mk1morebugs.finapp.ui.graphdraw.CategoryDetails
 import com.mk1morebugs.finapp.ui.graphdraw.GraphPeriod
 import com.mk1morebugs.finapp.ui.graphdraw.calculateDate
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val localRepository: IRepository,
+    private val localRepository: Repository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())

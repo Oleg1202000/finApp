@@ -3,7 +3,7 @@ package com.mk1morebugs.finapp.ui.home.adddata
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mk1morebugs.finapp.data.local.room.Summary
-import com.mk1morebugs.finapp.data.IRepository
+import com.mk1morebugs.finapp.data.Repository
 import com.mk1morebugs.finapp.ui.categories.CategoryItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddDataViewModel @Inject constructor(
-    private val localRepository: IRepository
+    private val localRepository: Repository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddDataUiState())

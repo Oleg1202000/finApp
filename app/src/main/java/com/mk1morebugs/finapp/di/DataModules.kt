@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
-import com.mk1morebugs.finapp.data.IRepository
 import com.mk1morebugs.finapp.data.Repository
+import com.mk1morebugs.finapp.data.RepositoryImpl
 import com.mk1morebugs.finapp.data.local.room.FinappDatabase
 import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
 import com.mk1morebugs.finapp.data.local.room.dao.PlanDao
@@ -25,7 +25,7 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Singleton
     @Binds
-    abstract fun bindRepository (repository: Repository): IRepository
+    abstract fun bindRepository (repository: RepositoryImpl): Repository
 }
 
 @Module

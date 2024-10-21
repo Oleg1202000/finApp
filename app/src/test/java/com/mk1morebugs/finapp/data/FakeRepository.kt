@@ -11,7 +11,7 @@ import com.mk1morebugs.finapp.data.local.room.Summary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class FakeRepository : IRepository {
+class FakeRepository : Repository {
 
     private var fakeCategories: MutableList<Category> = mutableListOf()
     var fakeSummary: MutableList<Summary> = mutableListOf()
