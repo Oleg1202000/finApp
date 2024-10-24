@@ -3,7 +3,6 @@ package com.mk1morebugs.finapp.ui.plan.addplan
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mk1morebugs.finapp.data.local.room.Planned
 import com.mk1morebugs.finapp.data.Repository
 import com.mk1morebugs.finapp.ui.categories.CategoryItem
 import com.mk1morebugs.finapp.ui.home.adddata.ErrorMessage
@@ -42,7 +41,7 @@ class AddPlanViewModel @Inject constructor(
                                     id = it.id,
                                     name = it.name,
                                     iconId = it.iconId,
-                                    colorIcon = it.color
+                                    colorIcon = it.iconColor
                                 )
                             }
                         )
@@ -142,16 +141,8 @@ class AddPlanViewModel @Inject constructor(
                 )*/
 
                 try {
-                    localRepository.setPlan(
-                        plan = Planned(
-                            id = 0L,
-                            categoryId = uiState.value.selectedCategoryId!!.toLong(),
-                            amount = uiState.value.amount.toInt(),
-                            //date = date[0],
-                            date = uiState.value.selectedDate
 
-                        )
-                    )
+
                 } catch (e: NumberFormatException) {
                     exceptionMessage = ErrorMessage.AmountOverLimit
                     tempErrorTextField = true

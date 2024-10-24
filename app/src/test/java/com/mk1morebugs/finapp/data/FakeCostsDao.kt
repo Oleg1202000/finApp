@@ -1,29 +1,28 @@
 package com.mk1morebugs.finapp.data
 
-import com.mk1morebugs.finapp.data.local.room.ReturnSumAmount
-import com.mk1morebugs.finapp.data.local.room.ReturnSummaryHistory
-import com.mk1morebugs.finapp.data.local.room.Summary
-import com.mk1morebugs.finapp.data.local.room.dao.SummaryDao
+import com.mk1morebugs.finapp.data.local.room.CostForUi
+import com.mk1morebugs.finapp.data.local.room.CostHistory
+import com.mk1morebugs.finapp.data.local.room.Cost
+import com.mk1morebugs.finapp.data.local.room.dao.CostsDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 
-class FakeSummaryDao : SummaryDao {
+class FakeCostsDao : CostsDao {
 
-    override fun getSumAmount(
+    override fun getCostForUi(
         isIncome: Boolean,
         beginDate: Long,
         endDate: Long
 
-    ) : Flow<List<ReturnSumAmount>> = flow {
+    ) : Flow<List<CostForUi>> = flow {
         emit(
             fakeCategories.map {
-                ReturnSumAmount(
+                CostForUi(
                     categoryName = it.name,
-                    color = it.color,
+                    iconColor = it.color,
                     iconId = it.iconId,
-                    amount = fakeSummaries.sumOf { summary -> summary.amount },
-                    plan = fakePlans.sumOf { planned -> planned.amount },
+                    summaryAmount = fakeSummaries.sumOf { summary -> summary.amount },
                 )
             }
         )
@@ -32,19 +31,19 @@ class FakeSummaryDao : SummaryDao {
     override fun getSummaryHistory(
         beginDate: Long,
         endDate: Long
-    ) : Flow<List<ReturnSummaryHistory>> = flow {
+    ) : Flow<List<CostHistory>> = flow {
         emit(fakeSummaries.map { summary ->
 
             val category = fakeCategories.find { category ->
                 summary.id == category.id
             }
 
-            ReturnSummaryHistory(
+            CostHistory(
                 id = summary.id,
                 categoryName = category!!.name,
                 isIncome = category.isIncome,
                 iconId = category.iconId,
-                color = category.color,
+                iconColor = category.color,
                 amount = summary.amount,
                 date = summary.date,
                 about = summary.about,
@@ -52,11 +51,11 @@ class FakeSummaryDao : SummaryDao {
         })
     }
 
-    override suspend fun setSummary(summary: Summary) {
-        fakeSummaries.add(summary)
+    override suspend fun setCost(cost: Cost) {
+        fakeSummaries.add(cost)
     }
 
-    override suspend fun deleteSummaryById(id: Long) {
+    override suspend fun deleteCostById(id: Long) {
         fakeSummaries.remove(
             fakeSummaries.find {
                 it.id == id
@@ -64,12 +63,12 @@ class FakeSummaryDao : SummaryDao {
         )
     }
 
-    override suspend  fun updateSummary(summary: Summary) {
+    override suspend  fun updateCost(cost: Cost) {
         fakeSummaries.remove(
             fakeSummaries.find {
-                it.id == summary.id
+                it.id == cost.id
             }
         )
-        fakeSummaries.add(summary)
+        fakeSummaries.add(cost)
     }
 }

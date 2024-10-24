@@ -20,6 +20,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Tab
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -232,8 +233,7 @@ fun HistoryItem(
 
         showDropdownMenu = false
 
-        AlertDialog(
-            onDismissRequest = { showDialog = false }
+        BasicAlertDialog(onDismissRequest = { showDialog = false }
         ) {
             Surface(
                 modifier = Modifier

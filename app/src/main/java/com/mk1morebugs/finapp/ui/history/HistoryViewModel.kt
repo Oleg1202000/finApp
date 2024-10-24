@@ -30,9 +30,10 @@ class HistoryViewModel @Inject constructor(
     fun updateDataSummary() {
 
         viewModelScope.launch {
-            localRepository.getSummaryHistory(
+            localRepository.getCostsHistory(
                 beginDate = Calendar.getInstance().timeInMillis,
-                endDate = 0L
+                endDate = 0L,
+                isPlanned = false // TODO
             )
                 .collect { items ->
                     _uiState.update {
@@ -42,7 +43,7 @@ class HistoryViewModel @Inject constructor(
                                     id = it.id,
                                     categoryName = it.categoryName,
                                     iconId = it.iconId,
-                                    color = it.color,
+                                    color = it.iconColor,
                                     amount = it.amount,
                                     date = it.date,
                                     about = it.about,
@@ -58,9 +59,10 @@ class HistoryViewModel @Inject constructor(
     fun updateDataPlanned() {
 
         viewModelScope.launch {
-            localRepository.getPlannedHistory(
+            localRepository.getCostsHistory(
                 beginDate = Calendar.getInstance().timeInMillis,
-                endDate = 0L
+                endDate = 0L,
+                isPlanned = true
             )
                 .collect { items ->
                     _uiState.update {
@@ -70,7 +72,7 @@ class HistoryViewModel @Inject constructor(
                                     id = it.id,
                                     categoryName = it.categoryName,
                                     iconId = it.iconId,
-                                    color = it.color,
+                                    color = it.iconColor,
                                     amount = it.amount,
                                     date = it.date,
                                     about = null,
@@ -89,7 +91,7 @@ class HistoryViewModel @Inject constructor(
     ) {
 
         viewModelScope.launch {
-            localRepository.deleteSummaryById(
+            localRepository.deleteCostById(
                 id = id
             )
         }
@@ -100,7 +102,7 @@ class HistoryViewModel @Inject constructor(
     ) {
 
         viewModelScope.launch {
-            localRepository.deletePlanById(
+            localRepository.deleteCostById(  // TODO
                 id = id
             )
         }

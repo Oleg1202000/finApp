@@ -16,7 +16,7 @@ class FakeCategoriesDao : CategoriesDao {
             CategoryWithoutIsIncome(
                 id = it.id,
                 name = it.name,
-                color = it.color,
+                iconColor = it.color,
                 iconId = it.iconId
             )
         }

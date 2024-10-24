@@ -20,6 +20,7 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -261,8 +262,7 @@ fun CardItem(
     
     if (showDialog) {
         showDropdownMenu = false
-        AlertDialog(
-            onDismissRequest = { showDialog = false }
+        BasicAlertDialog(onDismissRequest = { showDialog = false }
         ) {
             Surface(
                 modifier = Modifier
@@ -280,23 +280,23 @@ fun CardItem(
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
 
-                        Text(
-                            text = "Вы действительно хотите удалить эту категорию?",
-                            minLines = 2,
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.headlineMedium
+                    Text(
+                        text = "Вы действительно хотите удалить эту категорию?",
+                        minLines = 2,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.headlineMedium
 
-                        )
+                    )
 
 
                     Spacer(modifier = Modifier.height(30.dp))
 
 
-                        Text(
-                            text = "Удалятся все данные категории",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.surfaceTint
-                        )
+                    Text(
+                        text = "Удалятся все данные категории",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.surfaceTint
+                    )
 
                     Spacer(modifier = Modifier.height(30.dp))
 
@@ -327,10 +327,10 @@ fun CardItem(
 
                         }
                     }
-                    
+
                 }
             }
-            
+
         }
     }
 }

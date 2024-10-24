@@ -10,8 +10,7 @@ import com.mk1morebugs.finapp.data.Repository
 import com.mk1morebugs.finapp.data.RepositoryImpl
 import com.mk1morebugs.finapp.data.local.room.FinappDatabase
 import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
-import com.mk1morebugs.finapp.data.local.room.dao.PlanDao
-import com.mk1morebugs.finapp.data.local.room.dao.SummaryDao
+import com.mk1morebugs.finapp.data.local.room.dao.CostsDao
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -43,11 +42,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun providePlanDao(db: FinappDatabase): PlanDao = db.planDao()
-
-    @Singleton
-    @Provides
-    fun provideSummaryDao(db: FinappDatabase): SummaryDao = db.summaryDao()
+    fun provideSummaryDao(db: FinappDatabase): CostsDao = db.costsDao()
 }
 
 @Module

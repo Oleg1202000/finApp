@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 interface CategoriesDao {
     @Query(
         """
-        SELECT id, name, color, icon_id FROM categories WHERE is_income = :isIncome
+        SELECT id, name, color AS icon_color, icon_id FROM categories WHERE is_income = :isIncome
         """
     )
-    fun getCategories(isIncome: Boolean = false) : Flow<List<CategoryWithoutIsIncome>>
+    fun getCategories(isIncome: Boolean = false): Flow<List<CategoryWithoutIsIncome>>
 
     @Insert
     suspend  fun setCategory(category: Category)

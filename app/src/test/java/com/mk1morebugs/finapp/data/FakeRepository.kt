@@ -5,16 +5,16 @@ import com.mk1morebugs.finapp.data.local.room.CategoryWithoutIsIncome
 import com.mk1morebugs.finapp.data.local.room.Planned
 import com.mk1morebugs.finapp.data.local.room.ReturnPlanAmount
 import com.mk1morebugs.finapp.data.local.room.ReturnPlannedHistory
-import com.mk1morebugs.finapp.data.local.room.ReturnSumAmount
-import com.mk1morebugs.finapp.data.local.room.ReturnSummaryHistory
-import com.mk1morebugs.finapp.data.local.room.Summary
+import com.mk1morebugs.finapp.data.local.room.CostForUi
+import com.mk1morebugs.finapp.data.local.room.CostHistory
+import com.mk1morebugs.finapp.data.local.room.Cost
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class FakeRepository : Repository {
 
     private var fakeCategories: MutableList<Category> = mutableListOf()
-    var fakeSummary: MutableList<Summary> = mutableListOf()
+    var fakeCost: MutableList<Cost> = mutableListOf()
 
 
     override fun getCategories(isIncome: Boolean): Flow<List<CategoryWithoutIsIncome>> = flow {
@@ -23,7 +23,7 @@ class FakeRepository : Repository {
                 CategoryWithoutIsIncome(
                     id = it.id,
                     name = it.name,
-                    color = it.color,
+                    iconColor = it.color,
                     iconId = it.iconId,
                 )
             }
@@ -42,7 +42,7 @@ class FakeRepository : Repository {
         )
     }
 
-    override fun getPlan(
+    override fun getPlannedCosts(
         isIncome: Boolean,
         beginDate: Long,
         endDate: Long
@@ -50,7 +50,7 @@ class FakeRepository : Repository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun setPlan(plan: Planned) {
+    override suspend fun setPlannedCosts(plan: Planned) {
         TODO("Not yet implemented")
     }
 
@@ -65,30 +65,30 @@ class FakeRepository : Repository {
         TODO("Not yet implemented")
     }
 
-    override fun getSumAmount(
+    override fun getCosts(
         isIncome: Boolean,
         beginDate: Long,
         endDate: Long
-    ): Flow<List<ReturnSumAmount>> {
+    ): Flow<List<CostForUi>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSummaryHistory(
+    override fun getCostsHistory(
         beginDate: Long,
         endDate: Long
-    ): Flow<List<ReturnSummaryHistory>> {
+    ): Flow<List<CostHistory>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun setSummary(summary: Summary) {
-        fakeSummary.add(summary)
+    override suspend fun setCost(cost: Cost) {
+        fakeCost.add(cost)
     }
 
-    override suspend fun deleteSummaryById(id: Long) {
+    override suspend fun deleteCostById(id: Long) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateSummary(summary: Summary) {
+    override suspend fun updateCost(cost: Cost) {
         TODO("Not yet implemented")
     }
 

@@ -39,9 +39,10 @@ class HomeViewModel @Inject constructor(
             }
             if (uiState.value.isFactIncome) {
 
-                localRepository.getSumAmount(
+                localRepository.getCosts(
                     beginDate = uiState.value.beginDate,
-                    endDate = uiState.value.endDate
+                    endDate = uiState.value.endDate,
+                    isPlanned = false,
                 )
                     .collect { items ->
                         _uiState.update {
@@ -50,36 +51,15 @@ class HomeViewModel @Inject constructor(
                                     CategoryDetails(
                                         categoryName = it.categoryName,
                                         categoryIconId = it.iconId,
-                                        categoryIconColor = it.color.toULong(),
-                                        categoryAmount = it.amount,
+                                        categoryIconColor = it.iconColor.toULong(),
+                                        categoryAmount = it.summaryAmount,
                                     )
                                 },
-                                sumAmount = items.sumOf { it.amount },
+                                sumAmount = items.sumOf { it.summaryAmount },
                                 isLoading = false
                             )
                         }
                     }
-            } else {
-                localRepository.getPlan(
-                    isIncome = false,
-                    beginDate = uiState.value.beginDate,
-                    endDate = uiState.value.endDate
-                ).collect { items ->
-                    _uiState.update { it ->
-                        it.copy(
-                            categoriesDetails = items.map {
-                                CategoryDetails(
-                                    categoryName = it.categoryName,
-                                    categoryIconId = it.iconId,
-                                    categoryIconColor = it.color.toULong(),
-                                    categoryAmount = it.plan,
-                                )
-                            },
-                            sumAmount = items.sumOf { it.plan },
-                            isLoading = false
-                        )
-                    }
-                }
             }
         }
     }

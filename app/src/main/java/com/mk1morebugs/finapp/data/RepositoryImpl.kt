@@ -1,25 +1,23 @@
 package com.mk1morebugs.finapp.data
 
 import com.mk1morebugs.finapp.data.local.room.Category
-import com.mk1morebugs.finapp.data.local.room.Planned
-import com.mk1morebugs.finapp.data.local.room.Summary
+import com.mk1morebugs.finapp.data.local.room.Cost
+import com.mk1morebugs.finapp.data.local.room.CostForUi
+import com.mk1morebugs.finapp.data.local.room.CostHistory
 import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
-import com.mk1morebugs.finapp.data.local.room.dao.PlanDao
-import com.mk1morebugs.finapp.data.local.room.dao.SummaryDao
+import com.mk1morebugs.finapp.data.local.room.dao.CostsDao
 import com.mk1morebugs.finapp.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val categoriesDao: CategoriesDao,
-    private val summaryDao: SummaryDao,
-    private val planDao: PlanDao,
+    private val costsDao: CostsDao,
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : Repository {
 
-
-    // Categories table
     override fun getCategories (isIncome: Boolean) = categoriesDao.getCategories(isIncome)
         .flowOn(dispatcher)
 
@@ -28,38 +26,35 @@ class RepositoryImpl @Inject constructor(
     override suspend fun deleteCategoryById (id: Long) = categoriesDao.deleteCategoryById(id)
 
 
-    // Planned table
-    override fun getPlan(
+    override fun getCosts(
         isIncome: Boolean,
+        isPlanned: Boolean,
         beginDate: Long,
-        endDate: Long
-    ) = planDao.getPlan(isIncome, beginDate, endDate).flowOn(dispatcher)
+        endDate: Long,
+    ): Flow<List<CostForUi>> {
+        return costsDao.getCostsForUi(
+            isIncome = isIncome,
+            isPlanned = isPlanned,
+            beginDate = beginDate,
+            endDate = endDate,
+        ).flowOn(dispatcher)
+    }
 
-    override suspend fun setPlan (plan: Planned) = planDao.setPlan(plan)
-
-    override suspend fun deletePlanById (id: Long) = planDao.deletePlanById(id)
-
-    override fun getPlannedHistory(
+    override fun getCostsHistory(
         beginDate: Long,
-        endDate: Long
-    ) = planDao.getPlannedHistory(endDate, beginDate).flowOn(dispatcher)
+        endDate: Long,
+        isPlanned: Boolean,
+    ): Flow<List<CostHistory>> {
+        return costsDao.getCostsHistory(
+            beginDate = beginDate,
+            endDate = endDate,
+            isPlanned = isPlanned
+        ).flowOn(dispatcher)
+    }
 
+    override suspend fun setCost(cost: Cost) = costsDao.setCost(cost)
 
-    // Summary table
-    override fun getSumAmount(
-        isIncome: Boolean,
-        beginDate: Long,
-        endDate: Long
-    ) = summaryDao.getSumAmount(isIncome, beginDate, endDate).flowOn(dispatcher)
+    override suspend fun deleteCostById(id: Long) = costsDao.deleteCostById(id)
 
-    override fun getSummaryHistory(
-        beginDate: Long,
-        endDate: Long
-    ) = summaryDao.getSummaryHistory(endDate, beginDate).flowOn(dispatcher)
-
-    override suspend fun setSummary(summary: Summary) = summaryDao.setSummary(summary)
-
-    override suspend fun deleteSummaryById(id: Long) = summaryDao.deleteSummaryById(id)
-
-    override suspend fun updateSummary(summary: Summary) = summaryDao.updateSummary(summary)
+    override suspend fun updateCost(cost: Cost) = costsDao.updateCost(cost)
 }

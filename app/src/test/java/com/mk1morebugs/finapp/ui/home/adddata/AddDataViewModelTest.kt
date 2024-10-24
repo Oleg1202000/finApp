@@ -2,7 +2,7 @@ package com.mk1morebugs.finapp.ui.home.adddata
 
 import com.google.common.truth.Truth.assertThat
 import com.mk1morebugs.finapp.data.FakeRepository
-import com.mk1morebugs.finapp.data.local.room.Summary
+import com.mk1morebugs.finapp.data.local.room.Cost
 import com.mk1morebugs.finapp.data.fakeCategories
 import com.mk1morebugs.finapp.data.fakeDeletedCategory
 import com.mk1morebugs.finapp.ui.categories.CategoryItem
@@ -195,7 +195,7 @@ class AddDataViewModelTest {
 
     @Test
     fun addData_errorsNotFond_createNewEntry() {
-        val expectedSummary = Summary(
+        val expectedCost = Cost(
             id = 0L,
             categoryId = 0L,
             amount = 2147483647,
@@ -209,7 +209,7 @@ class AddDataViewModelTest {
         viewModel.setDescription("fake about")
         viewModel.addData()
 
-        assertThat(repository.fakeSummary).contains(expectedSummary)
+        assertThat(repository.fakeCost).contains(expectedCost)
     }
 
 

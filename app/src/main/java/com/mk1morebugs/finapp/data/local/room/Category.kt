@@ -22,6 +22,6 @@ data class Category(
 data class CategoryWithoutIsIncome(
     @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "color") val color: Long,
+    @ColumnInfo(name = "icon_color") val iconColor: Long,
     @ColumnInfo(name = "icon_id") val iconId: Int
 )

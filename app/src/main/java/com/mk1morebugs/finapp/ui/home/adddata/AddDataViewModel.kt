@@ -2,7 +2,7 @@ package com.mk1morebugs.finapp.ui.home.adddata
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mk1morebugs.finapp.data.local.room.Summary
+import com.mk1morebugs.finapp.data.local.room.Cost
 import com.mk1morebugs.finapp.data.Repository
 import com.mk1morebugs.finapp.ui.categories.CategoryItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,7 +45,7 @@ class AddDataViewModel @Inject constructor(
                                     id = it.id,
                                     name = it.name,
                                     iconId = it.iconId,
-                                    colorIcon = it.color
+                                    colorIcon = it.iconColor
                                 )
                             }
                         )
@@ -165,8 +165,8 @@ class AddDataViewModel @Inject constructor(
 
             } else {
                 try {
-                    localRepository.setSummary(
-                        summary = Summary(
+                    localRepository.setCost(
+                        cost = Cost(
                             id = 0L,
                             categoryId = uiState.value.selectedCategoryId!!.toLong(),
                             amount = uiState.value.amount.toInt(),
