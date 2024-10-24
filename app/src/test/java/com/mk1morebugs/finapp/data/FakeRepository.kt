@@ -2,9 +2,6 @@ package com.mk1morebugs.finapp.data
 
 import com.mk1morebugs.finapp.data.local.room.Category
 import com.mk1morebugs.finapp.data.local.room.CategoryWithoutIsIncome
-import com.mk1morebugs.finapp.data.local.room.Planned
-import com.mk1morebugs.finapp.data.local.room.ReturnPlanAmount
-import com.mk1morebugs.finapp.data.local.room.ReturnPlannedHistory
 import com.mk1morebugs.finapp.data.local.room.CostForUi
 import com.mk1morebugs.finapp.data.local.room.CostHistory
 import com.mk1morebugs.finapp.data.local.room.Cost
@@ -42,40 +39,19 @@ class FakeRepository : Repository {
         )
     }
 
-    override fun getPlannedCosts(
-        isIncome: Boolean,
-        beginDate: Long,
-        endDate: Long
-    ): Flow<List<ReturnPlanAmount>> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun setPlannedCosts(plan: Planned) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun deletePlanById(id: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getPlannedHistory(
-        beginDate: Long,
-        endDate: Long
-    ): Flow<List<ReturnPlannedHistory>> {
-        TODO("Not yet implemented")
-    }
-
     override fun getCosts(
         isIncome: Boolean,
+        isPlanned: Boolean,
         beginDate: Long,
-        endDate: Long
+        endDate: Long,
     ): Flow<List<CostForUi>> {
         TODO("Not yet implemented")
     }
 
     override fun getCostsHistory(
         beginDate: Long,
-        endDate: Long
+        endDate: Long,
+        isPlanned: Boolean,
     ): Flow<List<CostHistory>> {
         TODO("Not yet implemented")
     }

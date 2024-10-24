@@ -9,13 +9,12 @@ import kotlinx.coroutines.flow.flow
 
 
 class FakeCostsDao : CostsDao {
-
-    override fun getCostForUi(
+    override fun getCostsForUi(
         isIncome: Boolean,
+        isPlanned: Boolean,
         beginDate: Long,
-        endDate: Long
-
-    ) : Flow<List<CostForUi>> = flow {
+        endDate: Long,
+    ): Flow<List<CostForUi>> = flow {
         emit(
             fakeCategories.map {
                 CostForUi(
@@ -28,10 +27,11 @@ class FakeCostsDao : CostsDao {
         )
     }
 
-    override fun getSummaryHistory(
+    override fun getCostsHistory(
         beginDate: Long,
-        endDate: Long
-    ) : Flow<List<CostHistory>> = flow {
+        endDate: Long,
+        isPlanned: Boolean,
+    ): Flow<List<CostHistory>> = flow {
         emit(fakeSummaries.map { summary ->
 
             val category = fakeCategories.find { category ->

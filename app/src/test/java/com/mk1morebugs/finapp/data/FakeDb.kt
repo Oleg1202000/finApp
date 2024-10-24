@@ -2,9 +2,7 @@ package com.mk1morebugs.finapp.data
 
 import com.mk1morebugs.finapp.R
 import com.mk1morebugs.finapp.data.local.room.Category
-import com.mk1morebugs.finapp.data.local.room.Planned
 import com.mk1morebugs.finapp.data.local.room.Cost
-
 
 val fakeCategories: MutableList<Category> = mutableListOf(
     Category(
@@ -29,7 +27,7 @@ val fakeSummaries: MutableList<Cost> = mutableListOf(
         categoryId = 0L,
         amount = 100,
         date = 0L,
-        isSync = false,
+        isPlanned = false,
         about = null,
     ),
     Cost(
@@ -37,7 +35,7 @@ val fakeSummaries: MutableList<Cost> = mutableListOf(
         categoryId = 0L,
         amount = 111,
         date = 0L,
-        isSync = false,
+        isPlanned = false,
         about = "fake about",
     ),
     Cost(
@@ -45,23 +43,8 @@ val fakeSummaries: MutableList<Cost> = mutableListOf(
         categoryId = 1L,
         amount = 200,
         date = 0L,
-        isSync = false,
+        isPlanned = false,
         about = null,
-    ),
-)
-
-val fakePlans: MutableList<Planned> = mutableListOf(
-    Planned(
-        id = 0L,
-        categoryId = 0L,
-        amount = 500,
-        date = 0L,
-    ),
-    Planned(
-        id = 1L,
-        categoryId = 1L,
-        amount = 200,
-        date = 0L,
     ),
 )
 
