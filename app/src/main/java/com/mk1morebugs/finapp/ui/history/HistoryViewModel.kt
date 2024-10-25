@@ -3,7 +3,9 @@ package com.mk1morebugs.finapp.ui.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mk1morebugs.finapp.data.Repository
+import com.mk1morebugs.finapp.data.local.room.CostHistory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,105 +17,74 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val localRepository: Repository
+    private val repository: Repository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HistoryUiState())
     val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
 
-
     init {
-        updateDataSummary()
+        loadCostHistory()
     }
 
-
-    fun updateDataSummary() {
-
+    private fun loadCostHistory() {
         viewModelScope.launch {
-            localRepository.getCostsHistory(
-                beginDate = Calendar.getInstance().timeInMillis,
-                endDate = 0L,
-                isPlanned = false // TODO
-            )
-                .collect { items ->
-                    _uiState.update {
-                        it.copy(
-                            historyItems = items.map {
-                                HistoryItem(
-                                    id = it.id,
-                                    categoryName = it.categoryName,
-                                    iconId = it.iconId,
-                                    color = it.iconColor,
-                                    amount = it.amount,
-                                    date = it.date,
-                                    about = it.about,
-                                    isIncome = it.isIncome
-                                )
-                            }
-                        )
-                    }
+            val costHistory = loadCostsHistoryFromDB(isFactCosts = uiState.value.isFactCosts)
+
+            costHistory.collect { costItem ->
+                _uiState.update { historyUiState ->
+                    historyUiState.copy(
+                        historyItems = costItem.map {
+                            HistoryItem(
+                                id = it.id,
+                                categoryName = it.categoryName,
+                                iconId = it.iconId,
+                                color = it.iconColor,
+                                amount = it.amount,
+                                date = it.date,
+                                about = it.about,
+                                isIncome = it.isIncome
+                            )
+                        }
+                    )
                 }
+            }
         }
     }
 
-    fun updateDataPlanned() {
-
-        viewModelScope.launch {
-            localRepository.getCostsHistory(
-                beginDate = Calendar.getInstance().timeInMillis,
-                endDate = 0L,
-                isPlanned = true
-            )
-                .collect { items ->
-                    _uiState.update {
-                        it.copy(
-                            historyItems = items.map {
-                                HistoryItem(
-                                    id = it.id,
-                                    categoryName = it.categoryName,
-                                    iconId = it.iconId,
-                                    color = it.iconColor,
-                                    amount = it.amount,
-                                    date = it.date,
-                                    about = null,
-                                    isIncome = false
-                                )
-                            }
-                        )
-                    }
-                }
-        }
+    private fun loadCostsHistoryFromDB(isFactCosts: Boolean): Flow<List<CostHistory>> {
+        val today = Calendar.getInstance().timeInMillis
+        return repository.getCostsHistory(
+            beginDate = 0L,
+            endDate = today,
+            isPlanned = !isFactCosts,
+        )
     }
 
-
-    fun deleteSummaryById(
-        id: Long
-    ) {
-
+    fun deleteCostById(id: Long) {
         viewModelScope.launch {
-            localRepository.deleteCostById(
+            repository.deleteCostById(
                 id = id
             )
         }
     }
 
-    fun deletePlanById(
-        id: Long
+    fun switchTypeCosts(
+        isFactCosts: Boolean,
     ) {
-
-        viewModelScope.launch {
-            localRepository.deleteCostById(  // TODO
-                id = id
+        _uiState.update {
+            it.copy(
+                isFactCosts = isFactCosts
             )
         }
+        loadCostHistory()
     }
 }
 
-
 data class HistoryUiState(
     val historyItems: List<HistoryItem> = emptyList(),
+    val isFactCosts: Boolean = true,
 )
-
 
 data class HistoryItem(
     val id: Long,
@@ -123,5 +94,5 @@ data class HistoryItem(
     val amount: Int,
     val date: Long,
     val about: String?,
-    val isIncome: Boolean
+    val isIncome: Boolean,
 )

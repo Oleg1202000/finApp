@@ -30,6 +30,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -69,7 +70,7 @@ fun HistoryScreen(
     ) { paddingValues ->
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        var stateTab by remember { mutableStateOf(0) }
+        var stateTab by remember { mutableIntStateOf(0) }
         val titles = listOf("Фактически \n потрачено", "Запланировано")
 
         LazyColumn(
@@ -83,7 +84,9 @@ fun HistoryScreen(
                     titles.forEachIndexed { index, title ->
                         Tab(
                             selected = stateTab == index,
-                            onClick = { stateTab = index },
+                            onClick = {
+                                stateTab = index
+                            },
                             text = {
                                 Text(
                                     text = title,
@@ -101,21 +104,16 @@ fun HistoryScreen(
             }
 
             if (stateTab == 0) {
-                viewModel.updateDataSummary()
+                viewModel.switchTypeCosts(isFactCosts = true)
             } else {
-                viewModel.updateDataPlanned()
+                viewModel.switchTypeCosts(isFactCosts = false)
             }
 
             items(uiState.historyItems) { item ->
                 HistoryItem(
                     item = item,
                     deleteSummaryById = {
-                        if (stateTab == 0) {
-                            viewModel.deleteSummaryById(id = item.id)
-                        } else {
-                            viewModel.deletePlanById(id = item.id)
-                        }
-
+                            viewModel.deleteCostById(id = item.id)
                     }
                 )
             }
