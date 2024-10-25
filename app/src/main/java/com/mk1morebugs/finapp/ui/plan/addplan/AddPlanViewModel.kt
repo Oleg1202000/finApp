@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mk1morebugs.finapp.data.Repository
 import com.mk1morebugs.finapp.ui.categories.CategoryItem
-import com.mk1morebugs.finapp.ui.home.adddata.ErrorMessage
+import com.mk1morebugs.finapp.ui.costs.adddata.ErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

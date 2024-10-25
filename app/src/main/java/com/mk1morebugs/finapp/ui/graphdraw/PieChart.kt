@@ -44,18 +44,18 @@ fun PieChart(
         val coordinateCenter = maxWidth * 0.5f
         val arcStrokeTotalWidth = 30f
 
-        val sumAmount = pieChartItems.sumOf { it.categoryAmount }
+        val sumAmount = pieChartItems.sumOf { it.categorySummaryCost }
         var offsetAngle = -90f
         var pieChartData: List<PieChartData> by remember {
             mutableStateOf(
                 pieChartItems.map { item ->
-                    val sweepAngle = item.categoryAmount / sumAmount.toFloat() * 360f
+                    val sweepAngle = item.categorySummaryCost / sumAmount.toFloat() * 360f
                     val data = PieChartData(
                         startAngle = offsetAngle,
                         sweepAngle = sweepAngle,
                         arcStrokeWidth = arcStrokeTotalWidth,
                         pieChartItemColor = item.categoryIconColor,
-                        pieChartItemAmount = item.categoryAmount
+                        pieChartItemAmount = item.categorySummaryCost
                     )
                     offsetAngle += sweepAngle
                     data
@@ -187,19 +187,19 @@ private fun PieChartPreview() {
                 categoryName = "categoryName 1",
                 categoryIconId = R.drawable.ic_category_coffee_40px,
                 categoryIconColor = Color.Cyan.value,
-                categoryAmount = 1000
+                categorySummaryCost = 1000
             ),
             CategoryDetails(
                 categoryName = "categoryName 1",
                 categoryIconId = R.drawable.ic_category_coffee_40px,
                 categoryIconColor = Color.Yellow.value,
-                categoryAmount = 500
+                categorySummaryCost = 500
             ),
             CategoryDetails(
                 categoryName = "categoryName 1",
                 categoryIconId = R.drawable.ic_category_coffee_40px,
                 categoryIconColor = Color.Magenta.value,
-                categoryAmount = 500
+                categorySummaryCost = 500
             )
         )
 

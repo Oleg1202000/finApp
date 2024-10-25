@@ -1,9 +1,10 @@
 package com.mk1morebugs.finapp.ui.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -23,19 +24,15 @@ fun FinappNavigationBar(
     NavigationBar(
         windowInsets = WindowInsets.navigationBars
     ) {
-
         navItems.forEach { screen ->
             NavigationBarItem(
-
                 label = {
                     Text(text = screen.label,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                        },
-
+                },
                 selected = currentDestination?.route == screen.route,
-
                 onClick = {
                     navController.navigate(screen.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -45,17 +42,15 @@ fun FinappNavigationBar(
                         restoreState = true
                         launchSingleTop = true
                     }
-                          },
-
+                },
                 icon = {
                     Icon(painter = painterResource(screen.icon),
                     contentDescription = screen.label)
-                       },
+                },
             )
         }
     }
 }
-
 
 data class ScreenItem(val route: String, val label: String, val icon: Int)
 

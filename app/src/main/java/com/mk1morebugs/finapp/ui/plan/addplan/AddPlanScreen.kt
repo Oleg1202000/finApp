@@ -36,7 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.mk1morebugs.finapp.ui.categories.CategoriesScreen
-import com.mk1morebugs.finapp.ui.home.adddata.ErrorMessage
+import com.mk1morebugs.finapp.ui.costs.adddata.ErrorMessage
 import com.mk1morebugs.finapp.ui.theme.Shapes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

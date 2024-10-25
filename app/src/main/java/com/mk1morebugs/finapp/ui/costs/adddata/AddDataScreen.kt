@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.ui.home.adddata
+package com.mk1morebugs.finapp.ui.costs.adddata
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

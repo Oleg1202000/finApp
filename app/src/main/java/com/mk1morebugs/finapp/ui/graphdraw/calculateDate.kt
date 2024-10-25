@@ -6,12 +6,11 @@ import java.util.TimeZone
 fun calculateDate(
     delta: Int,
     graphPeriod: GraphPeriod
-) : Array<Long> {
+): Array<Long> {
 
     val beginDate: Long
     val endDate: Long
     val currentDate : Calendar = Calendar.getInstance(TimeZone.getDefault())
-
 
     when (graphPeriod) {
 
@@ -48,7 +47,6 @@ fun calculateDate(
             currentDate.set(Calendar.SECOND, 59)
             currentDate.set(Calendar.MILLISECOND, 999)
             endDate = currentDate.timeInMillis
-
         }
 
         GraphPeriod.MONTH -> {

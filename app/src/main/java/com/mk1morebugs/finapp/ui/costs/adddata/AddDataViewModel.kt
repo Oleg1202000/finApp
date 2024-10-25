@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.ui.home.adddata
+package com.mk1morebugs.finapp.ui.costs.adddata
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

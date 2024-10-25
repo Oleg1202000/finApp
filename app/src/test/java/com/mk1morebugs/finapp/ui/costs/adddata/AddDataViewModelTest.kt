@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.ui.home.adddata
+package com.mk1morebugs.finapp.ui.costs.adddata
 
 import com.google.common.truth.Truth.assertThat
 import com.mk1morebugs.finapp.data.FakeRepository

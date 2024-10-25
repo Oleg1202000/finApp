@@ -11,10 +11,10 @@ import com.mk1morebugs.finapp.ui.categories.addcategory.AddCategoryScreen
 import com.mk1morebugs.finapp.ui.categories.addcategory.AddCategoryViewModel
 import com.mk1morebugs.finapp.ui.history.HistoryScreen
 import com.mk1morebugs.finapp.ui.history.HistoryViewModel
-import com.mk1morebugs.finapp.ui.home.HomeScreen
-import com.mk1morebugs.finapp.ui.home.HomeViewModel
-import com.mk1morebugs.finapp.ui.home.adddata.AddDataScreen
-import com.mk1morebugs.finapp.ui.home.adddata.AddDataViewModel
+import com.mk1morebugs.finapp.ui.costs.CostsScreen
+import com.mk1morebugs.finapp.ui.costs.CostsViewModel
+import com.mk1morebugs.finapp.ui.costs.adddata.AddDataScreen
+import com.mk1morebugs.finapp.ui.costs.adddata.AddDataViewModel
 import com.mk1morebugs.finapp.ui.plan.PlanScreen
 import com.mk1morebugs.finapp.ui.plan.PlanViewModel
 import com.mk1morebugs.finapp.ui.plan.addplan.AddPlanScreen
@@ -37,10 +37,9 @@ fun NavGraph(
     ) {
 
         composable(Screen.Home.route) {
-            val viewModel = hiltViewModel<HomeViewModel>()
-            HomeScreen(
-                viewModel = viewModel,
-                finappStatusbarTitle = finappStatusbarTitle
+            CostsScreen(
+                finappStatusbarTitle = finappStatusbarTitle,
+                isFactCosts = false
             )
 
         }
@@ -55,15 +54,6 @@ fun NavGraph(
                 coroutineScope = coroutineScope
             )
 
-        }
-
-        composable(Screen.Plan.route) {
-            val viewModel = hiltViewModel<PlanViewModel>()
-            PlanScreen(
-                viewModel = viewModel,
-                finappStatusBarTitle = finappStatusbarTitle
-
-            )
         }
 
         composable(Screen.AddPlan.route) {
