@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.ui.graphdraw
+package com.mk1morebugs.finapp.ui.costs
 
 data class PieChartData(
     val pieChartItemColor: ULong,

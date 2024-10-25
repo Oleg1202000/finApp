@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.ui.graphdraw
+package com.mk1morebugs.finapp.ui.costs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

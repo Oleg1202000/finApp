@@ -1,6 +1,5 @@
-package com.mk1morebugs.finapp.ui.graphdraw
+package com.mk1morebugs.finapp.ui.costs
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,14 +18,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.mk1morebugs.finapp.ui.theme.Shapes
-import com.mk1morebugs.finapp.ui.theme.redColor
-import com.mk1morebugs.finapp.ui.theme.yellowColor
 
 @Composable
 fun CostTable(
     modifier: Modifier = Modifier,
     detailData: List<CategoryDetails>,
-    sumIncome: Int,
 ) {
     Surface(
         shape = Shapes.small,
@@ -38,17 +33,7 @@ fun CostTable(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             for (costItem in detailData) {
-                val backgroundColor =
-                    if (costItem.categorySummaryCost / sumIncome.toFloat() > 1) {
-                        redColor
-                    } else if (costItem.categorySummaryCost / sumIncome.toFloat() >= 0.8) {
-                        yellowColor
-                    } else {
-                        MaterialTheme.colorScheme.background
-                    }
-
                 CostTableItemCard(
-                    backgroundColor = backgroundColor,
                     categoryName = costItem.categoryName,
                     categoryIconId = costItem.categoryIconId,
                     categoryIconColor = costItem.categoryIconColor,
@@ -61,7 +46,6 @@ fun CostTable(
 
 @Composable
 private fun CostTableItemCard(
-    backgroundColor: Color,
     categoryName: String,
     categoryIconId: Int,
     categoryIconColor: ULong,
@@ -73,8 +57,7 @@ private fun CostTableItemCard(
                 bottom = 8.dp,
                 top = 8.dp,
             )
-            .fillMaxWidth()
-            .background(color = backgroundColor),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         Icon(

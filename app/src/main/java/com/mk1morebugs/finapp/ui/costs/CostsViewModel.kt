@@ -4,9 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mk1morebugs.finapp.data.Repository
 import com.mk1morebugs.finapp.data.local.room.CostForUi
-import com.mk1morebugs.finapp.ui.graphdraw.CategoryDetails
-import com.mk1morebugs.finapp.ui.graphdraw.GraphPeriod
-import com.mk1morebugs.finapp.ui.graphdraw.calculateDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,7 +48,6 @@ class CostsViewModel @Inject constructor(
                                 categorySummaryCost = it.summaryAmount,
                             )
                         },
-                        sumAmount = categoryCost.sumOf { it.summaryAmount },
                         isLoading = false
                     )
                 }
@@ -113,5 +109,4 @@ data class HomeUiState(
     val selectedGraphPeriod: GraphPeriod = GraphPeriod.WEEK,
     val isLoading: Boolean = false,
     val isFactCosts: Boolean = true,
-    val sumAmount: Int = 0,
 )

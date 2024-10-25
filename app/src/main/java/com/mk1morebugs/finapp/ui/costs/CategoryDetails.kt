@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.ui.graphdraw
+package com.mk1morebugs.finapp.ui.costs
 
 data class CategoryDetails(
     val categoryName: String,

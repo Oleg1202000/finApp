@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.ui.graphdraw
+package com.mk1morebugs.finapp.ui.costs
 
 import java.util.Calendar
 import java.util.TimeZone

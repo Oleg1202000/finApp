@@ -24,11 +24,6 @@ import com.mk1morebugs.finapp.ui.Screen
 import com.mk1morebugs.finapp.ui.components.FinappFloatingActionButton
 import com.mk1morebugs.finapp.ui.components.FinappNavigationBar
 import com.mk1morebugs.finapp.ui.components.FinappScaffold
-import com.mk1morebugs.finapp.ui.graphdraw.ButtonGraph
-import com.mk1morebugs.finapp.ui.graphdraw.CategoryDetails
-import com.mk1morebugs.finapp.ui.graphdraw.GraphPeriod
-import com.mk1morebugs.finapp.ui.graphdraw.PieChart
-import com.mk1morebugs.finapp.ui.graphdraw.CostTable
 import com.mk1morebugs.finapp.ui.theme.Shapes
 
 @Composable
@@ -69,7 +64,6 @@ fun CostsScreen(
             contentIsLoading = uiState.isLoading,
             beginDate = uiState.beginDate,
             endDate = uiState.endDate,
-            summaryAmount = uiState.sumAmount,
             updateDate = viewModel::updateDate,
             updateGraphPeriod = viewModel::updateGraphPeriod,
             updateCosts = viewModel::updateCosts
@@ -85,7 +79,6 @@ fun CostsScreenContent(
     contentIsLoading: Boolean,
     beginDate: Long,
     endDate: Long,
-    summaryAmount: Int,
     updateDate: (Int) -> Unit,
     updateGraphPeriod: (GraphPeriod) -> Unit,
     updateCosts: () -> Unit,
@@ -119,7 +112,6 @@ fun CostsScreenContent(
                     } else {
                         PieChart(
                             modifier = Modifier
-                               // .padding(20.dp)
                                 .size(280.dp),
                             pieChartItems = categoriesDetails,
                         )
@@ -152,7 +144,6 @@ fun CostsScreenContent(
             CostTable(
                 modifier = Modifier.fillMaxWidth(0.9f),
                 detailData = categoriesDetails,
-                sumIncome = summaryAmount
             )
         }
 
