@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.ui.costs.adddata
+package com.mk1morebugs.finapp.ui.costs.addcost
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,11 +33,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import com.mk1morebugs.finapp.R
+import com.mk1morebugs.finapp.ui.Screen
 import com.mk1morebugs.finapp.ui.categories.CategoriesScreen
+import com.mk1morebugs.finapp.ui.components.FinappNavigationBar
+import com.mk1morebugs.finapp.ui.components.FinappScaffold
 import com.mk1morebugs.finapp.ui.theme.Shapes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -44,62 +49,71 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddDataScreen(
-    viewModel: AddDataViewModel = viewModel(),
-    navController: NavHostController,
-    snackBarHostState: SnackbarHostState,
-    coroutineScope: CoroutineScope
+fun AddCostScreen(
+    viewModel: AddDataViewModel = hiltViewModel(),
+    snackbarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope,
+    currentDestination: Screen,
+    fromNavBarNavigateTo: (Screen) -> Unit,
+    backToPreviousDestination: () -> Unit,
+    navigateTo: (Screen) -> Unit,
+    isPlanned: Boolean,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     val showBottomSheet = rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
     val openDateDialog = rememberSaveable { mutableStateOf(false) }
-
     var showAddResult by rememberSaveable { mutableStateOf(false) }
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Spacer(modifier = Modifier.height(150.dp))
-
-        OutlinedTextField(
-            value = uiState.about.orEmpty(),
-            onValueChange = { viewModel.setDescription(it) },
-            label = { Text("Описание") }
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        OutlinedTextField(
-            value = uiState.amount,
-            singleLine = true,
-            onValueChange = { viewModel.setAmount(it) },
-            label = { Text("Сумма, ₽") },
-
-            supportingText = {
-                if (uiState.errorMessage == ErrorMessage.AmountOverLimit) {
-                    Text("Превышен лимит в 2 147 483 647 ₽")
-                } else if (uiState.errorMessage == ErrorMessage.AmountIsEmpty) {
-                    Text("Обязательное поле")
-                } else {
-                    Text("Целое число \nили выражение вида: x * y =")
-                }
-            },
-
-            isError = uiState.errorTextField
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+    FinappScaffold(
+        statusbarTitle = stringResource(R.string.add_cost),
+        snackbarHostState = snackbarHostState,
+        bottomBar = {
+            FinappNavigationBar(
+                currentDestination = currentDestination,
+                fromNavBarNavigateTo = fromNavBarNavigateTo
+            )
+        },
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(150.dp))
+
+            OutlinedTextField(
+                value = uiState.about.orEmpty(),
+                onValueChange = { viewModel.setDescription(it) },
+                label = { Text("Описание") }
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+
+            OutlinedTextField(
+                value = uiState.amount,
+                singleLine = true,
+                onValueChange = { viewModel.setCost(it) },
+                label = { Text("Сумма, ₽") },
+                supportingText = {
+                    if (uiState.errorMessage == ErrorMessage.AmountOverLimit) {
+                        Text("Превышен лимит в 2 147 483 647 ₽")
+                    } else if (uiState.errorMessage == ErrorMessage.AmountIsEmpty) {
+                        Text("Обязательное поле")
+                    } else {
+                        Text("Целое число \nили выражение вида: x * y =")
+                    }
+                },
+                isError = uiState.errorTextField
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
 
                 // Выбор категории
                 Button(
@@ -111,71 +125,66 @@ fun AddDataScreen(
                     Text(text = "Выбрать категорию")
                 }
 
-            // Выбор даты
+                // Выбор даты
+                Button(
+                    onClick = { openDateDialog.value = true },
+                    shape = Shapes.small
+                ) {
+                    Text(text = "Выбрать дату")
+                }
+            }
+            Spacer(modifier = Modifier.height(30.dp))
+
             Button(
-                onClick = { openDateDialog.value = true },
-                shape = Shapes.small
+                onClick = {
+                    viewModel.addCostToDb(isPlanned)
+                    showAddResult = true
+                }
             ) {
-                Text(text = "Выбрать дату")
+                Text(text = "Добавить запись")
             }
-        }
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        Button(
-            onClick = {
-                viewModel.addData()
-                showAddResult = true
-            }
-        ) {
-            Text(text = "Добавить запись")
-        }
 
 
-        if (showAddResult && uiState.isLoading) {
-            CircularProgressIndicator()
+            if (showAddResult && uiState.isLoading) {
+                CircularProgressIndicator()
 
-        } else if (showAddResult) {
-            if (uiState.errorMessage != null) {
-                SideEffect {
-                    coroutineScope.launch {
-                        snackBarHostState.showSnackbar(
-                            message = if (uiState.errorMessage == ErrorMessage.AmountIsEmpty) {
-                                "Поле \"Сумма\" не может быть пустым!"
-                            } else if (uiState.errorMessage == ErrorMessage.AmountNotInt) {
-                                "Поле \"Сумма\" должно содержать число"
-                            } else if (uiState.errorMessage == ErrorMessage.AmountOverLimit) {
-                                "Превышен лимит в 2 147 483 647 ₽"
-                            } else {
-                                "Категория не выбрана!"
-                            }
-                        )
+            } else if (showAddResult) {
+                if (uiState.errorMessage != null) {
+                    SideEffect {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = if (uiState.errorMessage == ErrorMessage.AmountIsEmpty) {
+                                    "Поле \"Сумма\" не может быть пустым!"
+                                } else if (uiState.errorMessage == ErrorMessage.AmountNotInt) {
+                                    "Поле \"Сумма\" должно содержать число"
+                                } else if (uiState.errorMessage == ErrorMessage.AmountOverLimit) {
+                                    "Превышен лимит в 2 147 483 647 ₽"
+                                } else {
+                                    "Категория не выбрана!"
+                                }
+                            )
+                        }
                     }
-                }
-
-            } else {
-                SideEffect {
-                    coroutineScope.launch {
-
-                        snackBarHostState.showSnackbar(
-                            message = "Запись успешно добавлена!"
-                        )
+                } else {
+                    SideEffect {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Запись успешно добавлена!"
+                            )
+                        }
                     }
+                    backToPreviousDestination()
                 }
-                navController.popBackStack()
+                showAddResult = false
             }
-            showAddResult = false
         }
-
     }
-
 
     if (showBottomSheet.value) {
         ModalBottomSheet(
             onDismissRequest = { showBottomSheet.value = false },
             sheetState = sheetState,
         ) {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -192,18 +201,17 @@ fun AddDataScreen(
                         viewModel.updateData()
                     }
                 )
-
             }
 
             CategoriesScreen(
                 categories = uiState.categories,
                 selectedCategoryId = uiState.selectedCategoryId,
-                navController = navController,
                 showBottomSheet = showBottomSheet,
                 sheetState = sheetState,
                 coroutineScope = coroutineScope,
                 selectCategory = { viewModel.setCategory(selectedCategoryId = it) },
-                deleteCategoryById = { viewModel.deleteCategoryById(id = it) }
+                deleteCategoryById = { viewModel.deleteCategoryById(id = it) },
+                navigateTo = navigateTo
             )
         }
     }
@@ -215,8 +223,6 @@ fun AddDataScreen(
             selectedDate = uiState.selectedDate
         )
     }
-
-
 }
 
 
@@ -234,7 +240,6 @@ fun ShowDatePicker(
         derivedStateOf { datePickerState.selectedDateMillis != null }
     }
 
-
     DatePickerDialog(
         onDismissRequest = {
             openDateDialog.value = false
@@ -250,7 +255,6 @@ fun ShowDatePicker(
                 Text("OK")
             }
         },
-
         dismissButton = {
             TextButton(
                 onClick = { openDateDialog.value = false }

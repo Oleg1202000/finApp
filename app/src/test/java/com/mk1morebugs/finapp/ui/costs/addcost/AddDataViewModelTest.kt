@@ -1,4 +1,4 @@
-package com.mk1morebugs.finapp.ui.costs.adddata
+package com.mk1morebugs.finapp.ui.costs.addcost
 
 import com.google.common.truth.Truth.assertThat
 import com.mk1morebugs.finapp.data.FakeRepository
@@ -19,9 +19,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-
 @OptIn(ExperimentalCoroutinesApi::class)
-class AddDataViewModelTest {
+class AddCostToDbViewModelTest {
     private lateinit var repository: FakeRepository
     private lateinit var viewModel: AddDataViewModel
 
@@ -39,7 +38,7 @@ class AddDataViewModelTest {
         }
         advanceUntilIdle()
 
-        viewModel = AddDataViewModel(localRepository = repository)
+        viewModel = AddDataViewModel(repository = repository)
     }
 
     @After
@@ -72,19 +71,19 @@ class AddDataViewModelTest {
 
 
     @Test
-    fun setAmount_addSumNewEntry() {
+    fun setCost_addSumNewEntry() {
         val amount = "30"
 
-        viewModel.setAmount(amount)
+        viewModel.setCost(amount)
 
         assertThat(viewModel.uiState.value.amount).contains(amount)
         println(viewModel.uiState.value.amount)
     }
 
     @Test
-    fun setAmount_giveString_parseAndCalculateAmount() {
+    fun setAmount_giveString_parseAndCalculateCost() {
         val amount = "2 * 40 ="
-        viewModel.setAmount(amount)
+        viewModel.setCost(amount)
 
         assertThat(viewModel.uiState.value.amount).contains("80")
     }
@@ -149,8 +148,8 @@ class AddDataViewModelTest {
 
 
     @Test
-    fun addData_categoryIdIsNull_errorCategoryNotSelected() {
-        viewModel.addData()
+    fun addCostToDb_categoryIdIsNull_errorCategoryNotSelected() {
+        viewModel.addCostToDb(isPlanned = false)
 
         assertThat(viewModel.uiState.value.errorMessage.toString())
             .contains(ErrorMessage.CategoryNotSelected.toString())
@@ -158,9 +157,9 @@ class AddDataViewModelTest {
     }
 
     @Test
-    fun addData_amountIsEmpty_errorAmountIsEmpty() {
+    fun addCostToDb_amountIsEmpty_errorAmountIsEmpty() {
         viewModel.setCategory(0L)
-        viewModel.addData()
+        viewModel.addCostToDb(isPlanned = false)
 
         assertThat(viewModel.uiState.value.errorMessage.toString())
             .contains(ErrorMessage.AmountIsEmpty.toString())
@@ -169,11 +168,11 @@ class AddDataViewModelTest {
     }
 
     @Test
-    fun addData_amountIsNotOnlyDigit_errorAmountNotNumber() {
+    fun addCostToDb_amountIsNotOnlyDigit_errorAmountNotNumber() {
 
         viewModel.setCategory(0L)
-        viewModel.setAmount("2+2=")
-        viewModel.addData()
+        viewModel.setCost("2+2=")
+        viewModel.addCostToDb(isPlanned = false)
 
         assertThat(viewModel.uiState.value.errorMessage.toString())
             .contains(ErrorMessage.AmountNotInt.toString())
@@ -182,10 +181,10 @@ class AddDataViewModelTest {
     }
 
     @Test
-    fun addData_amountOverLimitOrOther_errorNumberFormatException() {
+    fun addCostToDb_amountOverLimitOrOther_errorNumberFormatException() {
         viewModel.setCategory(0L)
-        viewModel.setAmount("2147483648")
-        viewModel.addData()
+        viewModel.setCost("2147483648")
+        viewModel.addCostToDb(isPlanned = false)
 
         assertThat(viewModel.uiState.value.errorMessage.toString())
             .contains(ErrorMessage.AmountOverLimit.toString())
@@ -194,7 +193,7 @@ class AddDataViewModelTest {
     }
 
     @Test
-    fun addData_errorsNotFond_createNewEntry() {
+    fun addCostToDb_errorsNotFond_createNewEntry() {
         val expectedCost = Cost(
             id = 0L,
             categoryId = 0L,
@@ -204,10 +203,10 @@ class AddDataViewModelTest {
         )
 
         viewModel.setCategory(0L)
-        viewModel.setAmount("2147483647")
+        viewModel.setCost("2147483647")
         viewModel.setDate(0L)
         viewModel.setDescription("fake about")
-        viewModel.addData()
+        viewModel.addCostToDb(isPlanned = false)
 
         assertThat(repository.fakeCost).contains(expectedCost)
     }
@@ -215,13 +214,13 @@ class AddDataViewModelTest {
 
     @Test
     fun amountIsDigit_returnFalse() {
-        viewModel.setAmount("2+2=")
+        viewModel.setCost("2+2=")
         assertThat(viewModel.uiState.value.amountIsDigit()).isFalse()
     }
 
     @Test
     fun amountIsDigit_returnTrue() {
-        viewModel.setAmount("4")
+        viewModel.setCost("4")
         assertThat(viewModel.uiState.value.amountIsDigit()).isTrue()
     }
 }

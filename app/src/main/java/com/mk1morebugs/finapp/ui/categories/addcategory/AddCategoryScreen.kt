@@ -7,15 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Button
@@ -37,90 +34,122 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.mk1morebugs.finapp.R
+import com.mk1morebugs.finapp.ui.components.FinappScaffold
 import com.mk1morebugs.finapp.ui.theme.colorCategories
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun AddCategoryScreen(
-    viewModel: AddCategoryViewModel = viewModel(),
-    navController: NavHostController,
+    viewModel: AddCategoryViewModel = hiltViewModel(),
     snackBarHostState: SnackbarHostState,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    backToPreviousDestination: () -> Unit,
 ) {
+    FinappScaffold(
+        statusbarTitle = stringResource(R.string.create_category),
+        snackbarHostState = snackBarHostState,
+    ) { paddingValues ->
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        var showAddResult by rememberSaveable { mutableStateOf(false) }
 
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item { Spacer(modifier = Modifier.height(200.dp)) }
 
-    var showAddResult by rememberSaveable { mutableStateOf(false) }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.statusBars),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        item { Spacer(modifier = Modifier.height(200.dp)) }
-
-        item {
-            OutlinedTextField(
-                value = uiState.categoryName,
-                onValueChange = { viewModel.setCategoryName(it) },
-                label = { Text("Название категории") }
-            )
-        }
-
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 20.dp,
-                        bottom =20.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                Text(text = "Доход")
-
-                Switch(
-                    checked = uiState.isIncome,
-                    onCheckedChange = {
-                        viewModel.setIsIncomeValue(it)
-                    }
+            item {
+                OutlinedTextField(
+                    value = uiState.categoryName,
+                    onValueChange = { viewModel.setCategoryName(it) },
+                    label = { Text("Название категории") }
                 )
-
             }
-        }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 20.dp,
+                            bottom = 20.dp
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Text(text = "Доход")
+
+                    Switch(
+                        checked = uiState.isIncome,
+                        onCheckedChange = {
+                            viewModel.setIsIncomeValue(it)
+                        }
+                    )
+
+                }
+            }
 
 
-        // "Сетка категорий"
-        item {
-            LazyRow {
+            // "Сетка категорий"
+            item {
+                LazyRow {
+                    val iconItemsSize = iconCategoryItems.size
+                    for (i in 0 until iconItemsSize - iconItemsSize % 3 step 3) {
+                        item {
+                            Column {
+                                for (j in i..i + 2) {
 
-                val iconItemsSize = iconCategoryItems.size
-                for (i in 0 until iconItemsSize - iconItemsSize % 3 step 3) {
+                                    val colorCard =
+                                        if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryIcon == iconCategoryItems[j]) {
+
+                                            CardDefaults.cardColors(
+                                                containerColor = MaterialTheme.colorScheme.onSurface,
+                                                contentColor = MaterialTheme.colorScheme.surface
+                                            )
+
+                                        } else {
+
+                                            CardDefaults.cardColors(
+                                                containerColor = MaterialTheme.colorScheme.surface,
+                                                contentColor = MaterialTheme.colorScheme.onSurface
+                                            )
+                                        }
+
+                                    DrawItem(
+                                        clickedItem = { viewModel.setCategoryIcon(iconCategoryItems[j]) },
+                                        colorCard = colorCard
+                                    ) {
+
+                                        Icon(
+                                            painter = painterResource(id = iconCategoryItems[j]),
+                                            contentDescription = "IconCategoryItem"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     item {
                         Column {
-                            for (j in i..i + 2) {
+                            for (j in iconItemsSize - iconItemsSize % 3 until iconItemsSize) {
 
                                 val colorCard =
                                     if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryIcon == iconCategoryItems[j]) {
-
                                         CardDefaults.cardColors(
                                             containerColor = MaterialTheme.colorScheme.onSurface,
                                             contentColor = MaterialTheme.colorScheme.surface
                                         )
-
                                     } else {
-
                                         CardDefaults.cardColors(
                                             containerColor = MaterialTheme.colorScheme.surface,
                                             contentColor = MaterialTheme.colorScheme.onSurface
@@ -131,63 +160,63 @@ fun AddCategoryScreen(
                                     clickedItem = { viewModel.setCategoryIcon(iconCategoryItems[j]) },
                                     colorCard = colorCard
                                 ) {
-
                                     Icon(
                                         painter = painterResource(id = iconCategoryItems[j]),
                                         contentDescription = "IconCategoryItem"
                                     )
                                 }
+                                // TODO: Убрать лишний (повторяющийся) код
                             }
-                        }
-                    }
-                }
-
-                item {
-                    Column {
-                        for (j in iconItemsSize - iconItemsSize % 3 until iconItemsSize) {
-
-                            val colorCard =
-                                if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryIcon == iconCategoryItems[j]) {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.onSurface,
-                                        contentColor = MaterialTheme.colorScheme.surface
-                                    )
-                                } else {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.surface,
-                                        contentColor = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
-
-                            DrawItem(
-                                clickedItem = { viewModel.setCategoryIcon(iconCategoryItems[j]) },
-                                colorCard = colorCard
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = iconCategoryItems[j]),
-                                    contentDescription = "IconCategoryItem"
-                                )
-                            }
-                            // TODO: Убрать лишний (повторяющийся) код
                         }
                     }
                 }
             }
-        }
 
 
-        item { Spacer(modifier = Modifier.height(20.dp)) }
+            item { Spacer(modifier = Modifier.height(20.dp)) }
 
 
-        // Сетка цветов
-        item {
-            LazyRow {
+            // Сетка цветов
+            item {
+                LazyRow {
 
-                val colorItemsSize = colorCategories.size
-                for (i in 0 until colorItemsSize - colorItemsSize % 3 step 3) {
+                    val colorItemsSize = colorCategories.size
+                    for (i in 0 until colorItemsSize - colorItemsSize % 3 step 3) {
+                        item {
+                            Column {
+                                for (j in i..i + 2) {
+
+                                    val colorCard =
+                                        if (uiState.selectedCategoryColor != null && uiState.selectedCategoryColor == colorCategories[j]) {
+                                            CardDefaults.cardColors(
+                                                containerColor = MaterialTheme.colorScheme.onSurface,
+                                                contentColor = MaterialTheme.colorScheme.surface
+                                            )
+                                        } else {
+                                            CardDefaults.cardColors(
+                                                containerColor = MaterialTheme.colorScheme.surface,
+                                                contentColor = MaterialTheme.colorScheme.onSurface
+                                            )
+                                        }
+
+                                    DrawItem(
+                                        clickedItem = { viewModel.setCategoryColor(colorCategories[j]) },
+                                        colorCard = colorCard
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                                .background(colorCategories[j])
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     item {
                         Column {
-                            for (j in i..i + 2) {
+                            for (j in colorItemsSize - colorItemsSize % 3 until colorItemsSize) {
 
                                 val colorCard =
                                     if (uiState.selectedCategoryColor != null && uiState.selectedCategoryColor == colorCategories[j]) {
@@ -216,132 +245,100 @@ fun AddCategoryScreen(
                         }
                     }
                 }
+            }
 
+
+            // Демонстрация карточки категории
+            if (
+                uiState.selectedCategoryIcon != null &&
+                uiState.selectedCategoryColor != null
+            ) {
                 item {
-                    Column {
-                        for (j in colorItemsSize - colorItemsSize % 3 until colorItemsSize) {
+                    Card(
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                            .padding(
+                                start = 15.dp,
+                                end = 15.dp,
+                                top = 15.dp,
+                                bottom = 15.dp
 
-                            val colorCard =
-                                if (uiState.selectedCategoryColor != null && uiState.selectedCategoryColor == colorCategories[j]) {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.onSurface,
-                                        contentColor = MaterialTheme.colorScheme.surface
-                                    )
-                                } else {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.surface,
-                                        contentColor = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
+                            ),
+                    ) {
 
-                            DrawItem(
-                                clickedItem = { viewModel.setCategoryColor(colorCategories[j]) },
-                                colorCard = colorCard
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(50.dp)
-                                        .background(colorCategories[j])
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            if (!uiState.isLoading) {
+
+                                Icon(
+                                    painter = painterResource(id = uiState.selectedCategoryIcon!!),
+                                    contentDescription = "CategoryItem",
+                                    tint = uiState.selectedCategoryColor!!
                                 )
+
+                                Spacer(
+                                    modifier = Modifier.height(15.dp)
+                                )
+
+                                Text(text = uiState.categoryName)
+                            } else {
+                                CircularProgressIndicator()
                             }
                         }
                     }
                 }
             }
-        }
 
 
-        // Демонстрация карточки категории
-        if (
-            uiState.selectedCategoryIcon != null &&
-            uiState.selectedCategoryColor != null
-        ) {
+            item { Spacer(modifier = Modifier.height(30.dp)) }
+
+
             item {
-                Card(
-                    modifier = Modifier
-                        .height(150.dp)
-                        .width(150.dp)
-                        .padding(
-                            start = 15.dp,
-                            end = 15.dp,
-                            top = 15.dp,
-                            bottom = 15.dp
-
-                        ),
-                ) {
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-
-                        if (!uiState.isLoading) {
-
-                            Icon(
-                                painter = painterResource(id = uiState.selectedCategoryIcon!!),
-                                contentDescription = "CategoryItem",
-                                tint = uiState.selectedCategoryColor!!
-                            )
-
-                            Spacer(
-                                modifier = Modifier.height(15.dp)
-                            )
-
-                            Text(text = uiState.categoryName)
-                        } else {
-                            CircularProgressIndicator()
-                        }
+                Button(
+                    onClick = {
+                        viewModel.addCategory()
+                        showAddResult = true
                     }
+                ) {
+                    Text(text = "Добавить категорию")
                 }
             }
-        }
 
 
-        item { Spacer(modifier = Modifier.height(30.dp)) }
+            if (showAddResult && !uiState.isLoading) {
+                if (uiState.errorCategoryMessage != null) {
 
-
-        item {
-            Button(
-                onClick = {
-                    viewModel.addCategory()
-                    showAddResult = true
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = if (uiState.errorCategoryMessage == ErrorCategoryMessage.NameNotUnique) {
+                                "Имя категории должно быть уникальным"
+                            } else if (uiState.errorCategoryMessage == ErrorCategoryMessage.IconNotSelected) {
+                                "Иконка не выбрана"
+                            } else {
+                                "Цвет не выбран"
+                            }
+                        )
+                    }
+                } else {
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = "Категория успешно добавлена!"
+                        )
+                    }
+                    backToPreviousDestination()
                 }
-            ) {
-                Text(text = "Добавить категорию")
+                showAddResult = false
             }
+
+
+            item { Spacer(modifier = Modifier.height(30.dp)) }
         }
-
-
-        if (showAddResult && !uiState.isLoading) {
-            if (uiState.errorCategoryMessage != null) {
-
-                coroutineScope.launch {
-                    snackBarHostState.showSnackbar(
-                        message = if (uiState.errorCategoryMessage == ErrorCategoryMessage.NameNotUnique) {
-                            "Имя категории должно быть уникальным"
-                        } else if (uiState.errorCategoryMessage == ErrorCategoryMessage.IconNotSelected) {
-                            "Иконка не выбрана"
-                        } else {
-                            "Цвет не выбран"
-                        }
-                    )
-                }
-
-            } else {
-                coroutineScope.launch {
-                    snackBarHostState.showSnackbar(
-                        message = "Категория успешно добавлена!"
-                    )
-                }
-                navController.popBackStack()
-            }
-            showAddResult = false
-        }
-
-
-        item { Spacer(modifier = Modifier.height(30.dp)) }
     }
 }
 

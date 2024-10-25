@@ -3,4 +3,10 @@
     <string name="app_name">finapp</string>
 
     <string name="no_records_for_selected_period">No records for the selected period</string>
+
+    <string name="fact_costs">Фактические расходы</string>
+    <string name="planned_costs">Запланированные  расходы</string>
+    <string name="history">История</string>
+    <string name="create_category">Создание категории</string>
+    <string name="add_cost">Добавление записи о расходах</string>
 </resources>

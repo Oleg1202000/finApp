@@ -2,4 +2,11 @@
     <string name="app_name">finapp</string>
 
     <string name="no_records_for_selected_period">No records for the selected period</string>
+
+    <string name="fact_costs">Fact costs</string>
+    <string name="planned_costs">Planned costs</string>
+    <string name="history">History</string>
+    <string name="create_category">Create a category</string>
+    <string name="add_cost">Adding an cost entry</string>
+
 </resources>

@@ -21,17 +21,15 @@ class AddCategoryViewModel @Inject constructor(
     private val localRepository: Repository
 ) : ViewModel() {
 
-
     private val _uiState = MutableStateFlow(AddCategoryUiState())
     val uiState: StateFlow<AddCategoryUiState> = _uiState.asStateFlow()
-
 
     fun setCategoryName(
         categoryName: String
     ) {
         _uiState.update {
             it.copy(
-                categoryName = categoryName.trim()
+                categoryName = categoryName
             )
         }
     }
@@ -49,11 +47,11 @@ class AddCategoryViewModel @Inject constructor(
 
 
     fun setCategoryColor(
-        CategoryColor: Color
+        categoryColor: Color
     ) {
         _uiState.update {
             it.copy(
-                selectedCategoryColor = CategoryColor
+                selectedCategoryColor = categoryColor
             )
         }
     }
@@ -99,7 +97,7 @@ class AddCategoryViewModel @Inject constructor(
                     exceptionMessage = ErrorCategoryMessage.NameNotUnique
                 }
             }
-            delay(1000)
+            delay(500)
 
         _uiState.update {
             it.copy(

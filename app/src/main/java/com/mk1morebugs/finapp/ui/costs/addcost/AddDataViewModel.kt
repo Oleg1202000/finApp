@@ -1,9 +1,9 @@
-package com.mk1morebugs.finapp.ui.costs.adddata
+package com.mk1morebugs.finapp.ui.costs.addcost
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mk1morebugs.finapp.data.local.room.Cost
 import com.mk1morebugs.finapp.data.Repository
+import com.mk1morebugs.finapp.data.local.room.Cost
 import com.mk1morebugs.finapp.ui.categories.CategoryItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,45 +18,39 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddDataViewModel @Inject constructor(
-    private val localRepository: Repository
+    private val repository: Repository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddDataUiState())
     val uiState: StateFlow<AddDataUiState> = _uiState.asStateFlow()
-
 
     init {
         updateData()
     }
 
     fun updateData() {
-
         viewModelScope.launch {
-
-            localRepository.getCategories(
+            repository.getCategories(
                 isIncome = uiState.value.isIncome
-            )
-                .collect { items ->
-
-                    _uiState.update {
-                        it.copy(
-                            categories = items.map {
-                                CategoryItem(
-                                    id = it.id,
-                                    name = it.name,
-                                    iconId = it.iconId,
-                                    colorIcon = it.iconColor
-                                )
-                            }
-                        )
-                    }
+            ).collect { items ->
+                _uiState.update {
+                    it.copy(
+                        categories = items.map {
+                            CategoryItem(
+                                id = it.id,
+                                name = it.name,
+                                iconId = it.iconId,
+                                colorIcon = it.iconColor
+                            )
+                        }
+                    )
                 }
+            }
         }
     }
 
-
     fun setDescription(
-        about: String
+        about: String,
     ) {
         _uiState.update {
             it.copy(
@@ -65,21 +59,20 @@ class AddDataViewModel @Inject constructor(
         }
     }
 
-
-    fun setAmount(
-        amount: String
+    fun setCost(
+        amount: String,
     ) {
         _uiState.update {
             it.copy(
-                amount = calculateAmount(amount = amount),
+                amount = calculateCost(amount = amount),
                 errorMessage = null,
                 errorTextField = false
             )
         }
     }
 
-    private fun calculateAmount(
-        amount: String
+    private fun calculateCost(
+        amount: String,
     ): String {
         if (amount.isNotEmpty() && amount[amount.length - 1].toString() == "=") {
             val expressionList: List<String> = amount.split(" ")
@@ -90,9 +83,8 @@ class AddDataViewModel @Inject constructor(
         return amount
     }
 
-
     fun setDate(
-        selectedDate: Long?
+        selectedDate: Long?,
     ) {
         _uiState.update {
             it.copy(
@@ -101,9 +93,8 @@ class AddDataViewModel @Inject constructor(
         }
     }
 
-
     fun setCategory(
-        selectedCategoryId: Long
+        selectedCategoryId: Long,
     ) {
         _uiState.update {
             it.copy(
@@ -112,9 +103,8 @@ class AddDataViewModel @Inject constructor(
         }
     }
 
-
     fun deleteCategoryById(
-        id: Long
+        id: Long,
     ) {
         _uiState.update {
             it.copy(
@@ -123,14 +113,14 @@ class AddDataViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            localRepository.deleteCategoryById(
+            repository.deleteCategoryById(
                 id = id
             )
         }
     }
 
     fun setIsIncomeValue(
-        changeValue: Boolean
+        changeValue: Boolean,
     ) {
         _uiState.update {
             it.copy(
@@ -139,9 +129,7 @@ class AddDataViewModel @Inject constructor(
         }
     }
 
-
-    fun addData() {
-
+    fun addCostToDb(isPlanned: Boolean) {
         _uiState.update {
             it.copy(
                 isLoading = true
@@ -150,7 +138,6 @@ class AddDataViewModel @Inject constructor(
         viewModelScope.launch {
             var exceptionMessage: ErrorMessage? = null
             var tempErrorTextField = false
-
 
             if (uiState.value.selectedCategoryId == null) {
                 exceptionMessage = ErrorMessage.CategoryNotSelected
@@ -165,13 +152,14 @@ class AddDataViewModel @Inject constructor(
 
             } else {
                 try {
-                    localRepository.setCost(
+                    repository.setCost(
                         cost = Cost(
                             id = 0L,
                             categoryId = uiState.value.selectedCategoryId!!.toLong(),
                             amount = uiState.value.amount.toInt(),
                             date = uiState.value.selectedDate!!.toLong(),
-                            about = uiState.value.about
+                            about = uiState.value.about,
+                            isPlanned = isPlanned,
                         )
                     )
                 } catch (e: NumberFormatException) {
@@ -201,14 +189,14 @@ data class AddDataUiState(
     val errorTextField: Boolean = false,
     val errorMessage: ErrorMessage? = null,
     val isLoading: Boolean = false,
-    val isIncome: Boolean = false
+    val isIncome: Boolean = false,
 )
 
 fun AddDataUiState.amountIsDigit(): Boolean {
     var result = true
 
     for (char in this.amount) {
-        if(!char.isDigit()) {
+        if (!char.isDigit()) {
             result = false
             break
         }

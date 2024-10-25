@@ -63,7 +63,7 @@ class CostsViewModel @Inject constructor(
         return repository.getCosts(
             beginDate = uiState.value.beginDate,
             endDate = uiState.value.endDate,
-            isPlanned = isFactCosts,
+            isPlanned = !isFactCosts,
         )
     }
 

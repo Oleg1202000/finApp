@@ -14,11 +14,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
@@ -26,6 +25,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,73 +37,88 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mk1morebugs.finapp.R
+import com.mk1morebugs.finapp.ui.Screen
+import com.mk1morebugs.finapp.ui.components.FinappNavigationBar
+import com.mk1morebugs.finapp.ui.components.FinappScaffold
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 @Composable
 fun HistoryScreen(
-    viewModel: HistoryViewModel = viewModel()
+    viewModel: HistoryViewModel = hiltViewModel(),
+    snackbarHostState: SnackbarHostState,
+    currentDestination: Screen,
+    fromNavBarNavigateTo: (Screen) -> Unit,
 ) {
+    FinappScaffold(
+        statusbarTitle = stringResource(R.string.history),
+        snackbarHostState = snackbarHostState,
+        bottomBar = {
+            FinappNavigationBar(
+                currentDestination = currentDestination,
+                fromNavBarNavigateTo = fromNavBarNavigateTo
+            )
+        },
+    ) { paddingValues ->
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        var stateTab by remember { mutableStateOf(0) }
+        val titles = listOf("Фактически \n потрачено", "Запланировано")
 
-    var stateTab by remember { mutableStateOf(0) }
-    val titles = listOf("Фактически \n потрачено", "Запланировано")
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
 
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-
-        item {
-            TabRow(selectedTabIndex = stateTab) {
-                titles.forEachIndexed { index, title ->
-                    Tab(
-                        selected = stateTab == index,
-                        onClick = { stateTab = index },
-                        text = {
-                            Text(
-                                text = title,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    )
+            item {
+                TabRow(selectedTabIndex = stateTab) {
+                    titles.forEachIndexed { index, title ->
+                        Tab(
+                            selected = stateTab == index,
+                            onClick = { stateTab = index },
+                            text = {
+                                Text(
+                                    text = title,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        )
+                    }
                 }
             }
-        }
 
+            item {
+                Spacer(modifier = Modifier.height(10.dp))
+            }
 
-        item {
-            Spacer(modifier = Modifier.height(10.dp))
-        }
+            if (stateTab == 0) {
+                viewModel.updateDataSummary()
+            } else {
+                viewModel.updateDataPlanned()
+            }
 
+            items(uiState.historyItems) { item ->
+                HistoryItem(
+                    item = item,
+                    deleteSummaryById = {
+                        if (stateTab == 0) {
+                            viewModel.deleteSummaryById(id = item.id)
+                        } else {
+                            viewModel.deletePlanById(id = item.id)
+                        }
 
-        if (stateTab == 0) {
-            viewModel.updateDataSummary()
-        } else {
-            viewModel.updateDataPlanned()
-        }
-
-        items(uiState.historyItems) { item ->
-            HistoryItem(
-                item = item,
-                deleteSummaryById = {
-                    if (stateTab == 0) {
-                        viewModel.deleteSummaryById(id = item.id)
-                    } else {
-                        viewModel.deletePlanById(id = item.id)
                     }
-
-                }
-            )
+                )
+            }
         }
     }
 }
@@ -113,7 +128,7 @@ fun HistoryScreen(
 @Composable
 fun HistoryItem(
     item: HistoryItem,
-    deleteSummaryById: () -> Unit
+    deleteSummaryById: () -> Unit,
 ) {
     var showDropdownMenu by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
@@ -195,7 +210,6 @@ fun HistoryItem(
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start
                     ) {
-
                         Text(
                             modifier = Modifier.weight(6f),
                             text = item.categoryName,
@@ -224,23 +238,22 @@ fun HistoryItem(
                     onClick = { showDialog = true },
                     contentPadding = PaddingValues(vertical = 10.dp)
                 )
-
             }
         }
     }
 
     if (showDialog) {
-
         showDropdownMenu = false
 
-        BasicAlertDialog(onDismissRequest = { showDialog = false }
+        BasicAlertDialog(
+            onDismissRequest = { showDialog = false }
         ) {
             Surface(
                 modifier = Modifier
                     .wrapContentWidth()
                     .wrapContentHeight(),
                 shape = MaterialTheme.shapes.large,
-                elevation = AlertDialogDefaults.TonalElevation
+                tonalElevation = AlertDialogDefaults.TonalElevation
             ) {
                 Column(
                     modifier = Modifier
@@ -258,7 +271,6 @@ fun HistoryItem(
                         style = MaterialTheme.typography.headlineMedium
 
                     )
-
                     Spacer(modifier = Modifier.height(30.dp))
 
                     Row(
@@ -285,13 +297,10 @@ fun HistoryItem(
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.error
                             )
-
                         }
                     }
-
                 }
             }
-
         }
     }
 }

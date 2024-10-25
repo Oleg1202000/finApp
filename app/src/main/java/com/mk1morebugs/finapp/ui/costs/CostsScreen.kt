@@ -2,17 +2,16 @@ package com.mk1morebugs.finapp.ui.costs
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mk1morebugs.finapp.R
+import com.mk1morebugs.finapp.ui.Screen
+import com.mk1morebugs.finapp.ui.components.FinappFloatingActionButton
+import com.mk1morebugs.finapp.ui.components.FinappNavigationBar
+import com.mk1morebugs.finapp.ui.components.FinappScaffold
 import com.mk1morebugs.finapp.ui.graphdraw.ButtonGraph
 import com.mk1morebugs.finapp.ui.graphdraw.CategoryDetails
 import com.mk1morebugs.finapp.ui.graphdraw.GraphPeriod
@@ -31,32 +34,53 @@ import com.mk1morebugs.finapp.ui.theme.Shapes
 @Composable
 fun CostsScreen(
     viewModel: CostsViewModel = hiltViewModel(),
-    finappStatusbarTitle: MutableState<String>,
+    snackbarHostState: SnackbarHostState,
+    currentDestination: Screen,
+    fromNavBarNavigateTo: (Screen) -> Unit,
+    floatingActionButtonOnClick: () -> Unit,
     isFactCosts: Boolean,
 ) {
-    finappStatusbarTitle.value = "Расходы"
-
     viewModel.switchTypeCosts(
         isFactCosts = isFactCosts
     )
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    FinappScaffold(
+        statusbarTitle = stringResource(
+            id = if (isFactCosts) R.string.fact_costs else R.string.planned_costs
+        ),
+        snackbarHostState = snackbarHostState,
+        bottomBar = {
+            FinappNavigationBar(
+                currentDestination = currentDestination,
+                fromNavBarNavigateTo = fromNavBarNavigateTo
+            )
+        },
+        floatingActionButton = {
+            FinappFloatingActionButton(
+                onClick = floatingActionButtonOnClick
+            )
+        },
+    ) { paddingValues ->
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    CostsScreenContent(
-        categoriesDetails = uiState.categoriesDetails,
-        contentIsLoading = uiState.isLoading,
-        beginDate = uiState.beginDate,
-        endDate = uiState.endDate,
-        summaryAmount = uiState.sumAmount,
-        updateDate = viewModel::updateDate,
-        updateGraphPeriod = viewModel::updateGraphPeriod,
-        updateCosts = viewModel::updateCosts
+        CostsScreenContent(
+            modifier = Modifier.padding(paddingValues),
+            categoriesDetails = uiState.categoriesDetails,
+            contentIsLoading = uiState.isLoading,
+            beginDate = uiState.beginDate,
+            endDate = uiState.endDate,
+            summaryAmount = uiState.sumAmount,
+            updateDate = viewModel::updateDate,
+            updateGraphPeriod = viewModel::updateGraphPeriod,
+            updateCosts = viewModel::updateCosts
 
-    )
+        )
+    }
 }
 
 @Composable
 fun CostsScreenContent(
+    modifier: Modifier = Modifier,
     categoriesDetails: List<CategoryDetails>,
     contentIsLoading: Boolean,
     beginDate: Long,
@@ -67,7 +91,7 @@ fun CostsScreenContent(
     updateCosts: () -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
