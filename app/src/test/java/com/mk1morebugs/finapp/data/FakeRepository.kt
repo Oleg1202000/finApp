@@ -2,16 +2,18 @@ package com.mk1morebugs.finapp.data
 
 import com.mk1morebugs.finapp.data.local.room.Category
 import com.mk1morebugs.finapp.data.local.room.CategoryWithoutIsIncome
+import com.mk1morebugs.finapp.data.local.room.Cost
 import com.mk1morebugs.finapp.data.local.room.CostForUi
 import com.mk1morebugs.finapp.data.local.room.CostHistory
-import com.mk1morebugs.finapp.data.local.room.Cost
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeRepository : Repository {
 
     private var fakeCategories: MutableList<Category> = mutableListOf()
     var fakeCost: MutableList<Cost> = mutableListOf()
+    private var fakeCostHistory: MutableList<CostHistory> = mutableListOf()
 
 
     override fun getCategories(isIncome: Boolean): Flow<List<CategoryWithoutIsIncome>> = flow {
@@ -53,7 +55,11 @@ class FakeRepository : Repository {
         endDate: Long,
         isPlanned: Boolean,
     ): Flow<List<CostHistory>> {
-        TODO("Not yet implemented")
+        return flowOf(fakeCostHistory)
+    }
+
+    fun initFakeCostsHistory(listOfCostHistory: List<CostHistory>) {
+        fakeCostHistory.addAll(listOfCostHistory)
     }
 
     override suspend fun setCost(cost: Cost) {

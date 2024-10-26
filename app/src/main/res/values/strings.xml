@@ -9,4 +9,8 @@
     <string name="create_category">Create a category</string>
     <string name="add_cost">Adding an cost entry</string>
 
+    <string name="actually_spent">Actually spent</string>
+    <string name="planned">Planned</string>
+
+    <string name="delete">Delete</string>
 </resources>

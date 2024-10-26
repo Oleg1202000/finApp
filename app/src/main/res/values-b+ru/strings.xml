@@ -9,4 +9,9 @@
     <string name="history">История</string>
     <string name="create_category">Создание категории</string>
     <string name="add_cost">Добавление записи о расходах</string>
+
+    <string name="actually_spent">Фактически\nпотрачено</string>
+    <string name="planned">Запланировано</string>
+
+    <string name="delete">Удалить</string>
 </resources>

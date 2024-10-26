@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -27,25 +29,17 @@ class HistoryViewModel @Inject constructor(
         loadCostHistory()
     }
 
-    private fun loadCostHistory() {
+    fun loadCostHistory() {
         viewModelScope.launch {
             val costHistory = loadCostsHistoryFromDB(isFactCosts = uiState.value.isFactCosts)
 
-            costHistory.collect { costItem ->
+            costHistory.collect { listOfCosts ->
+                val historyGroupByDate = getHistoryGroupByDate(
+                    listOfCosts = listOfCosts
+                )
                 _uiState.update { historyUiState ->
                     historyUiState.copy(
-                        historyItems = costItem.map {
-                            HistoryItem(
-                                id = it.id,
-                                categoryName = it.categoryName,
-                                iconId = it.iconId,
-                                color = it.iconColor,
-                                amount = it.amount,
-                                date = it.date,
-                                about = it.about,
-                                isIncome = it.isIncome
-                            )
-                        }
+                        historyGroupByDate = historyGroupByDate
                     )
                 }
             }
@@ -59,6 +53,50 @@ class HistoryViewModel @Inject constructor(
             endDate = today,
             isPlanned = !isFactCosts,
         )
+    }
+
+    private fun formatDateToStringDdMmYyyyFormat(dateInMillis: Long): String {
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+        return dateFormat.format(dateInMillis)
+    }
+
+    private fun getHistoryGroupByDate(listOfCosts: List<CostHistory>): List<HistoryGroupByDate> {
+        val historyGroupByDate: MutableList<HistoryGroupByDate> = mutableListOf()
+        val historyItems: MutableList<HistoryItem> = mutableListOf()
+        var historyDate = formatDateToStringDdMmYyyyFormat(
+            dateInMillis = listOfCosts.firstOrNull()?.date ?: 0L
+        )
+        for (itemOfCosts in listOfCosts) {
+            val historyDateCurrent = formatDateToStringDdMmYyyyFormat(
+                dateInMillis = itemOfCosts.date
+            )
+            fun addHistoryItemsToResultList() {
+                historyGroupByDate.add(
+                    HistoryGroupByDate(date = historyDate, historyItems = historyItems.toList())
+                )
+                historyDate = historyDateCurrent
+                historyItems.clear()
+            }
+
+            if (historyDate != historyDateCurrent) {
+                addHistoryItemsToResultList()
+            }
+            historyItems.add(
+                HistoryItem(
+                    id = itemOfCosts.id,
+                    categoryName = itemOfCosts.categoryName,
+                    iconId = itemOfCosts.iconId,
+                    iconColor = itemOfCosts.iconColor,
+                    amount = itemOfCosts.amount,
+                    about = itemOfCosts.about,
+                    isIncome = itemOfCosts.isIncome
+                )
+            )
+            if (itemOfCosts == listOfCosts.last()) {
+                addHistoryItemsToResultList()
+            }
+        }
+        return historyGroupByDate
     }
 
     fun deleteCostById(id: Long) {
@@ -82,17 +120,21 @@ class HistoryViewModel @Inject constructor(
 }
 
 data class HistoryUiState(
-    val historyItems: List<HistoryItem> = emptyList(),
+    val historyGroupByDate: List<HistoryGroupByDate> = listOf(),
     val isFactCosts: Boolean = true,
+)
+
+data class HistoryGroupByDate(
+    val historyItems: List<HistoryItem> = listOf(),
+    val date: String = "",
 )
 
 data class HistoryItem(
     val id: Long,
     val categoryName: String,
     val iconId: Int,
-    val color: Long,
+    val iconColor: Long,
     val amount: Int,
-    val date: Long,
     val about: String?,
     val isIncome: Boolean,
 )
