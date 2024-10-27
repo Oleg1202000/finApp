@@ -2,98 +2,89 @@ package com.mk1morebugs.finapp.ui
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.mk1morebugs.finapp.ui.categories.addcategory.AddCategoryScreen
-import com.mk1morebugs.finapp.ui.categories.addcategory.AddCategoryViewModel
+import com.mk1morebugs.finapp.ui.costs.CostsScreen
+import com.mk1morebugs.finapp.ui.costs.addcost.AddCostScreen
 import com.mk1morebugs.finapp.ui.history.HistoryScreen
-import com.mk1morebugs.finapp.ui.history.HistoryViewModel
-import com.mk1morebugs.finapp.ui.home.HomeScreen
-import com.mk1morebugs.finapp.ui.home.HomeViewModel
-import com.mk1morebugs.finapp.ui.home.adddata.AddDataScreen
-import com.mk1morebugs.finapp.ui.home.adddata.AddDataViewModel
-import com.mk1morebugs.finapp.ui.plan.PlanScreen
-import com.mk1morebugs.finapp.ui.plan.PlanViewModel
-import com.mk1morebugs.finapp.ui.plan.addplan.AddPlanScreen
-import com.mk1morebugs.finapp.ui.plan.addplan.AddPlanViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.serialization.Serializable
 
+@Serializable
+sealed class Screen {
+    @Serializable
+    data class Costs(val isFactCosts: Boolean) : Screen()
+
+    @Serializable
+    data object History : Screen()
+
+    @Serializable
+    data class AddCost(val isFactCosts: Boolean) : Screen()
+
+    @Serializable
+    data object AddCategory : Screen()
+}
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    startDestination: String = Screen.Home.route,
+    startDestination: Screen = Screen.Costs(isFactCosts = true),
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
-    finappStatusbarTitle: MutableState<String>
+    navActions: NavigationActions = remember(navController) {
+        NavigationActions(navController = navController)
+    },
 ) {
-
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
 
-        composable(Screen.Home.route) {
-            val viewModel = hiltViewModel<HomeViewModel>()
-            HomeScreen(
-                viewModel = viewModel,
-                finappStatusbarTitle = finappStatusbarTitle
-            )
-
-        }
-
-        composable(Screen.AddData.route) {
-            val viewModel = hiltViewModel<AddDataViewModel>()
-            finappStatusbarTitle.value = "Добавление записи"
-            AddDataScreen(
-                navController = navController,
-                viewModel = viewModel,
-                snackBarHostState = snackbarHostState,
-                coroutineScope = coroutineScope
-            )
-
-        }
-
-        composable(Screen.Plan.route) {
-            val viewModel = hiltViewModel<PlanViewModel>()
-            PlanScreen(
-                viewModel = viewModel,
-                finappStatusBarTitle = finappStatusbarTitle
-
+        composable<Screen.Costs> { backStack ->
+            val costsScreen: Screen.Costs = backStack.toRoute()
+            CostsScreen(
+                snackbarHostState = snackbarHostState,
+                currentDestination = costsScreen,
+                fromNavBarNavigateTo = navActions::fromNavBarNavigateTo,
+                floatingActionButtonOnClick = {
+                    navActions.fromNavBarNavigateTo(
+                        Screen.AddCost(isFactCosts = costsScreen.isFactCosts)
+                    )
+                },
+                isFactCosts = costsScreen.isFactCosts,
             )
         }
 
-        composable(Screen.AddPlan.route) {
-            finappStatusbarTitle.value = "Планирование расходов"
-            val viewModel = hiltViewModel<AddPlanViewModel>()
-            AddPlanScreen(
-                navController = navController,
-                viewModel = viewModel,
-                snackBarHostState = snackbarHostState,
-                coroutineScope = coroutineScope
+        composable<Screen.AddCost> { backStack ->
+            val addCostScreen: Screen.AddCost = backStack.toRoute()
+            AddCostScreen(
+                snackbarHostState = snackbarHostState,
+                coroutineScope = coroutineScope,
+                currentDestination = addCostScreen,
+                fromNavBarNavigateTo = navActions::fromNavBarNavigateTo,
+                backToPreviousDestination = navActions::backToPreviousDestination,
+                navigateTo = navActions::navigateTo,
+                isPlanned = !addCostScreen.isFactCosts,
             )
-
         }
 
-        composable(Screen.History.route) {
-            finappStatusbarTitle.value = "История"
-            val viewModel = hiltViewModel<HistoryViewModel>()
+        composable<Screen.History> { backStack ->
             HistoryScreen(
-                viewModel = viewModel
+                snackbarHostState = snackbarHostState,
+                currentDestination = backStack.toRoute<Screen.History>(),
+                fromNavBarNavigateTo = navActions::fromNavBarNavigateTo,
             )
         }
 
-        composable(Screen.AddCategory.route) {
-            val viewModel = hiltViewModel<AddCategoryViewModel>()
-            finappStatusbarTitle.value = "Создание категории"
+        composable<Screen.AddCategory> {
             AddCategoryScreen(
-                viewModel = viewModel,
-                navController = navController,
                 snackBarHostState = snackbarHostState,
-                coroutineScope = coroutineScope
+                coroutineScope = coroutineScope,
+                backToPreviousDestination = navActions::backToPreviousDestinationWithBottomSheet
             )
 
         }

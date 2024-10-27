@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">finapp</string>
+
+    <string name="no_records_for_selected_period">No records for the selected period</string>
+
+    <string name="fact_costs">Fact costs</string>
+    <string name="planned_costs">Planned costs</string>
+    <string name="history">History</string>
+    <string name="create_category">Create a category</string>
+    <string name="add_cost">Adding an cost entry</string>
+
+    <string name="actually_spent">Actually spent</string>
+    <string name="planned">Planned</string>
+
+    <string name="delete">Delete</string>
+
+    <string name="non_unique_name">The category name must be unique</string>
+    <string name="icon_not_selected">Icon not selected</string>
+    <string name="color_not_selected">No color selected</string>
+    <string name="add_category_is_success">Category added successfully</string>
+
+    <string name="category_not_selected">Category not selected</string>
+    <string name="amount_is_empty">The "Amount" field cannot be empty</string>
+    <string name="amount_no_int">The "Amount" field must contain a number</string>
+    <string name="amount_over_limit">The limit of 2,147,483,647 ₽ has been exceeded</string>
+    <string name="add_cost_success">The entry was added successfully</string>
+    <string name="add_cost_supporting_text">An integer \nor an expression of the form: x * y =</string>
 </resources>

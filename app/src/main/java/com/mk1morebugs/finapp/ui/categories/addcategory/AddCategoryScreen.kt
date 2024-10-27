@@ -5,17 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Button
@@ -27,249 +21,125 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import com.oleg1202000.finapp.R
+import com.mk1morebugs.finapp.R
+import com.mk1morebugs.finapp.ui.components.FinappScaffold
 import com.mk1morebugs.finapp.ui.theme.colorCategories
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
+import kotlin.math.ceil
 
 @Composable
 fun AddCategoryScreen(
-    viewModel: AddCategoryViewModel = viewModel(),
-    navController: NavHostController,
+    viewModel: AddCategoryViewModel = hiltViewModel(),
+    coroutineScope: CoroutineScope,
     snackBarHostState: SnackbarHostState,
-    coroutineScope: CoroutineScope
+    backToPreviousDestination: () -> Unit,
 ) {
+    FinappScaffold(
+        statusbarTitle = stringResource(R.string.create_category),
+        snackbarHostState = snackBarHostState,
+    ) { paddingValues ->
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        uiState.snackbarMessageId?.let {
+            val snackbarText = stringResource(it)
+            LaunchedEffect(uiState.snackbarMessageId) {
+                coroutineScope.launch {
+                    snackBarHostState.showSnackbar(
+                        message = snackbarText
+                    )
+                }
+            }
+        }
 
+        if (uiState.isBackToPreviousScreen) {
+            backToPreviousDestination()
+        }
 
-    var showAddResult by rememberSaveable { mutableStateOf(false) }
+        AddCategoryScreenContent(
+            modifier = Modifier.padding(paddingValues),
+            categoryNameValue = uiState.categoryName,
+            onCategoryNameValueValueChange = viewModel::setCategoryName,
+            selectedCategoryIcon = uiState.selectedCategoryIcon,
+            setCategoryIcon = viewModel::setCategoryIcon,
+            selectedCategoryColor = uiState.selectedCategoryColor,
+            setCategoryColor = viewModel::setCategoryColor,
+            uiStateIsLoading = uiState.isLoading,
+            onAddCategoryClick = viewModel::addCategory,
+        )
+    }
+}
 
+@Composable
+fun AddCategoryScreenContent(
+    modifier: Modifier = Modifier,
+    categoryNameValue: String,
+    onCategoryNameValueValueChange: (String) -> Unit,
+    selectedCategoryIcon: Int?,
+    setCategoryIcon: (Int) -> Unit,
+    selectedCategoryColor: Color?,
+    setCategoryColor: (Color) -> Unit,
+    uiStateIsLoading: Boolean,
+    onAddCategoryClick: () -> Unit,
+) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.statusBars),
+        modifier = modifier
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         item { Spacer(modifier = Modifier.height(200.dp)) }
 
         item {
             OutlinedTextField(
-                value = uiState.categoryName,
-                onValueChange = { viewModel.setCategoryName(it) },
+                value = categoryNameValue,
+                onValueChange = onCategoryNameValueValueChange,
                 label = { Text("Название категории") }
             )
         }
 
         item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 20.dp,
-                        bottom =20.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                Text(text = "Доход")
-
-                Switch(
-                    checked = uiState.isIncome,
-                    onCheckedChange = {
-                        viewModel.setIsIncomeValue(it)
-                    }
-                )
-
-            }
+            val columnCount = 3
+            GridIcons(
+                rowCount = ceil(iconCategoryItems.size.toDouble() / columnCount).toInt(),
+                columnCount = columnCount,
+                categoryIconIdList = iconCategoryItems,
+                selectedCategoryIconId = selectedCategoryIcon,
+                onIconClick = setCategoryIcon,
+            )
         }
-
-
-        // "Сетка категорий"
-        item {
-            LazyRow {
-
-                val iconItemsSize = iconCategoryItems.size
-                for (i in 0 until iconItemsSize - iconItemsSize % 3 step 3) {
-                    item {
-                        Column {
-                            for (j in i..i + 2) {
-
-                                val colorCard =
-                                    if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryIcon == iconCategoryItems[j]) {
-
-                                        CardDefaults.cardColors(
-                                            containerColor = MaterialTheme.colorScheme.onSurface,
-                                            contentColor = MaterialTheme.colorScheme.surface
-                                        )
-
-                                    } else {
-
-                                        CardDefaults.cardColors(
-                                            containerColor = MaterialTheme.colorScheme.surface,
-                                            contentColor = MaterialTheme.colorScheme.onSurface
-                                        )
-                                    }
-
-                                DrawItem(
-                                    clickedItem = { viewModel.setCategoryIcon(iconCategoryItems[j]) },
-                                    colorCard = colorCard
-                                ) {
-
-                                    Icon(
-                                        painter = painterResource(id = iconCategoryItems[j]),
-                                        contentDescription = "IconCategoryItem"
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                item {
-                    Column {
-                        for (j in iconItemsSize - iconItemsSize % 3 until iconItemsSize) {
-
-                            val colorCard =
-                                if (uiState.selectedCategoryIcon != null && uiState.selectedCategoryIcon == iconCategoryItems[j]) {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.onSurface,
-                                        contentColor = MaterialTheme.colorScheme.surface
-                                    )
-                                } else {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.surface,
-                                        contentColor = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
-
-                            DrawItem(
-                                clickedItem = { viewModel.setCategoryIcon(iconCategoryItems[j]) },
-                                colorCard = colorCard
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = iconCategoryItems[j]),
-                                    contentDescription = "IconCategoryItem"
-                                )
-                            }
-                            // TODO: Убрать лишний (повторяющийся) код
-                        }
-                    }
-                }
-            }
-        }
-
 
         item { Spacer(modifier = Modifier.height(20.dp)) }
 
-
-        // Сетка цветов
         item {
-            LazyRow {
-
-                val colorItemsSize = colorCategories.size
-                for (i in 0 until colorItemsSize - colorItemsSize % 3 step 3) {
-                    item {
-                        Column {
-                            for (j in i..i + 2) {
-
-                                val colorCard =
-                                    if (uiState.selectedCategoryColor != null && uiState.selectedCategoryColor == colorCategories[j]) {
-                                        CardDefaults.cardColors(
-                                            containerColor = MaterialTheme.colorScheme.onSurface,
-                                            contentColor = MaterialTheme.colorScheme.surface
-                                        )
-                                    } else {
-                                        CardDefaults.cardColors(
-                                            containerColor = MaterialTheme.colorScheme.surface,
-                                            contentColor = MaterialTheme.colorScheme.onSurface
-                                        )
-                                    }
-
-                                DrawItem(
-                                    clickedItem = { viewModel.setCategoryColor(colorCategories[j]) },
-                                    colorCard = colorCard
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(50.dp)
-                                            .background(colorCategories[j])
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                item {
-                    Column {
-                        for (j in colorItemsSize - colorItemsSize % 3 until colorItemsSize) {
-
-                            val colorCard =
-                                if (uiState.selectedCategoryColor != null && uiState.selectedCategoryColor == colorCategories[j]) {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.onSurface,
-                                        contentColor = MaterialTheme.colorScheme.surface
-                                    )
-                                } else {
-                                    CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.surface,
-                                        contentColor = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
-
-                            DrawItem(
-                                clickedItem = { viewModel.setCategoryColor(colorCategories[j]) },
-                                colorCard = colorCard
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(50.dp)
-                                        .background(colorCategories[j])
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            val columnCount = 3
+            GridColors(
+                rowCount = ceil(iconCategoryItems.size.toDouble() / columnCount).toInt(),
+                columnCount = columnCount,
+                colorCategoriesList = colorCategories,
+                selectedCategoryColor = selectedCategoryColor,
+                onClick = setCategoryColor
+            )
         }
 
-
-        // Демонстрация карточки категории
-        if (
-            uiState.selectedCategoryIcon != null &&
-            uiState.selectedCategoryColor != null
-        ) {
+        if (selectedCategoryIcon != null && selectedCategoryColor != null) {
             item {
                 Card(
                     modifier = Modifier
-                        .height(150.dp)
-                        .width(150.dp)
-                        .padding(
-                            start = 15.dp,
-                            end = 15.dp,
-                            top = 15.dp,
-                            bottom = 15.dp
-
-                        ),
+                        .size(150.dp)
+                        .padding(all = 15.dp),
                 ) {
-
                     Column(
                         modifier = Modifier
                             .fillMaxSize(),
@@ -277,19 +147,15 @@ fun AddCategoryScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        if (!uiState.isLoading) {
-
+                        if (!uiStateIsLoading) {
                             Icon(
-                                painter = painterResource(id = uiState.selectedCategoryIcon!!),
+                                painter = painterResource(id = selectedCategoryIcon),
                                 contentDescription = "CategoryItem",
-                                tint = uiState.selectedCategoryColor!!
+                                tint = selectedCategoryColor
                             )
+                            Spacer(modifier = Modifier.height(15.dp))
 
-                            Spacer(
-                                modifier = Modifier.height(15.dp)
-                            )
-
-                            Text(text = uiState.categoryName)
+                            Text(text = categoryNameValue)
                         } else {
                             CircularProgressIndicator()
                         }
@@ -298,59 +164,126 @@ fun AddCategoryScreen(
             }
         }
 
-
         item { Spacer(modifier = Modifier.height(30.dp)) }
-
 
         item {
             Button(
                 onClick = {
-                    viewModel.addCategory()
-                    showAddResult = true
+                    onAddCategoryClick()
                 }
             ) {
                 Text(text = "Добавить категорию")
             }
         }
 
-
-        if (showAddResult && !uiState.isLoading) {
-            if (uiState.errorCategoryMessage != null) {
-
-                coroutineScope.launch {
-                    snackBarHostState.showSnackbar(
-                        message = if (uiState.errorCategoryMessage == ErrorCategoryMessage.NameNotUnique) {
-                            "Имя категории должно быть уникальным"
-                        } else if (uiState.errorCategoryMessage == ErrorCategoryMessage.IconNotSelected) {
-                            "Иконка не выбрана"
-                        } else {
-                            "Цвет не выбран"
-                        }
-                    )
-                }
-
-            } else {
-                coroutineScope.launch {
-                    snackBarHostState.showSnackbar(
-                        message = "Категория успешно добавлена!"
-                    )
-                }
-                navController.popBackStack()
-            }
-            showAddResult = false
-        }
-
-
-        item { Spacer(modifier = Modifier.height(30.dp)) }
+        item { Spacer(modifier = Modifier.height(40.dp)) }
     }
 }
 
+@Composable
+private fun GridIcons(
+    rowCount: Int,
+    columnCount: Int,
+    categoryIconIdList: List<Int>,
+    selectedCategoryIconId: Int?,
+    onIconClick: (Int) -> Unit,
+) {
+    LazyRow {
+        for (rowIndex in 0..<rowCount) {
+            item {
+                Column {
+                    for (columnIndex in 0..<columnCount) {
+                        val currentPositionOnList = rowIndex * columnCount + columnIndex
+                        if (currentPositionOnList < categoryIconIdList.size) {
+                            val colorCard =
+                                if (selectedCategoryIconId != null
+                                    && selectedCategoryIconId == categoryIconIdList[currentPositionOnList]
+                                ) {
+                                    CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.onSurface,
+                                        contentColor = MaterialTheme.colorScheme.surface
+                                    )
+                                } else {
+                                    CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.surface,
+                                        contentColor = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+
+                            CardItem(
+                                onClick = { onIconClick(categoryIconIdList[currentPositionOnList]) },
+                                colorCard = colorCard
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = categoryIconIdList[currentPositionOnList]),
+                                    contentDescription = "IconCategoryItem"
+                                )
+                            }
+                        } else {
+                            break
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
-fun DrawItem(
-    clickedItem: () -> Unit,
+private fun GridColors(
+    rowCount: Int,
+    columnCount: Int,
+    colorCategoriesList: List<Color>,
+    selectedCategoryColor: Color?,
+    onClick: (Color) -> Unit,
+) {
+    LazyRow {
+        for (rowIndex in 0..<rowCount) {
+            item {
+                Column {
+                    for (columnIndex in 0..<columnCount) {
+                        val currentPositionOnList = rowIndex * columnCount + columnIndex
+                        if (currentPositionOnList < colorCategoriesList.size) {
+                            val colorCard =
+                                if (selectedCategoryColor != null
+                                    && selectedCategoryColor == colorCategoriesList[currentPositionOnList]
+                                ) {
+                                    CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.onSurface,
+                                        contentColor = MaterialTheme.colorScheme.surface
+                                    )
+                                } else {
+                                    CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.surface,
+                                        contentColor = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+
+                            CardItem(
+                                onClick = { onClick(colorCategoriesList[currentPositionOnList]) },
+                                colorCard = colorCard
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(50.dp)
+                                        .background(colorCategoriesList[currentPositionOnList])
+                                )
+                            }
+                        } else {
+                            break
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CardItem(
+    onClick: () -> Unit,
     colorCard: CardColors,
-    item: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -359,22 +292,16 @@ fun DrawItem(
                 end = 15.dp,
                 bottom = 15.dp
             )
-            .clickable {
-                clickedItem()
-            },
-
+            .clickable(onClick = onClick),
         colors = colorCard
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
-            item()
-
+            content()
         }
     }
 }

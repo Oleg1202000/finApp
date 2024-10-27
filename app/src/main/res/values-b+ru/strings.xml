@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">finapp</string>
+
+    <string name="no_records_for_selected_period">No records for the selected period</string>
+
+    <string name="fact_costs">Фактические расходы</string>
+    <string name="planned_costs">Запланированные  расходы</string>
+    <string name="history">История</string>
+    <string name="create_category">Создание категории</string>
+    <string name="add_cost">Добавление записи о расходах</string>
+
+    <string name="actually_spent">Фактически\nпотрачено</string>
+    <string name="planned">Запланировано</string>
+
+    <string name="delete">Удалить</string>
+
+    <string name="non_unique_name">Имя категории должно быть уникальным</string>
+    <string name="icon_not_selected">Иконка не выбрана</string>
+    <string name="color_not_selected">Цвет не выбран</string>
+    <string name="add_category_is_success">Категория успешно добавлена</string>
+
+    <string name="category_not_selected">Категория не выбрана</string>
+    <string name="amount_is_empty">Поле "Сумма" не может быть пустым</string>
+    <string name="amount_no_int">Поле "Сумма" должно содержать число</string>
+    <string name="amount_over_limit">Превышен лимит в 2 147 483 647 ₽</string>
+    <string name="add_cost_success">Запись успешно добавлена</string>
+    <string name="add_cost_supporting_text">Целое число \nили выражение вида: x * y =</string>
+</resources>
