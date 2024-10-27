@@ -1,5 +1,6 @@
 package com.mk1morebugs.finapp.data
 
+import com.mk1morebugs.finapp.data.local.datastore.SettingsDS
 import com.mk1morebugs.finapp.data.local.room.Category
 import com.mk1morebugs.finapp.data.local.room.Cost
 import com.mk1morebugs.finapp.data.local.room.CostForUi
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class RepositoryImpl @Inject constructor(
     private val categoriesDao: CategoriesDao,
     private val costsDao: CostsDao,
+    private val settingsDS: SettingsDS,
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : Repository {
 
@@ -57,4 +59,10 @@ class RepositoryImpl @Inject constructor(
     override suspend fun deleteCostById(id: Long) = costsDao.deleteCostById(id)
 
     override suspend fun updateCost(cost: Cost) = costsDao.updateCost(cost)
+
+    override suspend fun getIsFirstLaunch(): Boolean = settingsDS.getIsFirstLaunch()
+
+    override suspend fun setIsFirstLaunch(value: Boolean) {
+        settingsDS.setIsFirstLaunch(value = value)
+    }
 }

@@ -33,4 +33,8 @@ interface Repository {
     suspend fun deleteCostById(id: Long)
 
     suspend fun updateCost(cost: Cost)
+
+    suspend fun getIsFirstLaunch(): Boolean
+
+    suspend fun setIsFirstLaunch(value: Boolean)
 }

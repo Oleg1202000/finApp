@@ -8,6 +8,8 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.mk1morebugs.finapp.data.Repository
 import com.mk1morebugs.finapp.data.RepositoryImpl
+import com.mk1morebugs.finapp.data.local.datastore.SettingsDS
+import com.mk1morebugs.finapp.data.local.datastore.SettingsDSImpl
 import com.mk1morebugs.finapp.data.local.room.FinappDatabase
 import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
 import com.mk1morebugs.finapp.data.local.room.dao.CostsDao
@@ -25,6 +27,14 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindRepository (repository: RepositoryImpl): Repository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class SettingsDSModule {
+    @Singleton
+    @Binds
+    abstract fun bindSettingsDS (settings: SettingsDSImpl): SettingsDS
 }
 
 @Module
@@ -53,7 +63,7 @@ object DataStoreModule {
     fun providePreferencesDataStore(@ApplicationContext context: Context) : DataStore<Preferences> =
         PreferenceDataStoreFactory.create (
             produceFile = {
-                context.preferencesDataStoreFile("plan_settings")
+                context.preferencesDataStoreFile("settings")
             }
         )
 }
