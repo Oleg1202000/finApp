@@ -14,4 +14,9 @@
     <string name="planned">Запланировано</string>
 
     <string name="delete">Удалить</string>
+
+    <string name="non_unique_name">Имя категории должно быть уникальным</string>
+    <string name="icon_not_selected">Иконка не выбрана</string>
+    <string name="color_not_selected">Цвет не выбран</string>
+    <string name="add_category_is_success">Категория успешно добавлена</string>
 </resources>

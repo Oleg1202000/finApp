@@ -4,8 +4,8 @@ import android.database.sqlite.SQLiteConstraintException
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mk1morebugs.finapp.data.local.room.Category
 import com.mk1morebugs.finapp.data.Repository
+import com.mk1morebugs.finapp.data.local.room.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,17 +15,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class AddCategoryViewModel @Inject constructor(
-    private val localRepository: Repository
+    private val localRepository: Repository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddCategoryUiState())
     val uiState: StateFlow<AddCategoryUiState> = _uiState.asStateFlow()
 
     fun setCategoryName(
-        categoryName: String
+        categoryName: String,
     ) {
         _uiState.update {
             it.copy(
@@ -34,9 +33,8 @@ class AddCategoryViewModel @Inject constructor(
         }
     }
 
-
     fun setCategoryIcon(
-        selectedCategoryIcon: Int
+        selectedCategoryIcon: Int,
     ) {
         _uiState.update {
             it.copy(
@@ -45,9 +43,8 @@ class AddCategoryViewModel @Inject constructor(
         }
     }
 
-
     fun setCategoryColor(
-        categoryColor: Color
+        categoryColor: Color,
     ) {
         _uiState.update {
             it.copy(
@@ -56,65 +53,56 @@ class AddCategoryViewModel @Inject constructor(
         }
     }
 
-    fun setIsIncomeValue(
-        changeValue: Boolean
-    ) {
+    fun addCategory() {
         _uiState.update {
             it.copy(
-                isIncome = changeValue
+                isLoading = true,
+                snackbarMessageId = null
             )
         }
-    }
-
-
-    fun addCategory(
-    ) {
-        _uiState.update {
-            it.copy(
-                isLoading = true
-            )
-        }
-
-        var exceptionMessage: ErrorCategoryMessage? = null
         viewModelScope.launch {
-        if (uiState.value.selectedCategoryIcon == null) {
-            exceptionMessage = ErrorCategoryMessage.IconNotSelected
+            var snackbarMessageId: Int?
+            if (uiState.value.selectedCategoryIcon == null) {
+                snackbarMessageId = SnackbarCategoryMessage.IconNotSelected.stringResource
 
-        } else if (uiState.value.selectedCategoryColor == null) {
-            exceptionMessage = ErrorCategoryMessage.ColorNotSelected
+            } else if (uiState.value.selectedCategoryColor == null) {
+                snackbarMessageId = SnackbarCategoryMessage.ColorNotSelected.stringResource
 
-        } else {
+            } else {
+
                 try {
                     localRepository.setCategory(
                         category = Category(
                             name = uiState.value.categoryName,
-                            isIncome = uiState.value.isIncome,
+                            isIncome = false,
                             color = uiState.value.selectedCategoryColor!!.value.toLong(),
                             iconId = uiState.value.selectedCategoryIcon!!.toInt()
                         )
                     )
+                    delay(500)
+                    snackbarMessageId = SnackbarCategoryMessage.OK.stringResource
+
                 } catch (e: SQLiteConstraintException) {
-                    exceptionMessage = ErrorCategoryMessage.NameNotUnique
+                    snackbarMessageId = SnackbarCategoryMessage.NameNotUnique.stringResource
                 }
             }
-            delay(500)
 
-        _uiState.update {
-            it.copy(
-                errorCategoryMessage = exceptionMessage,
-                isLoading = false
-            )
-        }
+            _uiState.update {
+                it.copy(
+                    isBackToPreviousScreen = snackbarMessageId == SnackbarCategoryMessage.OK.stringResource,
+                    snackbarMessageId = snackbarMessageId,
+                    isLoading = false
+                )
+            }
         }
     }
 }
 
-
-data class AddCategoryUiState (
+data class AddCategoryUiState(
     val categoryName: String = "",
     val selectedCategoryIcon: Int? = null,
     val selectedCategoryColor: Color? = null,
-    val errorCategoryMessage: ErrorCategoryMessage? = null,
     val isLoading: Boolean = false,
-    val isIncome: Boolean = false
+    val isBackToPreviousScreen: Boolean = false,
+    val snackbarMessageId: Int? = null,
 )

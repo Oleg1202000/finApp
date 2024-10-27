@@ -13,4 +13,9 @@
     <string name="planned">Planned</string>
 
     <string name="delete">Delete</string>
+
+    <string name="non_unique_name">The category name must be unique</string>
+    <string name="icon_not_selected">Icon not selected</string>
+    <string name="color_not_selected">No color selected</string>
+    <string name="add_category_is_success">Category added successfully</string>
 </resources>
