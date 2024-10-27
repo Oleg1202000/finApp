@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
@@ -28,7 +26,9 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -48,7 +48,6 @@ import com.mk1morebugs.finapp.ui.theme.Shapes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesScreen(
@@ -59,25 +58,23 @@ fun CategoriesScreen(
     selectedCategoryId: Long?,
     selectCategory: (Long) -> Unit,
     deleteCategoryById: (Long) -> Unit,
-    navigateTo: (Screen) -> Unit
+    navigateTo: (Screen) -> Unit,
 ) {
+    Spacer(modifier = Modifier.height(30.dp))
 
-        Spacer(modifier = Modifier.height(30.dp))
+    CategoryItems(
+        categories = categories,
+        showBottomSheet = showBottomSheet,
+        sheetState = sheetState,
+        coroutineScope = coroutineScope,
+        selectCategory = selectCategory,
+        selectedCategoryId = selectedCategoryId,
+        deleteCategoryById = deleteCategoryById,
+        navigateTo = navigateTo,
+    )
 
-        CategoryItems(
-            categories = categories,
-            showBottomSheet = showBottomSheet,
-            sheetState = sheetState,
-            coroutineScope = coroutineScope,
-            selectCategory = selectCategory,
-            selectedCategoryId = selectedCategoryId,
-            deleteCategoryById = deleteCategoryById,
-            navigateTo = navigateTo,
-        )
-
-        Spacer(Modifier.height(30.dp))
+    Spacer(Modifier.height(30.dp))
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,16 +86,12 @@ fun CategoryItems(
     selectedCategoryId: Long?,
     selectCategory: (Long) -> Unit,
     deleteCategoryById: (Long) -> Unit,
-    navigateTo: (Screen) -> Unit
-
+    navigateTo: (Screen) -> Unit,
 ) {
-
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-
         for (i in 0..categories.size - 2 step 2) {
-
             item {
                 Row(
                     modifier = Modifier.fillMaxSize(),
@@ -107,7 +100,7 @@ fun CategoryItems(
 
                     for (j in 0..1) {
                         CardItem(
-                            item = categories[i+j],
+                            item = categories[i + j],
                             showBottomSheet = showBottomSheet,
                             sheetState = sheetState,
                             coroutineScope = coroutineScope,
@@ -120,49 +113,45 @@ fun CategoryItems(
             }
         }
 
-
         item {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                if (categories.size % 2 == 1) {
+                    CardItem(
+                        item = categories[categories.lastIndex],
+                        showBottomSheet = showBottomSheet,
+                        sheetState = sheetState,
+                        coroutineScope = coroutineScope,
+                        selectCategory = selectCategory,
+                        selectedCategoryId = selectedCategoryId,
+                        deleteCategoryById = deleteCategoryById
+                    )
+                    ButtonItem(
+                        navigateTo = navigateTo,
+                    )
 
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
+                } else {
 
-                    if (categories.size % 2 == 1) {
-                        CardItem(
-                            item = categories[categories.lastIndex],
-                            showBottomSheet = showBottomSheet,
-                            sheetState = sheetState,
-                            coroutineScope = coroutineScope,
-                            selectCategory = selectCategory,
-                            selectedCategoryId = selectedCategoryId,
-                            deleteCategoryById = deleteCategoryById
-                        )
-
-                        ButtonItem(
-                            navigateTo = navigateTo,
-                        )
-                    } else {
-
-                        ButtonItem(
-                            navigateTo = navigateTo,
-                        )
-                        Spacer(
-                            modifier = Modifier
-                                .size(150.dp)
-                                .padding(
-                                    start = 15.dp,
-                                    end = 15.dp,
-                                    top = 15.dp,
-                                    bottom = 30.dp
-                                )
-                        )
-                    }
+                    ButtonItem(
+                        navigateTo = navigateTo,
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .size(150.dp)
+                            .padding(
+                                start = 15.dp,
+                                end = 15.dp,
+                                top = 15.dp,
+                                bottom = 30.dp
+                            )
+                    )
                 }
+            }
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -173,27 +162,24 @@ fun CardItem(
     coroutineScope: CoroutineScope,
     selectedCategoryId: Long?,
     selectCategory: (Long) -> Unit,
-    deleteCategoryById: (Long) -> Unit
-
+    deleteCategoryById: (Long) -> Unit,
 ) {
     var showDropdownMenu by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
 
     val colorCard = if (selectedCategoryId != null && selectedCategoryId == item.id) {
-
         CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             contentColor = MaterialTheme.colorScheme.onTertiaryContainer
         )
     } else {
-
         CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 
-    Card (
+    Card(
         modifier = Modifier
             .height(150.dp)
             .width(150.dp)
@@ -202,26 +188,22 @@ fun CardItem(
                 end = 15.dp,
                 bottom = 30.dp
             ),
-
         colors = colorCard,
         onClick = {
             showDropdownMenu = true
         }
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Icon(
                 painter = painterResource(id = item.iconId),
                 contentDescription = item.name,
                 tint = Color(item.colorIcon.toULong())
             )
-
             Text(text = item.name)
 
             if (showDropdownMenu) {
@@ -248,16 +230,12 @@ fun CardItem(
                             onClick = { showDialog = true },
                             contentPadding = PaddingValues(vertical = 10.dp)
                         )
-
                     }
                 }
             }
         }
     }
 
-    
-
-    
     if (showDialog) {
         showDropdownMenu = false
         BasicAlertDialog(onDismissRequest = { showDialog = false }
@@ -283,19 +261,14 @@ fun CardItem(
                         minLines = 2,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.headlineMedium
-
                     )
-
-
                     Spacer(modifier = Modifier.height(30.dp))
-
 
                     Text(
                         text = "Удалятся все данные категории",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.surfaceTint
                     )
-
                     Spacer(modifier = Modifier.height(30.dp))
 
                     Row(
@@ -311,6 +284,7 @@ fun CardItem(
                                 style = MaterialTheme.typography.labelLarge
                             )
                         }
+
                         OutlinedButton(
                             onClick = {
                                 deleteCategoryById(item.id)
@@ -322,17 +296,13 @@ fun CardItem(
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.error
                             )
-
                         }
                     }
-
                 }
             }
-
         }
     }
 }
-
 
 @Composable
 fun ButtonItem(
@@ -352,6 +322,6 @@ fun ButtonItem(
             navigateTo(Screen.AddCategory)
         }
     ) {
-
-        Text(text = "Добавить категорию") }
+        Text(text = "Добавить категорию")
+    }
 }
