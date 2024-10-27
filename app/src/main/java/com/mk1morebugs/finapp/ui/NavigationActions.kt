@@ -12,13 +12,16 @@ class NavigationActions(private val navController: NavHostController) {
     fun fromNavBarNavigateTo(destination: Screen) {
         navController.navigate(route = destination) {
             launchSingleTop = true
-           /* popUpTo(
-                route = navController.graph.last()
-            )*/
+            popUpTo(
+                route = navController.graph.last().route!!
+            )
         }
     }
 
     fun backToPreviousDestination() {
-        navController.popBackStack()
+        navController.popBackStack(
+            destinationId = navController.graph.last().id,
+            inclusive = false,
+        )
     }
 }
