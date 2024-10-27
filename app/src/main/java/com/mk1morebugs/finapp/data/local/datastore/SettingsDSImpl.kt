@@ -6,9 +6,10 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 
-class SettingsDSImpl(
+class SettingsDSImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : SettingsDS {
     private val isFirstLaunchKey = booleanPreferencesKey("is_first_launch")

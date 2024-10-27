@@ -74,4 +74,12 @@ class FakeRepository : Repository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getIsFirstLaunch(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setIsFirstLaunch(value: Boolean) {
+        TODO("Not yet implemented")
+    }
+
 }
