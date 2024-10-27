@@ -90,12 +90,7 @@ fun CostsScreenContent(
         item {
             Surface(
                 modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                /*.swipeable(
-                    state = swipeableState,
-                    orientation = Orientation.Horizontal,
-                    anchors = anchors
-                )*/,
+                    .fillMaxWidth(0.9f),
                 shape = Shapes.small,
                 shadowElevation = 4.dp
             ) {
