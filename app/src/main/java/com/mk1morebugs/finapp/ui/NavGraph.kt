@@ -84,7 +84,7 @@ fun NavGraph(
             AddCategoryScreen(
                 snackBarHostState = snackbarHostState,
                 coroutineScope = coroutineScope,
-                backToPreviousDestination = navActions::backToPreviousDestination
+                backToPreviousDestination = navActions::backToPreviousDestinationWithBottomSheet
             )
 
         }

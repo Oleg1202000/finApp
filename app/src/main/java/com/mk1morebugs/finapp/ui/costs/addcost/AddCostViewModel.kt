@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class AddDataViewModel @Inject constructor(
+class AddCostViewModel @Inject constructor(
     private val repository: Repository,
 ) : ViewModel() {
 
@@ -65,8 +65,7 @@ class AddDataViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 amount = calculateCost(amount = amount),
-                errorMessage = null,
-                errorTextField = false
+                isError = false
             )
         }
     }
@@ -132,23 +131,20 @@ class AddDataViewModel @Inject constructor(
     fun addCostToDb(isPlanned: Boolean) {
         _uiState.update {
             it.copy(
-                isLoading = true
+                isLoading = true,
+                addCostMessageId = null
             )
         }
         viewModelScope.launch {
-            var exceptionMessage: ErrorMessage? = null
-            var tempErrorTextField = false
-
+            var addCostMessageId: Int?
             if (uiState.value.selectedCategoryId == null) {
-                exceptionMessage = ErrorMessage.CategoryNotSelected
+                addCostMessageId = AddCostMessage.CATEGORY_NOT_SELECTED.stringResource
 
             } else if (uiState.value.amount.isEmpty()) {
-                exceptionMessage = ErrorMessage.AmountIsEmpty
-                tempErrorTextField = true
+                addCostMessageId = AddCostMessage.AMOUNT_IS_EMPTY.stringResource
 
             } else if (!uiState.value.amountIsDigit()) {
-                exceptionMessage = ErrorMessage.AmountNotInt
-                tempErrorTextField = true
+                addCostMessageId = AddCostMessage.AMOUNT_NOT_INT.stringResource
 
             } else {
                 try {
@@ -162,17 +158,17 @@ class AddDataViewModel @Inject constructor(
                             isPlanned = isPlanned,
                         )
                     )
+                    addCostMessageId = AddCostMessage.OK.stringResource
                 } catch (e: NumberFormatException) {
-                    exceptionMessage = ErrorMessage.AmountOverLimit
-                    tempErrorTextField = true
+                    addCostMessageId = AddCostMessage.AMOUNT_OVER_LIMIT.stringResource
                 }
             }
 
             _uiState.update {
                 it.copy(
-                    errorMessage = exceptionMessage,
-                    errorTextField = tempErrorTextField,
-                    isLoading = false
+                    isError = addCostMessageId != AddCostMessage.OK.stringResource,
+                    isLoading = false,
+                    addCostMessageId = addCostMessageId
                 )
             }
         }
@@ -186,11 +182,11 @@ data class AddDataUiState(
     val amount: String = "",
     val selectedCategoryId: Long? = null,
     val selectedDate: Long? = Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
-    val errorTextField: Boolean = false,
-    val errorMessage: ErrorMessage? = null,
+    val isError: Boolean = false,
     val isLoading: Boolean = false,
     val isIncome: Boolean = false,
-)
+    val addCostMessageId: Int? = null,
+    )
 
 fun AddDataUiState.amountIsDigit(): Boolean {
     var result = true

@@ -19,4 +19,11 @@
     <string name="icon_not_selected">Иконка не выбрана</string>
     <string name="color_not_selected">Цвет не выбран</string>
     <string name="add_category_is_success">Категория успешно добавлена</string>
+
+    <string name="category_not_selected">Категория не выбрана</string>
+    <string name="amount_is_empty">Поле "Сумма" не может быть пустым</string>
+    <string name="amount_no_int">Поле "Сумма" должно содержать число</string>
+    <string name="amount_over_limit">Превышен лимит в 2 147 483 647 ₽</string>
+    <string name="add_cost_success">Запись успешно добавлена</string>
+    <string name="add_cost_supporting_text">Целое число \nили выражение вида: x * y =</string>
 </resources>

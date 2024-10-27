@@ -22,7 +22,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddCostToDbViewModelTest {
     private lateinit var repository: FakeRepository
-    private lateinit var viewModel: AddDataViewModel
+    private lateinit var viewModel: AddCostViewModel
 
     @Before
     fun setUp() = runTest {
@@ -38,7 +38,7 @@ class AddCostToDbViewModelTest {
         }
         advanceUntilIdle()
 
-        viewModel = AddDataViewModel(repository = repository)
+        viewModel = AddCostViewModel(repository = repository)
     }
 
     @After
@@ -151,8 +151,8 @@ class AddCostToDbViewModelTest {
     fun addCostToDb_categoryIdIsNull_errorCategoryNotSelected() {
         viewModel.addCostToDb(isPlanned = false)
 
-        assertThat(viewModel.uiState.value.errorMessage.toString())
-            .contains(ErrorMessage.CategoryNotSelected.toString())
+        assertThat(viewModel.uiState.value.addCostMessageId.toString())
+            .contains(AddCostMessage.CATEGORY_NOT_SELECTED.stringResource.toString())
         assertThat(viewModel.uiState.value.isLoading).isFalse()
     }
 
@@ -161,9 +161,9 @@ class AddCostToDbViewModelTest {
         viewModel.setCategory(0L)
         viewModel.addCostToDb(isPlanned = false)
 
-        assertThat(viewModel.uiState.value.errorMessage.toString())
-            .contains(ErrorMessage.AmountIsEmpty.toString())
-        assertThat(viewModel.uiState.value.errorTextField).isTrue()
+        assertThat(viewModel.uiState.value.addCostMessageId.toString())
+            .contains(AddCostMessage.AMOUNT_IS_EMPTY.stringResource.toString())
+        assertThat(viewModel.uiState.value.isError).isTrue()
         assertThat(viewModel.uiState.value.isLoading).isFalse()
     }
 
@@ -174,9 +174,9 @@ class AddCostToDbViewModelTest {
         viewModel.setCost("2+2=")
         viewModel.addCostToDb(isPlanned = false)
 
-        assertThat(viewModel.uiState.value.errorMessage.toString())
-            .contains(ErrorMessage.AmountNotInt.toString())
-        assertThat(viewModel.uiState.value.errorTextField).isTrue()
+        assertThat(viewModel.uiState.value.addCostMessageId.toString())
+            .contains(AddCostMessage.AMOUNT_NOT_INT.stringResource.toString())
+        assertThat(viewModel.uiState.value.isError).isTrue()
         assertThat(viewModel.uiState.value.isLoading).isFalse()
     }
 
@@ -186,9 +186,9 @@ class AddCostToDbViewModelTest {
         viewModel.setCost("2147483648")
         viewModel.addCostToDb(isPlanned = false)
 
-        assertThat(viewModel.uiState.value.errorMessage.toString())
-            .contains(ErrorMessage.AmountOverLimit.toString())
-        assertThat(viewModel.uiState.value.errorTextField).isTrue()
+        assertThat(viewModel.uiState.value.addCostMessageId.toString())
+            .contains(AddCostMessage.AMOUNT_OVER_LIMIT.stringResource.toString())
+        assertThat(viewModel.uiState.value.isError).isTrue()
         assertThat(viewModel.uiState.value.isLoading).isFalse()
     }
 

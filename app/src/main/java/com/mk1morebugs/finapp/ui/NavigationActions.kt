@@ -21,6 +21,13 @@ class NavigationActions(private val navController: NavHostController) {
     fun backToPreviousDestination() {
         navController.popBackStack(
             destinationId = navController.graph.last().id,
+            inclusive = true,
+        )
+    }
+
+    fun backToPreviousDestinationWithBottomSheet() {
+        navController.popBackStack(
+            destinationId = navController.graph.last().id,
             inclusive = false,
         )
     }
