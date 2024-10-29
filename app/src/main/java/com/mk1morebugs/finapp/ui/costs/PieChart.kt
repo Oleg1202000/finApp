@@ -46,7 +46,7 @@ fun PieChart(
 
         val sumAmount = pieChartItems.sumOf { it.categorySummaryCost }
         var offsetAngle = -90f
-        var pieChartData: List<PieChartData> by remember {
+        var pieChartData: List<PieChartData>  by remember(pieChartItems) {
             mutableStateOf(
                 pieChartItems.map { item ->
                     val sweepAngle = item.categorySummaryCost / sumAmount.toFloat() * 360f
