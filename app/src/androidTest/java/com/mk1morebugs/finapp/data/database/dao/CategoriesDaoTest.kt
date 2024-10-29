@@ -4,32 +4,33 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
-import com.mk1morebugs.finapp.data.database.Category
-import com.mk1morebugs.finapp.data.database.CategoryWithoutIsIncome
-import com.mk1morebugs.finapp.data.database.FinappDatabase
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.firstOrNull
+import com.mk1morebugs.finapp.data.local.room.CategoryWithoutIsIncome
+import com.mk1morebugs.finapp.data.local.room.FinappDatabase
+import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @SmallTest
 class CategoriesDaoTest {
 
     private lateinit var database: FinappDatabase
     private lateinit var categoriesDao: CategoriesDao
 
-
     @Before
-    fun setUp() {
+    fun setUp() = runTest {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             FinappDatabase::class.java
         ).build()
 
         categoriesDao = database.categoriesDao()
+
+        fakeCategories.forEach {
+            categoriesDao.setCategory(it)
+        }
     }
 
     @After
@@ -37,75 +38,39 @@ class CategoriesDaoTest {
 
 
     @Test
-    fun setCategory_insertCategoryWithoutId() = runTest {
+    fun getCategories_insertCostCategory_returnListCategoriesWithoutIsIncomeField() = runTest {
+        val listCostCategories: List<CategoryWithoutIsIncome> = categoriesDao.getCategories().first()
 
-        categoriesDao.setCategory(insertedCategory)
-
-        val loaded: List<CategoryWithoutIsIncome> = categoriesDao.getCategories()
-            .firstOrNull() ?: listOf()
-
-        assertThat(loaded.size).isNotEqualTo(0)
-        assertThat(loaded[0].name).isEqualTo(insertedCategory.name)
-        assertThat(loaded[0].color).isEqualTo(insertedCategory.color)
-        assertThat(loaded[0].iconId).isEqualTo(insertedCategory.iconId)
-    }
-
-
-    @Test
-    fun getCategories_returnEmptyList() = runTest {
-
-        val loaded: List<CategoryWithoutIsIncome> = categoriesDao.getCategories()
-            .firstOrNull() ?: listOf()
-
-        assertThat(loaded.size).isEqualTo(0)
+        assertThat(listCostCategories[0].name).isEqualTo(fakeCategories[0].name)
+        assertThat(listCostCategories[0].iconColor).isEqualTo(fakeCategories[0].color)
+        assertThat(listCostCategories[0].iconId).isEqualTo(fakeCategories[0].iconId)
+        assertThat(listCostCategories.size).isEqualTo(2)
     }
 
     @Test
-    fun getCategories_returnListCategoriesWithoutIsIncome() = runTest {
+    fun getCategories_insertIncomeCategory_returnListCategoriesWithoutIsIncomeField() = runTest {
+        val listIncomeCategories: List<CategoryWithoutIsIncome> = categoriesDao.getCategories(
+            isIncome = true
+        ).first()
 
-        val expectedValue = fakeCategories.map {
-            CategoryWithoutIsIncome(
-                id = it.id,
-                name = it.name,
-                color = it.color,
-                iconId = it.iconId,
-            )
-        }
-
-        fakeCategories.forEach {
-            categoriesDao.setCategory(
-                category = Category(
-                    name = it.name,
-                    isIncome = it.isIncome,
-                    color = it.color,
-                    iconId = it.iconId,
-                )
-            )
-        }
-
-        val loaded: List<CategoryWithoutIsIncome> = categoriesDao.getCategories()
-            .firstOrNull() ?: listOf()
-
-        assertThat(loaded).containsAnyIn(expectedValue)
+        assertThat(listIncomeCategories[0].name).isEqualTo(fakeCategories[2].name)
+        assertThat(listIncomeCategories[0].iconColor).isEqualTo(fakeCategories[2].color)
+        assertThat(listIncomeCategories[0].iconId).isEqualTo(fakeCategories[2].iconId)
+        assertThat(listIncomeCategories.size).isEqualTo(1)
     }
 
     @Test
     fun deleteCategoryById() = runTest {
-        fakeCategories.forEach {
-            categoriesDao.setCategory(
-                category = Category(
-                    name = it.name,
-                    isIncome = it.isIncome,
-                    color = it.color,
-                    iconId = it.iconId,
-                )
-            )
-        }
-
         categoriesDao.deleteCategoryById(fakeCategories[1].id)
 
-        val loaded = categoriesDao.getCategories().firstOrNull() ?: listOf()
+        val listCostCategories = categoriesDao.getCategories().first()
+        val listIncomeCategories: List<CategoryWithoutIsIncome> = categoriesDao.getCategories(
+            isIncome = true
+        ).first()
 
-        assertThat(loaded).doesNotContain(fakeCategories[1])
+        assertThat(listCostCategories).doesNotContain(fakeCategories[1])
+        assertThat(listCostCategories.size).isEqualTo(1)
+        assertThat(listIncomeCategories).doesNotContain(fakeCategories[1])
+        assertThat(listCostCategories.size).isEqualTo(1)
     }
 }

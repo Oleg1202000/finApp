@@ -1,8 +1,8 @@
 package com.mk1morebugs.finapp.data
 
-import com.mk1morebugs.finapp.data.database.Category
-import com.mk1morebugs.finapp.data.database.CategoryWithoutIsIncome
-import com.mk1morebugs.finapp.data.database.dao.CategoriesDao
+import com.mk1morebugs.finapp.data.local.room.Category
+import com.mk1morebugs.finapp.data.local.room.CategoryWithoutIsIncome
+import com.mk1morebugs.finapp.data.local.room.dao.CategoriesDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -16,7 +16,7 @@ class FakeCategoriesDao : CategoriesDao {
             CategoryWithoutIsIncome(
                 id = it.id,
                 name = it.name,
-                color = it.color,
+                iconColor = it.color,
                 iconId = it.iconId
             )
         }
