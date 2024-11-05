@@ -1,5 +1,4 @@
 import java.io.FileInputStream
-import java.io.InputStream
 import java.util.Properties
 
 plugins {
@@ -43,17 +42,30 @@ android {
         }
     }
 
+    flavorDimensions += "version"
+    productFlavors {
+        create("alpha") {
+            versionNameSuffix = "-alpha"
+            applicationIdSuffix = ".alpha"
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
         }
+        debug {
+            isDebuggable = true
+        }
     }
-    
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
